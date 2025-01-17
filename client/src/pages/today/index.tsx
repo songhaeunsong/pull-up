@@ -1,5 +1,5 @@
-import InputForm from '@/components/home/inputform';
-import QuestionCard from '@/components/home/questioncard';
+import InputForm from '@/components/today/inputform';
+import QuestionCard from '@/components/today/questioncard';
 import { useState } from 'react';
 
 const Todaypage = () => {
