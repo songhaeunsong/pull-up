@@ -4,6 +4,9 @@ import tseslint from 'typescript-eslint';
 import pluginReact from 'eslint-plugin-react';
 import pluginReactHooks from 'eslint-plugin-react-hooks';
 import unusedImports from 'eslint-plugin-unused-imports';
+import tailwindcss from 'eslint-plugin-tailwindcss';
+import prettier from 'eslint-plugin-prettier';
+import prettierConfig from 'eslint-config-prettier';
 
 /** @type {import('eslint').Linter.Config[]} */
 export default [
@@ -17,10 +20,12 @@ export default [
     plugins: {
       'react-hooks': pluginReactHooks,
       'unused-imports': unusedImports,
+      tailwindcss,
     },
     rules: {
       'react-hooks/rules-of-hooks': 'error',
       'react-hooks/exhaustive-deps': 'warn',
+      'tailwindcss/classnames-order': 'error',
     },
   },
 
@@ -33,7 +38,6 @@ export default [
         'warn',
         { vars: 'all', varsIgnorePattern: '^_', args: 'after-used', argsIgnorePattern: '^_' },
       ],
-
       '@typescript-eslint/no-unused-vars': ['warn'],
       semi: ['error', 'always'],
       quotes: ['error', 'single'],
@@ -42,6 +46,24 @@ export default [
   },
 
   {
-    ignores: ['node_modules', 'dist', 'build', '.turbo', '.next'],
+    plugins: {
+      tailwindcss,
+    },
+    rules: {
+      'tailwindcss/classnames-order': 'error',
+    },
+  },
+
+  {
+    plugins: { prettier },
+    rules: {
+      'prettier/prettier': ['error', { endOfLine: 'auto' }],
+    },
+  },
+
+  {
+    rules: {
+      ...prettierConfig.rules,
+    },
   },
 ];
