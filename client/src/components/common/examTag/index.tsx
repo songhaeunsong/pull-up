@@ -2,8 +2,12 @@ interface ExamTagProps {
   title: string;
 }
 
-const examTag = ({ title }: ExamTagProps) => {
-  return <div className="p-1 rounded border">{title}</div>;
+const ExamTag = ({ title }: ExamTagProps) => {
+  return (
+    <div className="py-1 px-2 rounded border border-primary-400 bg-primary-50 text-primary-400 font-semibold text-xs">
+      {title}
+    </div>
+  );
 };
 
-export default examTag;
+export default ExamTag;

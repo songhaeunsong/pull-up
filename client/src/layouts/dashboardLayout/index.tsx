@@ -11,7 +11,7 @@ const DashBoardLayout = () => {
   };
 
   return (
-    <div className="flex w-full h-full">
+    <div className="flex w-full h-full bg-Main">
       <main className="flex flex-1 overflow-y-auto">
         <Outlet />
       </main>
