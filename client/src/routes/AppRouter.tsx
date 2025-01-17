@@ -10,6 +10,7 @@ import Todaypage from '@/pages/today';
 
 import DashBoardLayout from '@/layouts/dashboardLayout';
 import MainLayout from '@/layouts';
+import ResultPage from '@/pages/today/result';
 
 function AppRouter() {
   return (
@@ -18,6 +19,7 @@ function AppRouter() {
         <Route element={<MainLayout />}>
           <Route path="/" element={<Home />} />
           <Route path="/today" element={<Todaypage />} />
+          <Route path="/today/result" element={<ResultPage />} />
           <Route path="/game" element={<GamePage />} />
           <Route path="/exam" element={<ExamPage />} />
           <Route path="/signin" element={<SignInPage />} />
