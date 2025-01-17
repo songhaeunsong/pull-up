@@ -6,16 +6,18 @@ import GamePage from '../pages/game';
 import ExamPage from '../pages/exam';
 import RedirectPage from '../pages/redirect';
 import SignInPage from '../pages/signIn';
+import Todaypage from '@/pages/today';
 
-import Layout from '@/components/Layout';
 import DashBoardLayout from '@/layouts/dashboardLayout';
+import MainLayout from '@/layouts';
 
 function AppRouter() {
   return (
     <Router>
       <Routes>
-        <Route element={<Layout />}>
+        <Route element={<MainLayout />}>
           <Route path="/" element={<Home />} />
+          <Route path="/today" element={<Todaypage />} />
           <Route path="/game" element={<GamePage />} />
           <Route path="/exam" element={<ExamPage />} />
           <Route path="/signin" element={<SignInPage />} />
