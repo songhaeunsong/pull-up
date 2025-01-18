@@ -29,7 +29,7 @@ const SideBar = ({ image, name, email, subjects }: SideBarProps) => {
   return (
     <div className="flex flex-col rounded-2xl gap-6 w-[351px] p-5 shadow-sm bg-white">
       <Profile image={image} name={name} email={email} subjects={subjects} />
-      <hr className="border-b-2 border-stone-200" />
+      <hr className="border-2 border-stone-200" />
       <div className="flex flex-col gap-5">
         <Card link="/dashboard/recent" title="최근에 푼 모의고사" data={dummyRecent} />
         <Card link="/dashboard/wrong" title="내가 틀린 문제" data={dummyWrong} />

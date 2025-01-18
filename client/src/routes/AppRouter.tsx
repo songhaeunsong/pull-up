@@ -6,11 +6,11 @@ import GamePage from '../pages/game';
 import ExamPage from '../pages/exam';
 import RedirectPage from '../pages/redirect';
 import SignInPage from '../pages/signIn';
-import Todaypage from '@/pages/today';
+import TodayPage from '@/pages/today';
 
 import DashBoardLayout from '@/layouts/dashboardLayout';
 import MainLayout from '@/layouts';
-import ResultPage from '@/pages/today/result';
+import TodayResultPage from '@/pages/today/result';
 
 function AppRouter() {
   return (
@@ -18,8 +18,8 @@ function AppRouter() {
       <Routes>
         <Route element={<MainLayout />}>
           <Route path="/" element={<Home />} />
-          <Route path="/today" element={<Todaypage />} />
-          <Route path="/today/result" element={<ResultPage />} />
+          <Route path="/today" element={<TodayPage />} />
+          <Route path="/today/result" element={<TodayResultPage />} />
           <Route path="/game" element={<GamePage />} />
           <Route path="/exam" element={<ExamPage />} />
           <Route path="/signin" element={<SignInPage />} />

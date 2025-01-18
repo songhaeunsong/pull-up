@@ -20,16 +20,16 @@ const QuestionCard = ({ title, keywords, onHintClick, hint }: QuestionCardProps)
       >
         {/* 앞면 - 문제 */}
         <div className="absolute w-full h-full" style={{ backfaceVisibility: 'hidden' }}>
-          <div className="flex flex-col px-6 py-4 justify-start items-center w-full h-full shadow-md rounded-xl bg-white">
-            <div className="w-full flex justify-end">
+          <div className="flex flex-col items-center justify-start w-full h-full px-6 py-4 bg-white shadow-md rounded-xl">
+            <div className="flex justify-end w-full">
               <button
-                className="bg-stone-950 text-white rounded-lg py-2 px-4 text-sm font-extrabold transition-colors duration-200"
+                className="px-4 py-2 text-sm font-extrabold text-white transition-colors duration-200 rounded-lg bg-stone-950"
                 onClick={onHintClick}
               >
                 힌트 보기
               </button>
             </div>
-            <div className="flex flex-1 justify-center items-center">
+            <div className="flex items-center justify-center flex-1">
               <span className="text-3xl font-extrabold">{title}</span>
             </div>
           </div>
@@ -43,19 +43,19 @@ const QuestionCard = ({ title, keywords, onHintClick, hint }: QuestionCardProps)
             transform: 'rotateY(180deg)',
           }}
         >
-          <div className="flex flex-col px-6 py-4 justify-start items-center w-full h-full shadow-md rounded-xl bg-white">
-            <div className="w-full flex justify-end">
+          <div className="flex flex-col items-center justify-start w-full h-full px-6 py-4 bg-white shadow-md rounded-xl">
+            <div className="flex justify-end w-full">
               <button
-                className="bg-stone-950 text-white rounded-lg py-2 px-4 text-sm font-extrabold transition-colors duration-200"
+                className="px-4 py-2 text-sm font-extrabold text-white transition-colors duration-200 rounded-lg bg-stone-950"
                 onClick={onHintClick}
               >
                 문제 보기
               </button>
             </div>
-            <div className="flex flex-1 justify-center items-center">
+            <div className="flex items-center justify-center flex-1">
               <div className="flex flex-col items-center gap-8">
                 <span className="text-3xl font-bold text-primary-500">키워드</span>
-                <div className="flex gap-3 flex-wrap justify-center">
+                <div className="flex flex-wrap justify-center gap-3">
                   {keywords.map((keyword, index) => (
                     <Keyword key={index} title={keyword.title} color={keyword.correct ? 'purple' : 'gray'} />
                   ))}

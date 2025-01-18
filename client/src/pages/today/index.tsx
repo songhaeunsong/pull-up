@@ -2,7 +2,7 @@ import InputForm from '@/components/today/inputform';
 import QuestionCard from '@/components/today/questioncard';
 import { useState } from 'react';
 
-const Todaypage = () => {
+const TodayPage = () => {
   const [value, setValue] = useState(''); // 답변
   const [hint, setHint] = useState(false);
 
@@ -39,7 +39,7 @@ const Todaypage = () => {
           <span>님 만을 위한 오늘의 맞춤 문제🎯</span>
         </div>
         <QuestionCard title={data.title} keywords={data.keywords} hint={hint} onHintClick={onHintClick} />
-        <div className="flex flex-col gap-2 justify-start w-full">
+        <div className="flex flex-col justify-start w-full gap-2">
           <span className="text-xl font-semibold">나의 답변</span>
           <InputForm
             id="todayQuestion"
@@ -56,4 +56,4 @@ const Todaypage = () => {
   );
 };
 
-export default Todaypage;
+export default TodayPage;

@@ -1,14 +1,21 @@
-import Icon from '@/components/icon';
+import Icon from '@/components/common/icon';
+import SideMenu from '@/components/today/sidemenu';
 import TodayFeedback from '@/components/today/todayfeedback';
 import TodayResponse from '@/components/today/todayresponse';
+import { useState } from 'react';
 
-const ResultPage = () => {
-  const onClick = () => {
+const TodayResultPage = () => {
+  const [isOpen, setIsOpen] = useState(false);
+  
+  const onMenuClick = () => {
+    setIsOpen(!isOpen)
+  }
+  
+  const onButtonClick = () => {
     console.log('다른 사람의 답변 이동');
   };
 
   // 더미데이터
-  const date = '2025년 01월 16일';
   const todayData = {
     question: 'OOP의 5가지 설계 원칙 (SOLID)이란 무엇인가요?',
     answer:
@@ -44,36 +51,40 @@ const ResultPage = () => {
   };
 
   return (
-    <>
-      <div className="flex gap-8 w-full">
-        <div className="flex flex-col gap-6 flex-[4.5]">
-          <div className="flex gap-4 items-center">
-            <Icon id="menu" size={24} />
-            <span className="font-semibold text-2xl">{date}</span>
-          </div>
+    // 사이드바 넓이 만큼 왼쪽 마진 조절
+    <div className={`relative flex transition-all duration-500 h-full ${isOpen ? 'ml-[350px]' : 'ml-0'}`}>
+      <SideMenu isOpen={isOpen} onMenuClick={onMenuClick} />
+      
+      <div className="flex w-full h-full gap-8">
+        <div className="flex flex-col gap-6 flex-[4.5] h-fit">
+          <button className="flex items-center gap-4">
+            {!isOpen ? <Icon id="menu" size={24} onClick={() => setIsOpen(true)} /> : <></>}
+            <span className="text-2xl font-semibold">2025년 01월 16일</span>
+          </button>
           <TodayResponse question={todayData.question} answer={todayData.answer} />
-          <div className="flex w-full justify-end">
+          <div className="flex justify-end w-full">
             <button
-              className="py-3 px-6 rounded-lg bg-primary-500 text-xl font-semibold text-white w-fit"
-              onClick={onClick}
+              className="flex items-center gap-2 px-5 py-3 rounded-lg bg-primary-500"
+              onClick={onButtonClick}
             >
-              다른 사람의 답변
+              <span className='text-xl font-semibold text-white'>다른 사람의 답변</span>
+              <Icon id='move' size={20}/>
             </button>
           </div>
         </div>
 
-        <div className="flex-[5.5] h-full">
+        <div className="flex flex-[5.5] h-full">
           <TodayFeedback
             rate={todayData.rate}
             keywords={todayData.keywords}
             strength={todayData.strength}
-            weakenss={todayData.weakness}
+            weakness={todayData.weakness}
             modelanswer={todayData.modelanswer}
           />
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
-export default ResultPage;
+export default TodayResultPage;
