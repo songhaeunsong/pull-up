@@ -3,13 +3,11 @@ import MenuList from "./menulist";
 
 interface SideMenuProps {
     isOpen: boolean;
-    onMenuClick: (e: React.MouseEvent<HTMLButtonElement>)=>void;
+    handleMenuClick: (e: React.MouseEvent<HTMLButtonElement>)=>void;
+    handleSearchClick: () => void;
 }
 
-const SideMenu = ({ isOpen, onMenuClick }:SideMenuProps ) => {
-    const onSearchClick = () => {
-        console.log('오늘의 질문 검색')
-    }
+const SideMenu = ({ isOpen, handleMenuClick, handleSearchClick }:SideMenuProps ) => {
     
     // 더미데이터
     const dummyData = [
@@ -29,10 +27,10 @@ const SideMenu = ({ isOpen, onMenuClick }:SideMenuProps ) => {
         >
             <div className="flex flex-col gap-9 px-6 py-10 w-[350px] h-full">
                 <div className="flex justify-between">
-                    <button onClick={onMenuClick}>
+                    <button onClick={handleMenuClick}>
                         <Icon id='menu'/>
                     </button>
-                    <button onClick={onSearchClick}>
+                    <button onClick={handleSearchClick}>
                         <Icon id='search'/>
                     </button>
                 </div>

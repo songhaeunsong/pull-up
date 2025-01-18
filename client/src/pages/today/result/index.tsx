@@ -1,14 +1,16 @@
 import Icon from '@/components/common/icon';
+import SearchModal from '@/components/today/searchmodal';
 import SideMenu from '@/components/today/sidemenu';
 import TodayFeedback from '@/components/today/todayfeedback';
 import TodayResponse from '@/components/today/todayresponse';
 import { useState } from 'react';
 
 const TodayResultPage = () => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  const [isModalOpen, setIsModalOpen] = useState(false);
   
-  const onMenuClick = () => {
-    setIsOpen(!isOpen)
+  const handleMenuClick = () => {
+    setIsMenuOpen(!isMenuOpen)
   }
   
   const onButtonClick = () => {
@@ -52,13 +54,13 @@ const TodayResultPage = () => {
 
   return (
     // 사이드바 넓이 만큼 왼쪽 마진 조절
-    <div className={`relative flex transition-all duration-500 h-full ${isOpen ? 'ml-[350px]' : 'ml-0'}`}>
-      <SideMenu isOpen={isOpen} onMenuClick={onMenuClick} />
+    <div className={`relative flex transition-all duration-500 h-full ${isMenuOpen ? 'ml-[350px]' : 'ml-0'}`}>
+      <SideMenu isOpen={isMenuOpen} handleMenuClick={handleMenuClick} handleSearchClick={() => setIsModalOpen(true)} />
       
       <div className="flex w-full h-full gap-8">
         <div className="flex flex-col gap-6 flex-[4.5] h-fit">
           <button className="flex items-center gap-4">
-            {!isOpen ? <Icon id="menu" size={24} onClick={() => setIsOpen(true)} /> : <></>}
+            {!isMenuOpen ? <Icon id="menu" size={24} onClick={() => setIsMenuOpen(true)} /> : <></>}
             <span className="text-2xl font-semibold">2025년 01월 16일</span>
           </button>
           <TodayResponse question={todayData.question} answer={todayData.answer} />
@@ -83,6 +85,10 @@ const TodayResultPage = () => {
           />
         </div>
       </div>
+
+      {isModalOpen && (
+        <SearchModal onClose={() => setIsModalOpen(false)} />
+      )}
     </div>
   );
 };
