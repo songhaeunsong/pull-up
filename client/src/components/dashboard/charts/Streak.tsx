@@ -12,22 +12,20 @@ const Streak = () => {
   const weekStart = tomorrow.getDay() as DayIndex;
 
   return (
-    <div className="h-[200px] w-[500px]">
-      <ActivityCalendar
-        data={data}
-        weekStart={weekStart}
-        blockSize={23}
-        blockMargin={4}
-        hideColorLegend={true}
-        hideMonthLabels={true}
-        hideTotalCount={true}
-        colorScheme="light"
-        maxLevel={1}
-        theme={{
-          light: ['#eeeff1', '#6356f8'],
-        }}
-      />
-    </div>
+    <ActivityCalendar
+      data={data}
+      weekStart={weekStart}
+      blockSize={23}
+      blockMargin={4}
+      hideColorLegend={true}
+      hideMonthLabels={true}
+      hideTotalCount={true}
+      colorScheme="light"
+      maxLevel={1}
+      theme={{
+        light: ['#eeeff1', '#6356f8'],
+      }}
+    />
   );
 };
 

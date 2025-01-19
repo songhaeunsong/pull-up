@@ -2,7 +2,6 @@
 
 import { PolarAngleAxis, PolarGrid, Radar, RadarChart } from 'recharts';
 
-import { Card, CardContent, CardHeader, CardTitle } from '@/components/ui/card';
 import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
 const chartData = [
   { category: '컴퓨터구조', rate: 86 },
@@ -22,21 +21,14 @@ const chartConfig = {
 
 const Analysis = () => {
   return (
-    <Card>
-      <CardHeader className="items-center pb-4">
-        <CardTitle>강점 분석</CardTitle>
-      </CardHeader>
-      <CardContent className="pb-0">
-        <ChartContainer config={chartConfig} className="mx-auto flex max-h-[250px] min-h-[200px]">
-          <RadarChart data={chartData}>
-            <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
-            <PolarAngleAxis dataKey="category" />
-            <PolarGrid />
-            <Radar dataKey="rate" fill={chartConfig.rate.color} fillOpacity={0.4} />
-          </RadarChart>
-        </ChartContainer>
-      </CardContent>
-    </Card>
+    <ChartContainer config={chartConfig} className="mx-auto flex h-full w-full">
+      <RadarChart data={chartData}>
+        <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
+        <PolarAngleAxis dataKey="category" />
+        <PolarGrid />
+        <Radar dataKey="rate" fill={chartConfig.rate.color} fillOpacity={0.4} />
+      </RadarChart>
+    </ChartContainer>
   );
 };
 
