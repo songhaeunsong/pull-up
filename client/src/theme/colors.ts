@@ -1,4 +1,5 @@
 export const colors = {
+  Main: '#F4F6FF', // 배경색상
   primary: {
     900: '#2a2468',
     800: '#362f88',
