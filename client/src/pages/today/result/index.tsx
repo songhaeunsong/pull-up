@@ -8,11 +8,11 @@ import { useState } from 'react';
 const TodayResultPage = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  
+
   const handleMenuClick = () => {
-    setIsMenuOpen(!isMenuOpen)
-  }
-  
+    setIsMenuOpen(!isMenuOpen);
+  };
+
   const onButtonClick = () => {
     console.log('다른 사람의 답변 이동');
   };
@@ -54,28 +54,25 @@ const TodayResultPage = () => {
 
   return (
     // 사이드바 넓이 만큼 왼쪽 마진 조절
-    <div className={`relative flex transition-all duration-500 h-full ${isMenuOpen ? 'ml-[350px]' : 'ml-0'}`}>
+    <div className={`relative flex h-full transition-all duration-500 ${isMenuOpen ? 'ml-[350px]' : 'ml-0'}`}>
       <SideMenu isOpen={isMenuOpen} handleMenuClick={handleMenuClick} handleSearchClick={() => setIsModalOpen(true)} />
-      
-      <div className="flex w-full h-full gap-8">
-        <div className="flex flex-col gap-6 flex-[4.5] h-fit">
+
+      <div className="flex h-full w-full gap-8">
+        <div className="flex h-fit flex-[4.5] flex-col gap-6">
           <button className="flex items-center gap-4">
             {!isMenuOpen ? <Icon id="menu" size={24} onClick={() => setIsMenuOpen(true)} /> : <></>}
             <span className="text-2xl font-semibold">2025년 01월 16일</span>
           </button>
           <TodayResponse question={todayData.question} answer={todayData.answer} />
-          <div className="flex justify-end w-full">
-            <button
-              className="flex items-center gap-2 px-5 py-3 rounded-lg bg-primary-500"
-              onClick={onButtonClick}
-            >
-              <span className='text-xl font-semibold text-white'>다른 사람의 답변</span>
-              <Icon id='move' size={20}/>
+          <div className="flex w-full justify-end">
+            <button className="flex items-center gap-2 rounded-lg bg-primary-500 px-5 py-3" onClick={onButtonClick}>
+              <span className="text-xl font-semibold text-white">다른 사람의 답변</span>
+              <Icon id="move" size={20} />
             </button>
           </div>
         </div>
 
-        <div className="flex flex-[5.5] h-full">
+        <div className="flex h-full flex-[5.5]">
           <TodayFeedback
             rate={todayData.rate}
             keywords={todayData.keywords}
@@ -86,9 +83,7 @@ const TodayResultPage = () => {
         </div>
       </div>
 
-      {isModalOpen && (
-        <SearchModal onClose={() => setIsModalOpen(false)} />
-      )}
+      {isModalOpen && <SearchModal onClose={() => setIsModalOpen(false)} />}
     </div>
   );
 };
