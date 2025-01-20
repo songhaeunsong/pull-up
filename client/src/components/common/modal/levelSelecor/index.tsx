@@ -9,10 +9,10 @@ const LevelSelecor = ({ id, name, isSelected, onClick }: LevelSelectorProps) => 
   return (
     <button
       onClick={() => onClick(id)}
-      className={`text-lg flex flex-1 justify-center py-2 rounded-xl font-semibold border ${
+      className={`flex flex-1 justify-center rounded-xl border py-2 text-lg font-semibold ${
         isSelected
-          ? 'bg-primary-500 text-white border-primary-500' // 선택된 상태
-          : 'text-primary-500 border-2 border-primary-500 hover:bg-primary-50'
+          ? 'border-primary-500 bg-primary-500 text-white' // 선택된 상태
+          : 'border-2 border-primary-500 text-primary-500 hover:bg-primary-50'
       }`}
     >
       {name}
