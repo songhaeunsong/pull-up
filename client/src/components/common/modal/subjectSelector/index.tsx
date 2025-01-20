@@ -1,4 +1,4 @@
-import Icon from '@/components/icon';
+import Icon from '@/components/common/icon';
 
 export interface SubjectSelectorProps {
   id: string;
@@ -8,19 +8,10 @@ export interface SubjectSelectorProps {
   onClick: (id: string) => void;
 }
 
-const SubjectSelector: React.FC<SubjectSelectorProps> = ({
-  id,
-  name,
-  icon,
-  isSelected,
-  onClick,
-}) => {
+const SubjectSelector = ({ id, name, icon, isSelected, onClick }: SubjectSelectorProps) => {
   return (
-    <div
-      onClick={() => onClick(id)}
-      className="flex items-center gap-1 justify-between cursor-pointer" 
-    >
-      <div className="flex text-xl font-semibold items-center gap-6">
+    <div onClick={() => onClick(id)} className="flex cursor-pointer items-center justify-between gap-1">
+      <div className="flex items-center gap-6 text-xl font-semibold">
         <Icon id={icon} size={50} />
         <span>{name}</span>
       </div>
@@ -32,6 +23,5 @@ const SubjectSelector: React.FC<SubjectSelectorProps> = ({
     </div>
   );
 };
-
 
 export default SubjectSelector;

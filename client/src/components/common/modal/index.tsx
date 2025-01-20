@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import SubmitButton from '../submitButton';
-import Icon from '@/components/icon';
+import Icon from '../icon';
 import LevelSelecor from './levelSelecor';
 import SubjectSelector from './subjectSelector';
 
@@ -40,7 +40,7 @@ const Modal = ({ isModal = false, isExam = true, text }: ModalProps) => {
 
   return (
     <>
-      <div className="bg-white shadow-md w-[532px] min-w-[532px] h-auto rounded-2xl py-8 px-6 flex flex-col gap-2">
+      <div className="flex h-auto w-[532px] min-w-[532px] flex-col gap-2 rounded-2xl bg-white px-6 py-8 shadow-md">
         <div className="flex flex-col px-2">
           {isModal && (
             <div className="flex justify-end">
@@ -49,8 +49,8 @@ const Modal = ({ isModal = false, isExam = true, text }: ModalProps) => {
           )}
           <div className="flex flex-col gap-6 px-2">
             <div className="flex flex-col gap-4">
-              <div className="text-xl text-stone-700 font-semibold">시험 분야 선택</div>
-              <div className="flex flex-col gap-4 justify-center">
+              <div className="text-xl font-semibold text-stone-700">시험 분야 선택</div>
+              <div className="flex flex-col justify-center gap-4">
                 {SUBJECT_OPTIONS.map((subject) => (
                   <SubjectSelector
                     key={subject.id}
@@ -65,9 +65,9 @@ const Modal = ({ isModal = false, isExam = true, text }: ModalProps) => {
             </div>
             {isExam && (
               <div className="flex flex-col gap-4 pt-4">
-                <div className="text-xl text-stone-700 font-semibold">난이도 선택</div>
+                <div className="text-xl font-semibold text-stone-700">난이도 선택</div>
                 <div>
-                  <div className="flex gap-2 justify-center">
+                  <div className="flex justify-center gap-2">
                     {LEVELS_OPTIONS.map((level) => (
                       <LevelSelecor
                         key={level.id}

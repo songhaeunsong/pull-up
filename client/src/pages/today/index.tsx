@@ -33,13 +33,13 @@ const TodayPage = () => {
 
   return (
     <>
-      <div className="flex flex-col w-[873px] gap-12 justify-center items-center">
+      <div className="flex w-[873px] flex-col items-center justify-center gap-12">
         <div className="text-3xl font-extrabold">
           <span className="text-primary-600">{`${username}`}</span>
           <span>님 만을 위한 오늘의 맞춤 문제🎯</span>
         </div>
         <QuestionCard title={data.title} keywords={data.keywords} hint={hint} onHintClick={onHintClick} />
-        <div className="flex flex-col justify-start w-full gap-2">
+        <div className="flex w-full flex-col justify-start gap-2">
           <span className="text-xl font-semibold">나의 답변</span>
           <InputForm
             id="todayQuestion"
