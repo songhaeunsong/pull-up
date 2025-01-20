@@ -14,7 +14,7 @@ interface TodayFeedbackProps {
 
 const TodayFeedback = ({ rate, keywords, strength, weakness, modelanswer }: TodayFeedbackProps) => {
   return (
-    <div className="flex flex-col items-start w-full gap-6 border p-9 rounded-2xl border-primary-200">
+    <div className="flex flex-col items-start w-full h-full gap-6 border p-9 rounded-2xl border-primary-200 bg-white">
       <div className="flex justify-between w-full">
         <span className="text-3xl font-semibold text-primary-500">{rate}</span>
         <KeywordList keywords={keywords}/>

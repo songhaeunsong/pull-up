@@ -7,7 +7,7 @@ interface RouteHeaderProps {
 
 const RouteHeader = ({title, onBackClick}:RouteHeaderProps) => {
     return <div className="flex gap-4 items-center">
-        <button onClick={onBackClick}><Icon id='back'/></button>
+        <button onClick={onBackClick} aria-label="뒤로 가기"><Icon id='back'/></button>
         <span className="text-2xl font-semibold">{title}</span>
     </div>
 }

@@ -29,9 +29,10 @@ const QuestionCard = ({ title, keywords, onHintClick, hint }: QuestionCardProps)
                 힌트 보기
               </button>
             </div>
-            <div className="flex items-center justify-center flex-1">
-              <span className="text-3xl font-extrabold">{title}</span>
+            <div className="flex flex-1 items-center">
+              <span className="text-3xl font-extrabold ">{title}</span>
             </div>
+            <div className='h-9'></div>
           </div>
         </div>
 
@@ -52,7 +53,7 @@ const QuestionCard = ({ title, keywords, onHintClick, hint }: QuestionCardProps)
                 문제 보기
               </button>
             </div>
-            <div className="flex items-center justify-center flex-1">
+            <div className="flex items-center flex-1">
               <div className="flex flex-col items-center gap-8">
                 <span className="text-3xl font-bold text-primary-500">키워드</span>
                 <div className="flex flex-wrap justify-center gap-3">
@@ -62,6 +63,7 @@ const QuestionCard = ({ title, keywords, onHintClick, hint }: QuestionCardProps)
                 </div>
               </div>
             </div>
+            <div className='h-9'></div>
           </div>
         </div>
       </div>

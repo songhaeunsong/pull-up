@@ -21,7 +21,7 @@ const SideMenu = ({ isOpen, handleMenuClick, handleSearchClick }:SideMenuProps )
 
     return (
         <div 
-            className={`fixed top-0 left-0 h-full bg-white border-r border-primary-200 transition-transform duration-300 ease-in-out z-30 ${
+            className={`fixed top-[68px] left-0 h-full bg-white border-r border-primary-200 transition-transform duration-300 ease-in-out z-30 ${
                 isOpen ? 'translate-x-0' : '-translate-x-full'
             }`}
         >

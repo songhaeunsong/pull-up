@@ -24,7 +24,7 @@ const Header = () => {
   };
 
   return (
-    <header className="flex items-center justify-between w-full px-6 py-4 text-white bg-gray-950">
+    <header className="flex items-center justify-between w-full px-6 py-4 text-white bg-gray-950 top-0 z-10">
       <div className="text-3xl font-bold">
         {/* 로고 들어가야할 자리 */}
         <Link to="/">Pull Up!</Link>

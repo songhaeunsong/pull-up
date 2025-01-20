@@ -90,16 +90,18 @@ const OtherAnswerDetail = () => {
         });
     };
 
-    return <div className="flex flex-col gap-6">
-        <RouteHeader title="답변 상세 보기" onBackClick={onBackClick}/>
-        <OtherAnswerItem id={answer.id} userEmail={answer.userEmail} content={answer.content} keywords={answer.keywords} date={answer.date} likeCount={answer.likeCount} commentCount={answer.commentCount} liked={answer.liked} handleLikeClick={handleLikeClick} />
-        <InputForm id="answerComment" placeholder="댓글을 입력하세요" value={value} onChange={onChange} onSubmit={onSubmit} onKeyDown={onKeyDown}/>
-        <div>
-            {dummyComment.map((comment, index) => (
-                <div key={index}>
-                    <CommentItem userId={dummyUser.id} commentUserId={comment.commentUserId} commentUserEmail={comment.commentUserEmail} content={comment.content}/>
-                </div>
-            ))}
+    return <div className="py-10 px-20 bg-Main">
+        <div className="flex flex-col gap-6 bg-white border-primary-200 rounded-2xl border p-6">
+            <RouteHeader title="답변 상세 보기" onBackClick={onBackClick}/>
+            <OtherAnswerItem id={answer.id} userEmail={answer.userEmail} content={answer.content} keywords={answer.keywords} date={answer.date} likeCount={answer.likeCount} commentCount={answer.commentCount} liked={answer.liked} handleLikeClick={handleLikeClick} />
+            <InputForm id="answerComment" placeholder="댓글을 입력하세요" value={value} onChange={onChange} onSubmit={onSubmit} onKeyDown={onKeyDown}/>
+            <div>
+                {dummyComment.map((comment, index) => (
+                    <div key={index}>
+                        <CommentItem userId={dummyUser.id} commentUserId={comment.commentUserId} commentUserEmail={comment.commentUserEmail} content={comment.content}/>
+                    </div>
+                ))}
+            </div>
         </div>
     </div>
 }
