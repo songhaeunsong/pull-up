@@ -6,8 +6,8 @@ interface InputFormProps {
   value: string;
   limit?: number;
   onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
-  onSubmit: (e: React.FormEvent<HTMLButtonElement>) => void;
-  onKeyDown: (e: React.KeyboardEvent<HTMLButtonElement>) => void;
+  onSubmit: () => void;
+  onKeyDown: (e: React.KeyboardEvent<HTMLTextAreaElement>) => void;
 }
 
 const InputForm = ({ id, placeholder, value, limit, onChange, onSubmit, onKeyDown }: InputFormProps) => {
@@ -18,6 +18,7 @@ const InputForm = ({ id, placeholder, value, limit, onChange, onSubmit, onKeyDow
         placeholder={placeholder}
         value={value}
         onChange={onChange}
+        onKeyDown={onKeyDown}
         className="flex-1 h-full resize-none border-none focus:outline-none text-lg placeholder:text-stone-400"
       ></textarea>
       <div className="flex items-end gap-1 h-full">
@@ -29,7 +30,7 @@ const InputForm = ({ id, placeholder, value, limit, onChange, onSubmit, onKeyDow
         ) : (
           <></>
         )}
-        <button onSubmit={onSubmit} onKeyDown={onKeyDown}>
+        <button onClick={onSubmit}>
           {limit ? <Icon id="upload-black" size={48} /> : <Icon id="upload-gray" size={48} />}
         </button>
       </div>

@@ -1,5 +1,5 @@
 import React from 'react';
-import Keyword from '../keyword';
+import Keyword from '../keywordlist/keyword';
 
 interface QuestionCardProps {
   title: string;
