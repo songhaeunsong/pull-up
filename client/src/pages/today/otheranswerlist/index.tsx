@@ -70,7 +70,7 @@ const OtherAnswerList = () => {
 
     return <div className="py-10 px-20 bg-Main">
         <div className="flex flex-col gap-9 border border-primary-200 p-6 rounded-2xl bg-white">
-            <RouteHeader title="다른 사람의 답변" onBackClick={onBackClick}/>
+            <RouteHeader prev="오늘의 질문" title="다른 사람의 답변" onBackClick={onBackClick}/>
             <div className="flex flex-col gap-6">
                 {answers.length > 0 ? answers.map((answer, id) => (   
                     <OtherAnswerItem key={id} id={answer.id} userEmail={answer.userEmail} content={answer.content} date={answer.date} likeCount={answer.likeCount} commentCount={answer.commentCount} liked={answer.liked} handleLikeClick={handleLikeClick} onAnswerClick={onAnswerClick}/>
