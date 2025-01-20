@@ -14,10 +14,10 @@ interface TodayFeedbackProps {
 
 const TodayFeedback = ({ rate, keywords, strength, weakness, modelanswer }: TodayFeedbackProps) => {
   return (
-    <div className="flex flex-col items-start w-full h-full gap-6 border p-9 rounded-2xl border-primary-200 bg-white">
-      <div className="flex justify-between w-full">
+    <div className="flex h-full w-full flex-col items-start gap-6 rounded-2xl border border-primary-200 bg-white p-9">
+      <div className="flex w-full justify-between">
         <span className="text-3xl font-semibold text-primary-500">{rate}</span>
-        <KeywordList keywords={keywords}/>
+        <KeywordList keywords={keywords} />
       </div>
 
       <AnswerContainer title="강점" content={strength} />
