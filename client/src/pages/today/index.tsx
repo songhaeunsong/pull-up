@@ -33,7 +33,7 @@ const TodayPage = () => {
   };
 
   return (
-    <div className="flex w-full py-10 px-10 items-center justify-center bg-gradient-to-b from-primary-50 to-white">
+    <div className="flex w-full items-center justify-center bg-gradient-to-b from-primary-50 to-white px-10 py-10">
       <div className="flex w-[873px] flex-col items-center justify-center gap-12">
         <div className="text-3xl font-extrabold">
           <span className="text-primary-600">{`${username}`}</span>

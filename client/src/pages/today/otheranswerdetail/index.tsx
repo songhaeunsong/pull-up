@@ -91,6 +91,30 @@ const OtherAnswerDetail = () => {
     });
   };
 
+  const [commentValue, setCommentValue] = useState('');
+  const [updated, setUpdated] = useState(false);
+  const handleCommentUpdate = (comment: { id: string; email: string; content: string }) => {
+    setUpdated(!updated);
+    setCommentValue(comment.content);
+  };
+
+  const handleCommentDelete = () => {
+    console.log('댓글 삭제');
+  };
+
+  const onCommentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    setCommentValue(e.target.value);
+  };
+
+  const onCancelClick = () => {
+    setUpdated(!updated);
+  };
+
+  const onConfirmClick = () => {
+    setUpdated(!updated);
+    console.log('댓글 수정 완료');
+  };
+
   return (
     <div className="bg-Main px-20 py-10">
       <div className="flex flex-col gap-6 rounded-2xl border border-primary-200 bg-white p-6">
@@ -122,6 +146,13 @@ const OtherAnswerDetail = () => {
                 commentUserId={comment.commentUserId}
                 commentUserEmail={comment.commentUserEmail}
                 content={comment.content}
+                handleDelete={handleCommentDelete}
+                handleUpdate={handleCommentUpdate}
+                onCancelClick={onCancelClick}
+                onChange={onCommentChange}
+                onConfirmClick={onConfirmClick}
+                value={commentValue}
+                updated={updated}
               />
             </div>
           ))}
