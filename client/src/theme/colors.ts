@@ -48,4 +48,5 @@ export const colors = {
     100: '#FAD7DA',
     50: '#fdebed',
   },
+
 };
