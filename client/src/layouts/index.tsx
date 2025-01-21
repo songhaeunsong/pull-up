@@ -5,7 +5,7 @@ const MainLayout = () => {
   return (
     <div className="flex h-screen flex-col">
       <Header />
-      <main className="flex flex-1 items-start justify-center">
+      <main className="flex flex-1 items-start justify-center overflow-auto">
         <Outlet />
       </main>
     </div>

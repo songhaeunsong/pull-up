@@ -24,7 +24,7 @@ const Header = () => {
   };
 
   return (
-    <header className="flex items-center justify-between w-full px-6 py-4 text-white bg-gray-950">
+    <header className="top-0 z-10 flex w-full items-center justify-between bg-gray-950 px-6 py-4 text-white">
       <div className="text-3xl font-bold">
         {/* 로고 들어가야할 자리 */}
         <Link to="/">Pull Up!</Link>
@@ -35,9 +35,9 @@ const Header = () => {
           <Link
             key={item.path}
             to={item.path}
-            className={`text-xl font-semibold transition-colors duration-200 pb-1 ${
+            className={`pb-1 text-xl font-semibold transition-colors duration-200 ${
               location.pathname === item.path
-                ? 'text-gray-50 border-b-2 border-gray-50'
+                ? 'border-b-2 border-gray-50 text-gray-50'
                 : 'text-gray-500 hover:text-gray-200'
             }`}
             onClick={item.label === '로그아웃' || item.label === '로그인' ? handleAuthClick : undefined}

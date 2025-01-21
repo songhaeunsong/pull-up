@@ -12,6 +12,8 @@ import TodayPage from '@/pages/today';
 import DashBoardLayout from '@/layouts/dashboardLayout';
 import MainLayout from '@/layouts';
 import TodayResultPage from '@/pages/today/result';
+import OtherAnswerList from '@/pages/today/otheranswerlist';
+import OtherAnswerDetail from '@/pages/today/otheranswerdetail';
 
 function AppRouter() {
   return (
@@ -21,6 +23,8 @@ function AppRouter() {
           <Route path="/" element={<Home />} />
           <Route path="/today" element={<TodayPage />} />
           <Route path="/today/result" element={<TodayResultPage />} />
+          <Route path="/today/otheranswers" element={<OtherAnswerList />} />
+          <Route path="/today/otheranswers/:answerId" element={<OtherAnswerDetail />} />
           <Route path="/game" element={<GamePage />} />
           <Route path="/exam">
             <Route index element={<ExamPage />} />
