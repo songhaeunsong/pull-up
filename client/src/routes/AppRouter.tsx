@@ -3,8 +3,9 @@ import Home from '../pages/home';
 import Page404 from '../pages/404';
 import DashBoardPage from '../pages/dashboard';
 import GamePage from '../pages/game';
-import ExamPage from '../pages/exam';
-import ExamSolvePage from '../pages/exam/solve';
+import ExamPage from '@/pages/exam';
+import ExamSolvePage from '@/pages/exam/solve';
+import ExamResultPage from '@/pages/exam/result';
 import RedirectPage from '../pages/redirect';
 import SignInPage from '../pages/signIn';
 import TodayPage from '@/pages/today';
@@ -29,6 +30,7 @@ function AppRouter() {
           <Route path="/exam">
             <Route index element={<ExamPage />} />
             <Route path="solve" element={<ExamSolvePage />} />
+            <Route path="result" element={<ExamResultPage />} />
           </Route>
           <Route path="/signin" element={<SignInPage />} />
           <Route path="/dashboard" element={<DashBoardLayout />}>

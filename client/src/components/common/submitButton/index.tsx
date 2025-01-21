@@ -1,5 +1,5 @@
 interface SubmitButtonProps {
-  onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  onClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
   text: string;
   color?: 'primary' | 'secondary' | 'gray';
   disabled?: boolean;
@@ -16,7 +16,7 @@ const SubmitButton = ({ onClick, text, color = 'primary', disabled = false }: Su
     <button
       onClick={onClick}
       disabled={disabled}
-      className={`${COLOR_PROPS[color]}  w-full rounded-xl font-semibold py-5 text-xl`}
+      className={`${COLOR_PROPS[color]} w-full rounded-xl py-5 text-xl font-semibold`}
     >
       {text}
     </button>

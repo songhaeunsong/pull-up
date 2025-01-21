@@ -1,11 +1,19 @@
 import AnswerOption from '../answeroption';
 interface ExamAnswerProps {
   questionType: 'objective' | 'subjective';
-  options: { content: string; state: 'default' | 'selected' | 'wrong' | 'correct' | null }[];
+  options: { content: string; state: 'default' | 'selected' | 'wrong' | 'correct' }[];
   onSelectOption?: (index: number) => void;
+  onTextAnswerChange?: (answer: string) => void;
+  disabled?: boolean;
 }
 
-const ExamAnswer = ({ questionType, options, onSelectOption }: ExamAnswerProps) => {
+const ExamAnswer = ({
+  questionType,
+  options,
+  onSelectOption,
+  onTextAnswerChange,
+  disabled = false,
+}: ExamAnswerProps) => {
   return (
     <div className="flex w-full flex-col gap-3">
       {questionType === 'objective' ? (
@@ -17,6 +25,7 @@ const ExamAnswer = ({ questionType, options, onSelectOption }: ExamAnswerProps) 
             content={option.content}
             state={option.state ?? 'default'}
             onClick={() => onSelectOption?.(index)}
+            disabled={disabled}
           />
         ))
       ) : (
@@ -24,6 +33,7 @@ const ExamAnswer = ({ questionType, options, onSelectOption }: ExamAnswerProps) 
         <textarea
           placeholder="정답을 입력하세요."
           className="w-full resize-none rounded-lg border bg-stone-50 px-4 py-2 text-xl text-stone-950 placeholder-stone-500 focus:outline-none"
+          onChange={(e) => onTextAnswerChange?.(e.target.value)}
         />
       )}
     </div>

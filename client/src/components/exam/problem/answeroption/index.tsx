@@ -3,9 +3,10 @@ interface AnswerOptionProps {
   content: string; // 옵션 내용
   state: 'default' | 'selected' | 'wrong' | 'correct';
   onClick: () => void; // 클릭 핸들러
+  disabled?: boolean;
 }
 
-const AnswerOption = ({ id, content, onClick, state }: AnswerOptionProps) => {
+const AnswerOption = ({ id, content, onClick, state, disabled = false }: AnswerOptionProps) => {
   const COLOR_CLASSES = {
     default: 'border-primary-200',
     selected: 'border-primary-500 text-primary-500 bg-primary-50',
@@ -15,8 +16,9 @@ const AnswerOption = ({ id, content, onClick, state }: AnswerOptionProps) => {
 
   return (
     <button
-      onClick={onClick}
-      className={`w-full rounded-xl border px-8 py-3 text-start text-2xl ${COLOR_CLASSES[state]}`}
+      onClick={!disabled ? onClick : undefined}
+      disabled={disabled}
+      className={`w-full rounded-xl border px-8 py-3 text-start text-xl ${COLOR_CLASSES[state]} `}
     >
       {id}. {content}
     </button>
