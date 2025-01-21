@@ -1,13 +1,17 @@
-import MenuItem from "../menuitem";
+import MenuItem from '../menuitem';
 
 interface MenuListProps {
-    items: string[];
+  items: string[];
 }
 
-const MenuList = ({items}: MenuListProps) => {
-    return <div className="flex flex-col w-full gap-2">
-        {items.map((item, id)=>(<MenuItem key={id} title={item}/>))}
+const MenuList = ({ items }: MenuListProps) => {
+  return (
+    <div className="flex w-full flex-col gap-2">
+      {items.map((item, id) => (
+        <MenuItem key={id} title={item} />
+      ))}
     </div>
-}
+  );
+};
 
 export default MenuList;
