@@ -16,9 +16,10 @@ const TodayPage = () => {
 
   const onSubmit = () => {
     console.log('제출 답안: ', value);
+    setValue('');
   };
 
-  const onKeyDown = (e: React.KeyboardEvent<HTMLButtonElement>) => {
+  const onKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === 'Enter') {
       onSubmit();
     }
@@ -32,7 +33,7 @@ const TodayPage = () => {
   };
 
   return (
-    <>
+    <div className="flex w-full items-center justify-center bg-gradient-to-b from-primary-50 to-white px-10 py-10">
       <div className="flex w-[873px] flex-col items-center justify-center gap-12">
         <div className="text-3xl font-extrabold">
           <span className="text-primary-600">{`${username}`}</span>
@@ -52,7 +53,7 @@ const TodayPage = () => {
           />
         </div>
       </div>
-    </>
+    </div>
   );
 };
 
