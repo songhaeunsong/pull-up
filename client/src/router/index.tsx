@@ -1,13 +1,14 @@
 import { createBrowserRouter } from 'react-router-dom';
 import dashBoardRoutes from './routes/dashboardRoutes';
 import etcRoutes from './routes/etcRoutes';
-import Layout from '@/components/Layout';
+import todayRoutes from './routes/todayRoutes';
+import MainLayout from '@/layouts';
 
 const routes = [
   {
     path: '/',
-    element: <Layout />,
-    children: [...dashBoardRoutes, ...etcRoutes],
+    element: <MainLayout />,
+    children: [...dashBoardRoutes, ...todayRoutes, ...etcRoutes],
   },
 ];
 

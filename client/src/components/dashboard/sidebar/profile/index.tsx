@@ -1,5 +1,5 @@
 import SubjectTag from '@/components/common/subjectTag';
-import Icon from '@/components/icon';
+import Icon from '@/components/common/icon';
 
 interface ProfileProps {
   image: string;
