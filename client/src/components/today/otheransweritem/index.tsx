@@ -1,6 +1,6 @@
 import Icon from '@/components/common/icon';
 import KeywordList from '../keywordlist';
-import UserTag from '../usertag';
+import SmallChip from '../../common/smallchip';
 
 interface OtherAnswerItemProps {
   id: string;
@@ -34,7 +34,7 @@ const OtherAnswerItem = ({
     <div className="flex flex-col gap-6">
       <div className="flex flex-col gap-4 px-4">
         <div className="flex w-full items-center justify-between">
-          <UserTag userEmail={userEmail} />
+          <SmallChip title={userEmail} color="border-secondary-600 bg-secondary-50 text-secondary-600" />
           <span className="text-xl text-stone-700">{date}</span>
         </div>
         {keywords && (
