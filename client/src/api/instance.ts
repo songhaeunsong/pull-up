@@ -19,7 +19,7 @@ const api = instance.extend({
         }
       },
       (_request, _options, response) => {
-        if (response.ok) return response.json();
+        if (response.ok) return response;
         throw new Error('Response is not OK');
       },
     ],

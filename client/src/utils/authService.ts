@@ -1,10 +1,9 @@
-import { DomainType } from '@/types/auth';
 import { BeforeRequestHook } from 'ky';
 
 const { VITE_BASE_URI } = import.meta.env;
 
-export const OAuthLogin = (domain: DomainType) => {
-  window.location.href = `${VITE_BASE_URI}/oauth2/authoriaztion/${domain}`;
+export const OAuthLogin = (domain: string): void => {
+  window.location.href = `${VITE_BASE_URI}/oauth2/authorization/${domain}`;
 };
 
 // Header에 accessToken 담기
