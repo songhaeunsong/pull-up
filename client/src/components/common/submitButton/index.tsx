@@ -1,5 +1,5 @@
 interface SubmitButtonProps {
-  onClick?: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  onClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
   text: string;
   color?: 'primary' | 'secondary' | 'gray';
   disabled?: boolean;
