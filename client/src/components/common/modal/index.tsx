@@ -9,9 +9,10 @@ interface ModalProps {
   isModalOpen?: boolean;
   isExam?: boolean;
   text: string;
+  onClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
-const Modal = ({ isModal = false, isExam = true, text }: ModalProps) => {
+const Modal = ({ isModal = false, isExam = true, text, onClick }: ModalProps) => {
   const LEVELS_OPTIONS = [
     { id: '1', name: '상' },
     { id: '2', name: '중' },
@@ -28,15 +29,17 @@ const Modal = ({ isModal = false, isExam = true, text }: ModalProps) => {
   ];
 
   const [selectedLevelId, setSelectedLevelId] = useState<string | null>(null);
+  const [selectedSubjectIds, setSelectedSubjectIds] = useState<string[]>([]);
 
   const handleLevelClick = (id: string) => {
     setSelectedLevelId(id);
   };
 
-  const [selectedSubjectIds, setSelectedSubjectIds] = useState<string[]>([]);
   const handleSubjectClick = (id: string) => {
     setSelectedSubjectIds((prev) => (prev.includes(id) ? prev.filter((subjectId) => subjectId !== id) : [...prev, id]));
   };
+
+  const isDisabled = selectedSubjectIds.length === 0 || (isExam && !selectedLevelId);
 
   return (
     <>
@@ -83,7 +86,12 @@ const Modal = ({ isModal = false, isExam = true, text }: ModalProps) => {
             )}
             <div className="flex flex-col items-center gap-3 text-primary-500">
               {isModal && <span>링크를 생성하고 친구에게 전달해주세요!</span>}
-              <SubmitButton text={text} />
+              <SubmitButton
+                text={text}
+                onClick={onClick}
+                disabled={isDisabled}
+                color={isDisabled ? 'gray' : 'primary'}
+              />
             </div>
           </div>
         </div>
