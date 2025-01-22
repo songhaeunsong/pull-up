@@ -1,4 +1,4 @@
-import ky, { Options } from 'ky';
+import ky from 'ky';
 
 const instance = ky.create({
   prefixUrl: import.meta.env.VITE_BASE_URL,
@@ -7,15 +7,15 @@ const instance = ky.create({
   },
 });
 
-const customInstance = instance.extend({
+const api = instance.extend({
   hooks: {
     beforeRequest: [() => {}], // accessToken 넣기
     afterResponse: [
       (_request, _optionsresponse, response) => {
-        if (response.ok) return response;
+        if (response.ok) return response.json();
         throw new Error('Response is not OK');
       },
-      (request, options, response) => {
+      (_request, _options, response) => {
         if (response.status == 403) {
           console.log('reissue');
         }
@@ -23,15 +23,5 @@ const customInstance = instance.extend({
     ],
   },
 });
-
-const api = (url: string, options?: Options) =>
-  customInstance(url, options).then((response) =>
-    response
-      .json()
-      .then((data) => data)
-      .catch((error) => {
-        throw error;
-      }),
-  );
 
 export default api;
