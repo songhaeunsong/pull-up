@@ -3,7 +3,7 @@ import Keyword from '../keywordlist/keyword';
 
 interface QuestionCardProps {
   title: string;
-  keywords: { title: string; correct?: boolean }[];
+  keywords: string[];
   onHintClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
   hint: boolean;
 }
@@ -58,7 +58,7 @@ const QuestionCard = ({ title, keywords, onHintClick, hint }: QuestionCardProps)
                 <span className="text-3xl font-bold text-primary-500">키워드</span>
                 <div className="flex flex-wrap justify-center gap-3">
                   {keywords.map((keyword, index) => (
-                    <Keyword key={index} title={keyword.title} color={keyword.correct ? 'purple' : 'gray'} />
+                    <Keyword key={index} title={keyword} color="gray" />
                   ))}
                 </div>
               </div>

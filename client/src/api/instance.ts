@@ -1,4 +1,3 @@
-import { setAuthorizationHeader } from '@/utils/authService';
 import ky from 'ky';
 
 const instance = ky.create({
@@ -11,7 +10,7 @@ const instance = ky.create({
 
 const api = instance.extend({
   hooks: {
-    beforeRequest: [setAuthorizationHeader], // accessToken 넣기
+    beforeRequest: [], // setAuthorizationHeader
     afterResponse: [
       (_request, _options, response) => {
         if (response.status == 403) {
