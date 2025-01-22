@@ -16,6 +16,7 @@ const Header = () => {
   ];
 
   const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const userInfo = '';
 
   const handleAuthClick = () => {
     if (isLoggedIn) {
@@ -26,8 +27,8 @@ const Header = () => {
   return (
     <header className="top-0 z-10 flex w-full items-center justify-between bg-gray-950 px-6 py-4 text-white">
       <div className="text-3xl font-bold">
-        {/* 로고 들어가야할 자리 */}
-        <Link to="/">Pull Up!</Link>
+        {/* 로그인이면 로고->오늘의 문제, 비로그인이면 로고->메인인 */}
+        <Link to={!userInfo ? '/' : '/today'}>Pull Up!</Link>
       </div>
 
       <nav className="flex space-x-6">

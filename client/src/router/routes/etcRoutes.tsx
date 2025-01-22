@@ -4,6 +4,7 @@ import GamePage from '@/pages/game';
 import HomePage from '@/pages/home';
 import RedirectPage from '@/pages/redirect';
 import SignInPage from '@/pages/signIn';
+import SignUpPage from '@/pages/signup';
 
 const etcRoutes = [
   {
@@ -21,6 +22,10 @@ const etcRoutes = [
   {
     path: 'signin',
     element: <SignInPage />,
+  },
+  {
+    path: 'signup',
+    element: <SignUpPage />,
   },
   {
     path: 'redirect',
