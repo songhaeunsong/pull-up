@@ -2,12 +2,7 @@ export interface DomainType {
   domain: 'google' | 'naver' | 'kakao';
 }
 
-export interface LoginResponseType {
-  userInfo: UserInfo;
+export interface AuthResponseType {
   isSignedUp: boolean;
   isSolvedToday: boolean;
-}
-
-export interface UserInfo {
-  userId: string;
 }

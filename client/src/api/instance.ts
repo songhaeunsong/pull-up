@@ -1,7 +1,9 @@
+import { setAuthorizationHeader } from '@/utils/authService';
 import ky from 'ky';
 
 const instance = ky.create({
   prefixUrl: import.meta.env.VITE_BASE_URL,
+  credentials: 'include',
   headers: {
     'content-type': 'application/json',
   },
@@ -9,16 +11,16 @@ const instance = ky.create({
 
 const api = instance.extend({
   hooks: {
-    beforeRequest: [() => {}], // accessToken 넣기
+    beforeRequest: [setAuthorizationHeader], // accessToken 넣기
     afterResponse: [
-      (_request, _optionsresponse, response) => {
-        if (response.ok) return response.json();
-        throw new Error('Response is not OK');
-      },
       (_request, _options, response) => {
         if (response.status == 403) {
           console.log('reissue');
         }
+      },
+      (_request, _options, response) => {
+        if (response.ok) return response.json();
+        throw new Error('Response is not OK');
       },
     ],
   },
