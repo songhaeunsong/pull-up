@@ -1,5 +1,5 @@
 const RedirectPage = () => {
-  return <>RedirectPage</>;
+  return null;
 };
 
 export default RedirectPage;

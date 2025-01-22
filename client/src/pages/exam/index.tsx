@@ -9,7 +9,7 @@ const ExamPage = () => {
   };
   return (
     <>
-      <div className="flex h-full w-full flex-1 items-center justify-center gap-20 bg-Main py-10">
+      <div className="flex min-h-full w-full items-center justify-center gap-20 bg-Main py-10">
         <Modal text={'모의고사 만들기'} onClick={onSubmit} />
         <img src={exam1} alt="exam1" className="w-[720px] object-contain" />
       </div>
