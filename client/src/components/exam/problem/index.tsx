@@ -9,6 +9,7 @@ interface ExamProblemProps {
     subject: string;
     isBookmarked?: boolean;
     questionType: 'objective' | 'subjective';
+    chosenAnswer?: string;
     options?: { content: string; state?: 'default' | 'selected' | 'wrong' | 'correct' }[];
   };
   disabled?: boolean;
@@ -50,7 +51,7 @@ const ExamProblem = ({ problem, disabled = false, onSelectOption, onTextAnswerCh
             {problem.isBookmarked !== undefined && (
               <div
                 className={`cursor-pointer ${bookmark ? 'text-yellow-500' : 'text-gray-400'}`} // 북마크 상태에 따라 스타일 변경
-                onClick={handleBookmarkClick} // 클릭 시 북마크 상태 토글
+                onClick={handleBookmarkClick}
               >
                 <Icon id={bookmark ? 'bookmark' : 'bookmark-empty'} size={24} />
               </div>
@@ -66,6 +67,7 @@ const ExamProblem = ({ problem, disabled = false, onSelectOption, onTextAnswerCh
       <ExamAnswer
         questionType={problem.questionType}
         options={options}
+        chosenAnswer={problem.chosenAnswer}
         onSelectOption={handleOptionClick}
         onTextAnswerChange={onTextAnswerChange}
         disabled={disabled}

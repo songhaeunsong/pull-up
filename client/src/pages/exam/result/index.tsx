@@ -119,6 +119,7 @@ const ExamResultPage = () => {
                 isBookmarked: problem.bookmarkStatus,
                 questionType: problem.questionType,
                 options: problem.options,
+                chosenAnswer: problem.chosenAnswer,
               }}
               disabled={true}
             />
