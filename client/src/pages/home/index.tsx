@@ -1,5 +1,6 @@
 import SmallChip from '@/components/common/smallchip';
 import SubmitButton from '@/components/common/submitButton';
+import { useChipAnimation } from '@/hooks/useChipAnimation';
 import { useNavigate } from 'react-router-dom';
 
 const HomePage = () => {
@@ -7,6 +8,9 @@ const HomePage = () => {
   const onClick = () => {
     navigate('/signin');
   };
+
+  const { styles, currentStyles } = useChipAnimation();
+  const titles = ['오늘의 질문', '모의고사', '학습 게임'];
 
   return (
     <div
@@ -25,9 +29,13 @@ const HomePage = () => {
         <div className="flex flex-col gap-10">
           <div className="flex flex-col gap-6">
             <div className="flex gap-4">
-              <SmallChip title="오늘의 질문" color="border-2 border-primary-500 bg-primary-50 text-primary-500" />
-              <SmallChip title="모의고사" color="border-2 border-primary-500 bg-primary-500 text-white" />
-              <SmallChip title="학습 게임" color="border-2 border-primary-500 bg-primary-50 text-primary-500" />
+              {titles.map((title, index) => (
+                <SmallChip
+                  key={title}
+                  title={title}
+                  color={`${styles[currentStyles[index]]} transition-all duration-500`}
+                />
+              ))}
             </div>
             <div className="flex flex-col text-5xl font-bold">
               <span>나의 기술 스택과 실력</span>

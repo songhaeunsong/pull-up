@@ -21,9 +21,7 @@ const SignUpPage = () => {
     >
       <div className="relative flex h-full w-full items-center justify-around p-20">
         {/* 좌측 컨테이너 */}
-        <div className="flex flex-col gap-12">
-          <Modal text="회원가입" onClick={onConfirmSignUp} isExam={false} />
-        </div>
+        <Modal text="회원가입" onClick={onConfirmSignUp} isExam={false} />
         {/* 우측 컨테이너 */}
         <img src="/assets/images/exam1.png" alt="대문 이미지" className="h-auto w-[600px]" />
       </div>
