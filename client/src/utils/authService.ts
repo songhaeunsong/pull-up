@@ -1,9 +1,15 @@
+import { reissue } from '@/api/auth';
+import api from '@/api/instance';
 import { BeforeRequestHook } from 'ky';
 
 const { VITE_BASE_URI } = import.meta.env;
 
 export const OAuthLogin = (domain: string): void => {
-  window.location.href = `${VITE_BASE_URI}/oauth2/authorization/${domain}`;
+  if (import.meta.env.DEV) {
+    window.location.href = `/redirect?code=test_code`; // msw
+  } else {
+    window.location.href = `${VITE_BASE_URI}/oauth2/authorization/${domain}`;
+  }
 };
 
 // Header에 accessToken 담기
@@ -24,4 +30,16 @@ export const setAuthorizationHeader: BeforeRequestHook = (request) => {
   }
 
   request.headers.set('Authorization', `Bearer ${accessToken}`);
+};
+
+export const handleToken = async (request: Request, response: Response) => {
+  if (response.status == 401) {
+    try {
+      await reissue();
+      return api(request);
+    } catch (error) {
+      console.error('토큰 재발급에 실패했습니다.:', error);
+      window.location.href = '/signin';
+    }
+  }
 };

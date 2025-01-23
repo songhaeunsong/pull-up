@@ -7,22 +7,18 @@ const RedirectPage = () => {
   const { data: auth, isLoading } = useAuthInfo();
 
   useEffect(() => {
-    const checkAuth = () => {
-      if (!isLoading && auth) {
-        if (!auth.isSignedUp) {
-          navigate('/signup');
-        }
-
-        if (!auth.isSolvedToday) {
-          navigate('/today');
-        } else {
-          navigate('/today/result');
-        }
+    if (!isLoading && auth) {
+      if (!auth.isSignedUp) {
+        navigate('/signup');
+      } else {
+        navigate(auth.isSolvedToday ? '/today/result' : '/today');
       }
-    };
+    }
 
-    checkAuth();
-  }, [navigate]);
+    if (!isLoading && !auth) {
+      navigate('/signin');
+    }
+  }, [auth, isLoading, navigate]);
 
   return null;
 };
