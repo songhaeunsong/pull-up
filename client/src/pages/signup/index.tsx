@@ -1,4 +1,4 @@
-import Modal from '@/components/common/modal';
+import Modal from '@/components/common/csConditionSelector/temp';
 import { useNavigate } from 'react-router-dom';
 
 const SignUpPage = () => {
