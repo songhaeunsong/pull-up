@@ -10,7 +10,7 @@ import {
 
 type GetStreakResponse = Streak[];
 
-const getStreak = () => api.get<GetStreakResponse>('/interview/me/streak');
+const getStreak = () => api.get<GetStreakResponse>('interview/me/streak');
 
 export const useGetStreak = () =>
   useQuery({
@@ -20,7 +20,7 @@ export const useGetStreak = () =>
 
 // 오늘의 문제 조회
 const getInterview = () => {
-  const data = api.get('/interview').json<InterviewResponse>();
+  const data = api.get('interview').json<InterviewResponse>();
   return data;
 };
 
@@ -38,13 +38,13 @@ export const useGetInterview = () => {
 
 // 답안 제출
 export const postInterviewAnswer = async (id: number, answer: string) => {
-  const data = await api.post(`/interview/${id}`, { json: { answer } }).json<InterviewAnswerResponse>();
+  const data = await api.post(`interview/${id}`, { json: { answer } }).json<InterviewAnswerResponse>();
   return data;
 };
 
 // 결과 조회
 const getInterviewResult = (interviewAnswerId: number) => {
-  const data = api.get(`/interview/result/${interviewAnswerId}`).json<InterviewResultResponse>();
+  const data = api.get(`interview/result/${interviewAnswerId}`).json<InterviewResultResponse>();
   return data;
 };
 
@@ -62,7 +62,7 @@ export const useGetInterviewResult = (interviewAnswerId: number) => {
 
 // 오늘의 문제 전체 조회
 const getInterviewList = () => {
-  const data = api.get('/interview/me').json<InterviewListResponse>();
+  const data = api.get('interview/me').json<InterviewListResponse>();
   return data;
 };
 
