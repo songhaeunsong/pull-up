@@ -1,6 +1,5 @@
 import Page404 from '@/pages/404';
 import ExamPage from '@/pages/exam';
-import GamePage from '@/pages/game';
 import HomePage from '@/pages/home';
 import RedirectPage from '@/pages/redirect';
 import SignInPage from '@/pages/signIn';
@@ -10,10 +9,6 @@ const etcRoutes = [
   {
     index: true,
     element: <HomePage />,
-  },
-  {
-    path: 'game',
-    element: <GamePage />,
   },
   {
     path: 'exam',
