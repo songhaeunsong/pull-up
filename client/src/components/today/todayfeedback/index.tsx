@@ -3,10 +3,7 @@ import KeywordList from '../keywordlist';
 
 interface TodayFeedbackProps {
   rate: string;
-  keywords: {
-    title: string;
-    correct: boolean;
-  }[];
+  keywords: string[];
   strength: string;
   weakness: string;
   modelanswer: string;
@@ -17,7 +14,7 @@ const TodayFeedback = ({ rate, keywords, strength, weakness, modelanswer }: Toda
     <div className="flex h-full w-full flex-col items-start gap-6 rounded-2xl border border-primary-200 bg-white p-9">
       <div className="flex w-full justify-between">
         <span className="text-3xl font-semibold text-primary-500">{rate}</span>
-        <KeywordList keywords={keywords} />
+        <KeywordList keywords={keywords} color="purple" />
       </div>
 
       <AnswerContainer title="강점" content={strength} />

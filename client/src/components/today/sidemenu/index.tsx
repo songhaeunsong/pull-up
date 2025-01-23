@@ -1,5 +1,8 @@
 import Icon from '@/components/common/icon';
 import MenuList from './menulist';
+import { useGetInterviewList } from '@/api/interview';
+import { useEffect, useState } from 'react';
+import { InterviewListResponse } from '@/types/interview';
 
 interface SideMenuProps {
   isOpen: boolean;
@@ -8,15 +11,29 @@ interface SideMenuProps {
 }
 
 const SideMenu = ({ isOpen, handleMenuClick, handleSearchClick }: SideMenuProps) => {
-  // 더미데이터
-  const dummyData = [
-    'OOP의 5가지 설계 원칙 (SOLID)이란 무엇인가요?',
-    'OOP의 5가지 설계 원칙 (SOLID)이란 무엇인가요?',
-    'OOP의 5가지 설계 원칙 (SOLID)이란 무엇인가요?',
-    'OOP의 5가지 설계 원칙 (SOLID)이란 무엇인가요?',
-    'OOP의 5가지 설계 원칙 (SOLID)이란 무엇인가요?',
-    'OOP의 5가지 설계 원칧 (SOLID)이란 무엇인가요?',
-  ];
+  const { data: interviewList } = useGetInterviewList();
+  const [data, setData] = useState<InterviewListResponse>();
+
+  useEffect(() => {
+    if (!interviewList) {
+      setData([
+        {
+          interviewId: 1,
+          interviewAnswerId: 1,
+          question: 'OOP의 5가지 설계 원칙 (SOLID)이란 무엇인가요?',
+        },
+        {
+          interviewId: 2,
+          interviewAnswerId: 2,
+          question: 'Checked Exception과 Unchecked Exception의 차이는 ?',
+        },
+      ]);
+    } else {
+      setData(interviewList);
+    }
+  }, []);
+
+  if (!data) return null;
 
   return (
     <div
@@ -33,7 +50,7 @@ const SideMenu = ({ isOpen, handleMenuClick, handleSearchClick }: SideMenuProps)
             <Icon id="search" />
           </button>
         </div>
-        <MenuList items={dummyData} />
+        <MenuList items={data} />
       </div>
     </div>
   );

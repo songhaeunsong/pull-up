@@ -1,18 +1,7 @@
 import OAuthButton from '@/components/signin/oauthbutton';
+import { OAuthLogin } from '@/utils/authService';
 
 const SignInPage = () => {
-  const onGoogleClick = () => {
-    console.log('구글 로그인');
-  };
-
-  const onNaverClick = () => {
-    console.log('네이버 로그인');
-  };
-
-  const onKakaoClick = () => {
-    console.log('카카오 로그인');
-  };
-
   return (
     <div
       className="relative flex h-full w-full justify-center"
@@ -35,9 +24,9 @@ const SignInPage = () => {
         </div>
 
         <div className="flex flex-col gap-4">
-          <OAuthButton image="google" title="Google" onClick={onGoogleClick} />
-          <OAuthButton image="naver" title="Naver" onClick={onNaverClick} />
-          <OAuthButton image="kakao" title="Kakao" onClick={onKakaoClick} />
+          <OAuthButton image="google" title="Google" onClick={() => OAuthLogin('google')} />
+          <OAuthButton image="naver" title="Naver" onClick={() => OAuthLogin('naver')} />
+          <OAuthButton image="kakao" title="Kakao" onClick={() => OAuthLogin('kakao')} />
         </div>
       </div>
     </div>
