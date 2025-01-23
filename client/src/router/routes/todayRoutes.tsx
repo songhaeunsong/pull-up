@@ -12,18 +12,16 @@ const todayRoutes = [
         element: <TodayPage />,
       },
       {
-        path: 'result',
+        path: 'result/:resultId',
         element: <TodayResultPage />,
       },
       {
-        path: 'otheranswers',
+        path: 'result/:resultId/otheranswers',
         element: <OtherAnswerList />,
-        children: [
-          {
-            path: ':answerId',
-            element: <OtherAnswerDetail />,
-          },
-        ],
+      },
+      {
+        path: 'result/:resultId/otheranswers/:answerId',
+        element: <OtherAnswerDetail />,
       },
     ],
   },

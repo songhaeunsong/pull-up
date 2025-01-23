@@ -9,9 +9,17 @@ const HomePage = () => {
   };
 
   return (
-    <div className="relative h-full w-full bg-primary-500">
-      <div className="absolute left-0 top-0 h-full w-3/4 bg-white" />
-
+    <div
+      className="relative h-full w-full"
+      style={{
+        background: `
+        radial-gradient(circle at 50% 50%, rgb(255, 255, 255) 0%, transparent 100%),
+        radial-gradient(circle at 50% 10%, rgb(186, 230, 253) 0%, transparent 30%),
+        radial-gradient(circle at 80% 80%, rgb(227, 227, 255) 0%, transparent 50%),
+        linear-gradient(180deg, rgb(219, 234, 254) 0%, rgb(255, 255, 255) 100%)
+      `,
+      }}
+    >
       <div className="relative flex h-full w-full items-center justify-center gap-[20rem]">
         {/* 좌측 컨테이너 */}
         <div className="flex flex-col gap-12">
@@ -34,7 +42,7 @@ const HomePage = () => {
           <SubmitButton text="알림 받으러 가기" color="secondary" onClick={onClick} />
         </div>
         {/* 우측 컨테이너 */}
-        <img src="/assets/images/home.png" alt="대문 이미지" className="h-auto w-[500px]" />
+        <img src="/assets/images/exam1.png" alt="대문 이미지" className="h-auto w-[600px]" />
       </div>
     </div>
   );
