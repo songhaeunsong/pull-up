@@ -1,5 +1,8 @@
 import DashBoardLayout from '@/layouts/dashboardLayout';
 import DashBoardPage from '@/pages/dashboard';
+import Recent from '@/pages/dashboard/recent';
+import Wrong from '@/pages/dashboard/wrong';
+import Archive from '@/pages/dashboard/archive';
 
 const dashBoardRoutes = [
   {
@@ -12,15 +15,15 @@ const dashBoardRoutes = [
       },
       {
         path: 'recent',
-        element: <>recent</>,
+        element: <Recent />,
       },
       {
         path: 'wrong',
-        element: <>wrong</>,
+        element: <Wrong />,
       },
       {
         path: 'archive',
-        element: <>archive</>,
+        element: <Archive />,
       },
     ],
   },
