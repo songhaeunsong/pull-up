@@ -6,7 +6,7 @@ import WinningRate from '@/components/dashboard/charts/WinningRate';
 
 const DashBoardPage = () => {
   return (
-    <div className="bg-Main grid w-full grid-cols-[2fr_1fr] gap-4 rounded-2xl shadow-sm">
+    <div className="grid w-full grid-cols-[2fr_1fr] gap-4 rounded-2xl bg-Main shadow-sm">
       <div className="grid grid-rows-[1.5fr_1fr] gap-4">
         <div className="flex flex-col rounded-2xl bg-white p-5">
           <ChartContainer icon="feedback" title="오늘의 문제 및 피드백">
