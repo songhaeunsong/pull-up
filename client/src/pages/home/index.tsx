@@ -10,7 +10,7 @@ const HomePage = () => {
 
   return (
     <div
-      className="relative h-full w-full"
+      className="relative h-full w-full pt-16"
       style={{
         background: `
         radial-gradient(circle at 50% 50%, rgb(255, 255, 255) 0%, transparent 100%),
@@ -29,7 +29,7 @@ const HomePage = () => {
               <SmallChip title="모의고사" color="border-2 border-primary-500 bg-primary-500 text-white" />
               <SmallChip title="학습 게임" color="border-2 border-primary-500 bg-primary-50 text-primary-500" />
             </div>
-            <div className="flex flex-col text-5xl font-semibold">
+            <div className="flex flex-col text-5xl font-bold">
               <span>나의 기술 스택과 실력</span>
               <span>맞춤으로 준비하는 면접</span>
             </div>
