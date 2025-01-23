@@ -1,4 +1,4 @@
-import Modal from '@/components/common/modal';
+import Modal from '@/components/common/csConditionSelector/temp';
 import exam1 from '/assets/images/exam1.png';
 import { useNavigate } from 'react-router-dom';
 
