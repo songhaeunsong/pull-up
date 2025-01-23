@@ -1,6 +1,6 @@
 import { useQuery } from '@tanstack/react-query';
 import api from './instance';
-import { Exam } from '@/types/exam';
+import { Exam, ExamCreateRequest, ExamDetailsResponse, ExamResultRequest, ExamResultResponse } from '@/types/exam';
 import { CorrectRate, Score } from '@/types/chart';
 
 interface GetExamAllResponse {
@@ -44,3 +44,43 @@ export const useGetRecentExam = () =>
     queryKey: ['correctRates'],
     queryFn: () => getRecentExam(),
   });
+
+// 모의고사 생성
+export const postExam = async (data: ExamCreateRequest) => {
+  return await api.post('/exam/me', { json: data }).json<{ examId: number }>();
+};
+
+// 모의고사 조회
+const getExamDetails = (examId: number) => {
+  return api.get(`/exam/${examId}`).json<ExamDetailsResponse>();
+};
+
+export const useGetExamDetails = (examId: number) => {
+  return useQuery({
+    queryKey: ['examDetails', examId],
+    queryFn: () => getExamDetails(examId),
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
+    retry: false,
+  });
+};
+
+// 모의고사 답안 제출
+export const postExamAnswer = async (examId: number, data: ExamResultRequest) => {
+  return await api.post(`/exam/${examId}`, { json: { data } });
+};
+
+// 모의고사 채점 결과 조회
+export const getExamResult = (examId: number) => {
+  return api.get(`/exam/${examId}/result`).json<ExamResultResponse>();
+};
+
+export const useGetExamResult = (examId: number) => {
+  return useQuery({
+    queryKey: ['examResult', examId],
+    queryFn: () => getExamResult(examId),
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
+    retry: false,
+  });
+};
