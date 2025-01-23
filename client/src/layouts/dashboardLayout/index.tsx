@@ -11,11 +11,13 @@ const DashBoardLayout = () => {
   };
 
   return (
-    <div className="bg-Main box-border flex flex-1 gap-4 p-8">
-      <main className="flex flex-1 overflow-y-auto">
-        <Outlet />
-      </main>
-      <SideBar image={image} name={name} email={email} subjects={subjects} />
+    <div className="flex pt-16">
+      <div className="box-border flex flex-1 gap-4 bg-Main p-8">
+        <main className="flex flex-1 overflow-y-auto">
+          <Outlet />
+        </main>
+        <SideBar image={image} name={name} email={email} subjects={subjects} />
+      </div>
     </div>
   );
 };
