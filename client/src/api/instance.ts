@@ -1,7 +1,8 @@
 import ky from 'ky';
+import { handleToken } from '@/utils/authService';
 
 const instance = ky.create({
-  prefixUrl: import.meta.env.VITE_BASE_URL,
+  prefixUrl: import.meta.env.VITE_BASE_API,
   credentials: 'include',
   headers: {
     'content-type': 'application/json',
@@ -10,12 +11,15 @@ const instance = ky.create({
 
 const api = instance.extend({
   hooks: {
-    beforeRequest: [], // setAuthorizationHeader
+    beforeRequest: [
+      async (request) => {
+        console.log('beforeRequest'); // hook 등록 확인
+        return request;
+      },
+    ], // setAuthorizationHeader
     afterResponse: [
-      (_request, _options, response) => {
-        if (response.status == 403) {
-          console.log('reissue');
-        }
+      async (_request, _options, response) => {
+        await handleToken(_request, response);
       },
       (_request, _options, response) => {
         if (response.ok) return response;
