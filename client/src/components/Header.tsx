@@ -36,10 +36,10 @@ const Header = () => {
           <Link
             key={item.path}
             to={item.path}
-            className={`pb-1 text-xl font-semibold transition-colors duration-200 ${
+            className={`text-xl font-semibold transition-colors duration-200 ${
               location.pathname === item.path
                 ? 'border-b-[3px] border-primary-500 text-primary-500'
-                : 'text-stone-800 hover:text-stone-950'
+                : 'border-b-[3px] border-transparent text-stone-800 hover:text-stone-950'
             }`}
             onClick={item.label === '로그아웃' || item.label === '로그인' ? handleAuthClick : undefined}
           >

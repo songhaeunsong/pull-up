@@ -19,7 +19,7 @@ const SignUpPage = () => {
       `,
       }}
     >
-      <div className="relative flex h-full w-full items-center justify-center gap-[20rem]">
+      <div className="relative flex h-full w-full items-center justify-around p-20">
         {/* 좌측 컨테이너 */}
         <div className="flex flex-col gap-12">
           <Modal text="회원가입" onClick={onConfirmSignUp} isExam={false} />

@@ -3,9 +3,9 @@ import { Outlet } from 'react-router';
 
 const MainLayout = () => {
   return (
-    <div className="h-screen">
+    <div className="h-screen w-full">
       <Header />
-      <main className="h-full">
+      <main className="h-full w-full">
         <Outlet />
       </main>
     </div>
