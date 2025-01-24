@@ -1,20 +1,17 @@
 import { useState } from 'react';
 import SubmitButton from '../submitButton';
-import Icon from '../icon';
 import { SUBJECT_OPTIONS } from './subjectSelector/SubjectOptions';
-import { LEVELS_OPTIONS } from './levelSelecor/levelOptions';
+import { LEVELS_OPTIONS } from './levelSelector/levelOptions';
 import SubjectSelector from './subjectSelector';
-import LevelSelecor from './levelSelecor';
+import LevelSelector from './levelSelector';
 
-interface ModalProps {
-  isModal?: boolean;
-  isModalOpen?: boolean;
+interface CsConditionSelectorProps {
   isExam?: boolean;
   text: string;
   onClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
-const Modaltemp = ({ isModal = false, isExam = true, text, onClick }: ModalProps) => {
+const CsConditionSelector = ({ isExam = false, text, onClick }: CsConditionSelectorProps) => {
   const [selectedLevelId, setSelectedLevelId] = useState<string | null>(null);
   const [selectedSubjectIds, setSelectedSubjectIds] = useState<string[]>([]);
 
@@ -32,11 +29,6 @@ const Modaltemp = ({ isModal = false, isExam = true, text, onClick }: ModalProps
     <>
       <div className="flex h-auto w-[532px] min-w-[532px] flex-col gap-2 rounded-2xl bg-white px-6 py-8 shadow-md">
         <div className="flex flex-col px-2">
-          {isModal && (
-            <div className="flex justify-end">
-              <Icon className="cursor-pointer" id="close" size={36} />
-            </div>
-          )}
           <div className="flex flex-col gap-6 px-2">
             <div className="flex flex-col gap-4">
               <div className="text-xl font-semibold text-stone-700">시험 분야 선택</div>
@@ -59,7 +51,7 @@ const Modaltemp = ({ isModal = false, isExam = true, text, onClick }: ModalProps
                 <div>
                   <div className="flex justify-center gap-2">
                     {LEVELS_OPTIONS.map((level) => (
-                      <LevelSelecor
+                      <LevelSelector
                         key={level.id}
                         id={level.id}
                         name={level.name}
@@ -71,15 +63,7 @@ const Modaltemp = ({ isModal = false, isExam = true, text, onClick }: ModalProps
                 </div>
               </div>
             )}
-            <div className="flex flex-col items-center gap-3 text-primary-500">
-              {isModal && <span>링크를 생성하고 친구에게 전달해주세요!</span>}
-              <SubmitButton
-                text={text}
-                onClick={onClick}
-                disabled={isDisabled}
-                color={isDisabled ? 'gray' : 'primary'}
-              />
-            </div>
+            <SubmitButton text={text} onClick={onClick} disabled={isDisabled} color={isDisabled ? 'gray' : 'primary'} />
           </div>
         </div>
       </div>
@@ -87,4 +71,4 @@ const Modaltemp = ({ isModal = false, isExam = true, text, onClick }: ModalProps
   );
 };
 
-export default Modaltemp;
+export default CsConditionSelector;

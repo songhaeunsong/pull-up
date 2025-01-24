@@ -5,7 +5,7 @@ interface LevelSelectorProps {
   onClick: (id: string) => void;
 }
 
-const LevelSelecor = ({ id, name, isSelected, onClick }: LevelSelectorProps) => {
+const LevelSelector = ({ id, name, isSelected, onClick }: LevelSelectorProps) => {
   return (
     <button
       onClick={() => onClick(id)}
@@ -20,4 +20,4 @@ const LevelSelecor = ({ id, name, isSelected, onClick }: LevelSelectorProps) => 
   );
 };
 
-export default LevelSelecor;
+export default LevelSelector;
