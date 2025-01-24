@@ -1,6 +1,6 @@
 import AnswerOption from '../answeroption';
 interface ExamAnswerProps {
-  questionType: 'objective' | 'subjective';
+  questionType: 'SHORT_ANSWER' | 'MULTIPLE_CHOICE';
   options: { content: string; state: 'default' | 'selected' | 'wrong' | 'correct' }[];
   chosenAnswer?: string;
   disabled?: boolean;
@@ -18,7 +18,7 @@ const ExamAnswer = ({
 }: ExamAnswerProps) => {
   return (
     <div className="flex w-full flex-col gap-3">
-      {questionType === 'objective' ? (
+      {questionType === 'SHORT_ANSWER' ? (
         // 객관식 문제
         options.map((option, index) => (
           <AnswerOption

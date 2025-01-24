@@ -9,9 +9,9 @@ const ExamPage = () => {
   };
   return (
     <>
-      <div className="flex min-h-full w-full items-center justify-center gap-20 bg-Main py-10">
+      <div className="mt-16 flex h-full w-full items-center justify-around bg-Main py-10">
         <CsConditionSelector text={'모의고사 만들기'} onClick={onSubmit} isExam={true} />
-        <img src={exam1} alt="exam1" className="w-[720px] object-contain" />
+        <img src={exam1} alt="exam1" className="h-auto w-[600px]" />
       </div>
     </>
   );

@@ -4,13 +4,13 @@ import { useState } from 'react';
 
 interface ExamProblemProps {
   problem: {
-    id: number;
+    problemId: number;
     content: string;
     subject: string;
     isBookmarked?: boolean;
-    questionType: 'objective' | 'subjective';
+    questionType: 'SHORT_ANSWER' | 'MULTIPLE_CHOICE';
     chosenAnswer?: string;
-    options?: { content: string; state?: 'default' | 'selected' | 'wrong' | 'correct' }[];
+    options?: string[];
   };
   disabled?: boolean;
   onSelectOption: (index: number) => void;
@@ -41,13 +41,15 @@ const ExamProblem = ({ problem, disabled = false, onSelectOption, onTextAnswerCh
     setBookmark((prev) => !prev);
   };
 
+  console.log(options);
+
   return (
     <div className="flex flex-col gap-7 rounded-xl border border-primary-200 bg-white px-7 py-7">
       {/* 질문 섹션 */}
       <div className="flex flex-col gap-2">
         <div className="flex items-center justify-between">
           <div className="flex cursor-pointer items-center gap-2">
-            <span className="text-2xl font-bold text-stone-900">문제 {problem.id}</span>
+            <span className="text-2xl font-bold text-stone-900">문제 {problem.problemId}</span>
             {problem.isBookmarked !== undefined && (
               <div
                 className={`cursor-pointer ${bookmark ? 'text-yellow-500' : 'text-gray-400'}`} // 북마크 상태에 따라 스타일 변경

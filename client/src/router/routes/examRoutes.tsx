@@ -1,14 +1,14 @@
 import ExamPage from '@/pages/exam';
+import ExamDetailPage from '@/pages/exam/detail';
 import ExamResultPage from '@/pages/exam/result';
-import ExamSolvePage from '@/pages/exam/solve';
 
 const examRoutes = [
   {
     path: 'exam',
     children: [
       { index: true, element: <ExamPage /> },
-      { path: 'solve', element: <ExamSolvePage /> },
-      { path: 'result', element: <ExamResultPage /> },
+      { path: ':examId', element: <ExamDetailPage /> },
+      { path: ':examId/result', element: <ExamResultPage /> },
     ],
   },
 ];

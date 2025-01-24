@@ -12,14 +12,14 @@ export interface ExamDetail {
   problem: string;
   options: string[];
   subject: string;
-  problemType: '객관식' | '주관식';
+  problemType: 'MULTIPLE_CHOICE' | 'SHORT_ANSWER';
   chosenAnswer: string;
   answer: string;
   answerStatus: boolean;
   bookmarkStatus: boolean;
-  explaination: string;
+  explanation: string;
   correctRate: number;
-  round: number;
+  round: string;
 }
 
 // 모의고사 생성 요청

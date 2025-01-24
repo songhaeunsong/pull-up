@@ -26,11 +26,11 @@ const CsConditionSelector = ({ isExam = false, text, onClick }: CsConditionSelec
   const isDisabled = selectedSubjectIds.length === 0 || (isExam && !selectedLevelId);
 
   return (
-    <div className="flex h-auto w-[532px] min-w-[532px] flex-col gap-2 rounded-2xl bg-white p-8 shadow-md">
-      <div className="flex flex-col gap-6">
-        <div className="flex flex-col gap-4">
-          <div className="text-xl font-semibold text-stone-700">시험 분야 선택</div>
-          <div className="flex flex-col justify-center gap-4">
+    <div className="flex h-auto w-[450px] min-w-[450px] flex-col gap-2 rounded-2xl bg-white p-8 shadow-md">
+      <div className="flex flex-col gap-4">
+        <div className="flex flex-col gap-2">
+          <div className="text-lg font-semibold text-stone-700">시험 분야 선택</div>
+          <div className="flex flex-col justify-center gap-2">
             {SUBJECT_OPTIONS.map((subject) => (
               <SubjectSelector
                 key={subject.id}
@@ -44,8 +44,8 @@ const CsConditionSelector = ({ isExam = false, text, onClick }: CsConditionSelec
           </div>
         </div>
         {isExam && (
-          <div className="flex flex-col gap-4 pt-4">
-            <div className="text-xl font-semibold text-stone-700">난이도 선택</div>
+          <div className="flex flex-col gap-2 pt-4">
+            <div className="text-lg font-semibold text-stone-700">난이도 선택</div>
             <div className="flex justify-center gap-2">
               {LEVELS_OPTIONS.map((level) => (
                 <LevelSelector
