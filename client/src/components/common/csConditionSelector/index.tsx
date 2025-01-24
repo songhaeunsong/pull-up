@@ -26,48 +26,42 @@ const CsConditionSelector = ({ isExam = false, text, onClick }: CsConditionSelec
   const isDisabled = selectedSubjectIds.length === 0 || (isExam && !selectedLevelId);
 
   return (
-    <>
-      <div className="flex h-auto w-[532px] min-w-[532px] flex-col gap-2 rounded-2xl bg-white px-6 py-8 shadow-md">
-        <div className="flex flex-col px-2">
-          <div className="flex flex-col gap-6 px-2">
-            <div className="flex flex-col gap-4">
-              <div className="text-xl font-semibold text-stone-700">시험 분야 선택</div>
-              <div className="flex flex-col justify-center gap-4">
-                {SUBJECT_OPTIONS.map((subject) => (
-                  <SubjectSelector
-                    key={subject.id}
-                    id={subject.id}
-                    name={subject.name}
-                    icon={subject.icon}
-                    isSelected={selectedSubjectIds.includes(subject.id)}
-                    onClick={handleSubjectClick}
-                  />
-                ))}
-              </div>
-            </div>
-            {isExam && (
-              <div className="flex flex-col gap-4 pt-4">
-                <div className="text-xl font-semibold text-stone-700">난이도 선택</div>
-                <div>
-                  <div className="flex justify-center gap-2">
-                    {LEVELS_OPTIONS.map((level) => (
-                      <LevelSelector
-                        key={level.id}
-                        id={level.id}
-                        name={level.name}
-                        isSelected={selectedLevelId === level.id}
-                        onClick={handleLevelClick}
-                      />
-                    ))}
-                  </div>
-                </div>
-              </div>
-            )}
-            <SubmitButton text={text} onClick={onClick} disabled={isDisabled} color={isDisabled ? 'gray' : 'primary'} />
+    <div className="flex h-auto w-[532px] min-w-[532px] flex-col gap-2 rounded-2xl bg-white p-8 shadow-md">
+      <div className="flex flex-col gap-6">
+        <div className="flex flex-col gap-4">
+          <div className="text-xl font-semibold text-stone-700">시험 분야 선택</div>
+          <div className="flex flex-col justify-center gap-4">
+            {SUBJECT_OPTIONS.map((subject) => (
+              <SubjectSelector
+                key={subject.id}
+                id={subject.id}
+                name={subject.name}
+                icon={subject.icon}
+                isSelected={selectedSubjectIds.includes(subject.id)}
+                onClick={handleSubjectClick}
+              />
+            ))}
           </div>
         </div>
+        {isExam && (
+          <div className="flex flex-col gap-4 pt-4">
+            <div className="text-xl font-semibold text-stone-700">난이도 선택</div>
+            <div className="flex justify-center gap-2">
+              {LEVELS_OPTIONS.map((level) => (
+                <LevelSelector
+                  key={level.id}
+                  id={level.id}
+                  name={level.name}
+                  isSelected={selectedLevelId === level.id}
+                  onClick={handleLevelClick}
+                />
+              ))}
+            </div>
+          </div>
+        )}
+        <SubmitButton text={text} onClick={onClick} disabled={isDisabled} color={isDisabled ? 'gray' : 'primary'} />
       </div>
-    </>
+    </div>
   );
 };
 
