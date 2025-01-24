@@ -10,19 +10,17 @@ const TodayPage = () => {
   const [answer, setAnswer] = useState(''); // 답변
   const [hint, setHint] = useState(false);
   const { data: interview } = useGetInterview();
-  const [data, setData] = useState<InterviewResponse>();
+  const [data, setData] = useState<InterviewResponse>({
+    interviewId: 1,
+    question: 'Checked Exception과 Unchecked Exception의 차이는 ?',
+    keywords: ['Java', 'Exception'],
+  });
 
   // 더미데이터
   const username = '김싸피';
 
   useEffect(() => {
-    if (!interview) {
-      setData({
-        interviewId: 1,
-        question: 'Checked Exception과 Unchecked Exception의 차이는 ?',
-        keywords: ['Java', 'Exception'],
-      });
-    } else {
+    if (interview) {
       setData(interview);
     }
   }, []);
@@ -59,7 +57,7 @@ const TodayPage = () => {
 
   return (
     <div className="flex w-full items-center justify-center bg-gradient-to-b from-primary-50 to-white px-10 py-10">
-      <div className="flex w-[873px] flex-col items-center justify-center gap-12">
+      <div className="flex w-[873px] flex-col items-center justify-center gap-12 pt-16">
         <div className="text-3xl font-extrabold">
           <span className="text-primary-600">{`${username}`}</span>
           <span>님 만을 위한 오늘의 맞춤 문제🎯</span>
