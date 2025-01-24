@@ -9,6 +9,7 @@ import {
   InterviewResultResponse,
   MemberAnswerRequest,
 } from '@/types/interview';
+import { LikeResponse } from '@/types/common';
 
 type GetStreakResponse = Streak[];
 
@@ -86,7 +87,7 @@ const getInterviewAnswerList = (interviewId: number) => {
 
 export const useGetInterviewAnswerList = (interviewId: number) => {
   return useQuery({
-    queryKey: ['otherAnswerList', interviewId],
+    queryKey: ['interviewAnswerList', interviewId],
     queryFn: () => getInterviewAnswerList(interviewId),
     refetchOnMount: false,
     refetchOnWindowFocus: false,
@@ -102,10 +103,20 @@ const getInterviewAnswerDetail = (interviewId: number, interviewAnswerId: number
 
 export const useGetInterviewAnswerDetail = (interviewId: number, interviewAnswerId: number) => {
   return useQuery({
-    queryKey: ['otherAnswerDetail', interviewId, interviewAnswerId],
+    queryKey: ['interviewAnswerDetail', interviewId, interviewAnswerId],
     queryFn: () => getInterviewAnswerDetail(interviewId, interviewAnswerId),
     refetchOnMount: false,
     refetchOnWindowFocus: false,
     retry: false,
   });
+};
+
+// 다른 사람 답변 좋아요 토글
+const createLike = (interviewAnswerId: number) => {
+  const data = api.get(`interview/${interviewAnswerId}/like`).json<LikeResponse>();
+  return data;
+};
+
+export const useCreateLike = (interviewAnswerId: number, liked: number) => {
+  return;
 };
