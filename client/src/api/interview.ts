@@ -2,10 +2,12 @@ import { useQuery } from '@tanstack/react-query';
 import api from './instance';
 import { Streak } from '@/types/chart';
 import {
-  InterviewAnswerResponse,
+  InterviewAnswerDetailResponse,
+  InterviewAnswerListResponse,
   InterviewListResponse,
   InterviewResponse,
   InterviewResultResponse,
+  MemberAnswerRequest,
 } from '@/types/interview';
 
 type GetStreakResponse = Streak[];
@@ -37,8 +39,8 @@ export const useGetInterview = () => {
 };
 
 // 답안 제출
-export const postInterviewAnswer = async (id: number, answer: string) => {
-  const data = await api.post(`interview/${id}`, { json: { answer } }).json<InterviewAnswerResponse>();
+export const createMemberAnswer = async (id: number, answer: string) => {
+  const data = await api.post(`interview/${id}`, { json: { answer } }).json<MemberAnswerRequest>();
   return data;
 };
 
@@ -60,7 +62,7 @@ export const useGetInterviewResult = (interviewAnswerId: number) => {
   });
 };
 
-// 오늘의 문제 전체 조회
+// 지난 오늘의 문제 전체 조회
 const getInterviewList = () => {
   const data = api.get('interview/me').json<InterviewListResponse>();
   return data;
@@ -70,6 +72,38 @@ export const useGetInterviewList = () => {
   return useQuery({
     queryKey: ['interviewList'],
     queryFn: getInterviewList,
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
+    retry: false,
+  });
+};
+
+// 다른 사람 답변 전체 조회
+const getInterviewAnswerList = (interviewId: number) => {
+  const data = api.get(`interview/${interviewId}/all`).json<InterviewAnswerListResponse>();
+  return data;
+};
+
+export const useGetInterviewAnswerList = (interviewId: number) => {
+  return useQuery({
+    queryKey: ['otherAnswerList', interviewId],
+    queryFn: () => getInterviewAnswerList(interviewId),
+    refetchOnMount: false,
+    refetchOnWindowFocus: false,
+    retry: false,
+  });
+};
+
+// 다른 사람 답변 상세 조회
+const getInterviewAnswerDetail = (interviewId: number, interviewAnswerId: number) => {
+  const data = api.get(`interview/${interviewId}/${interviewAnswerId}`).json<InterviewAnswerDetailResponse>();
+  return data;
+};
+
+export const useGetInterviewAnswerDetail = (interviewId: number, interviewAnswerId: number) => {
+  return useQuery({
+    queryKey: ['otherAnswerDetail', interviewId, interviewAnswerId],
+    queryFn: () => getInterviewAnswerDetail(interviewId, interviewAnswerId),
     refetchOnMount: false,
     refetchOnWindowFocus: false,
     retry: false,

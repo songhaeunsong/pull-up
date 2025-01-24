@@ -1,9 +1,9 @@
-interface AnswerContainerProps {
+interface ContentSectionProps {
   title: string;
   content: string;
 }
 
-const AnswerContainer = ({ title, content }: AnswerContainerProps) => {
+const ContentSection = ({ title, content }: ContentSectionProps) => {
   return (
     <div className="flex w-full flex-col gap-4">
       <div className="w-fit rounded-2xl bg-stone-50 px-4 py-2 text-lg font-medium">{title}</div>
@@ -12,4 +12,4 @@ const AnswerContainer = ({ title, content }: AnswerContainerProps) => {
   );
 };
 
-export default AnswerContainer;
+export default ContentSection;

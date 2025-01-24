@@ -1,9 +1,9 @@
 interface CommentItemProps {
-  userId: string;
-  commentUserId: string;
+  userId: number;
+  commentId: number;
   commentUserEmail: string;
   content: string;
-  handleUpdate: (comment: { id: string; email: string; content: string }) => void;
+  handleUpdate: (comment: { id: number; email: string; content: string }) => void;
   handleDelete: (e: React.MouseEvent<HTMLButtonElement>) => void;
   onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
   onCancelClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
@@ -14,7 +14,7 @@ interface CommentItemProps {
 
 const CommentItem = ({
   userId,
-  commentUserId,
+  commentId,
   commentUserEmail,
   content,
   handleDelete,
@@ -30,13 +30,13 @@ const CommentItem = ({
       <div className="flex flex-col gap-4 px-2">
         <div className="flex justify-between">
           <div className="text-xl font-medium text-primary-500">{commentUserEmail}</div>
-          {userId === commentUserId &&
+          {userId === commentId &&
             (!updated ? (
               <div className="flex gap-2 text-lg text-primary-400">
                 <button
                   onClick={() =>
                     handleUpdate({
-                      id: commentUserId,
+                      id: commentId,
                       email: commentUserEmail,
                       content: content,
                     })

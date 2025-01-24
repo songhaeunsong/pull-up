@@ -1,14 +1,14 @@
 import React from 'react';
-import Keyword from '../keywordlist/keyword';
+import Keyword from '../keywordList/keyword';
 
-interface QuestionCardProps {
+interface InterviewCardProps {
   title: string;
   keywords: string[];
   onHintClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
   hint: boolean;
 }
 
-const QuestionCard = ({ title, keywords, onHintClick, hint }: QuestionCardProps) => {
+const InterviewCard = ({ title, keywords, onHintClick, hint }: InterviewCardProps) => {
   return (
     <div className="relative h-[372px] w-full" style={{ perspective: '2000px' }}>
       <div
@@ -71,4 +71,4 @@ const QuestionCard = ({ title, keywords, onHintClick, hint }: QuestionCardProps)
   );
 };
 
-export default QuestionCard;
+export default InterviewCard;
