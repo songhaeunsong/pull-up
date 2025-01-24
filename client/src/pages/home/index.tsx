@@ -1,5 +1,6 @@
 import SmallChip from '@/components/common/smallchip';
 import SubmitButton from '@/components/common/submitButton';
+import { useChipAnimation } from '@/hooks/useChipAnimation';
 import { useNavigate } from 'react-router-dom';
 
 const HomePage = () => {
@@ -7,6 +8,9 @@ const HomePage = () => {
   const onClick = () => {
     navigate('/signin');
   };
+
+  const { styles, currentStyles } = useChipAnimation();
+  const titles = ['오늘의 질문', '모의고사', '학습 게임'];
 
   return (
     <div
@@ -20,24 +24,30 @@ const HomePage = () => {
       `,
       }}
     >
-      <div className="relative flex h-full w-full items-center justify-center gap-[20rem]">
+      <div className="relative flex h-full w-full items-center justify-around p-20">
         {/* 좌측 컨테이너 */}
-        <div className="flex flex-col gap-12">
+        <div className="flex flex-col gap-10">
           <div className="flex flex-col gap-6">
             <div className="flex gap-4">
-              <SmallChip title="오늘의 질문" color="border-2 border-primary-500 bg-primary-50 text-primary-500" />
-              <SmallChip title="모의고사" color="border-2 border-primary-500 bg-primary-500 text-white" />
-              <SmallChip title="학습 게임" color="border-2 border-primary-500 bg-primary-50 text-primary-500" />
+              {titles.map((title, index) => (
+                <SmallChip
+                  key={title}
+                  title={title}
+                  color={`${styles[currentStyles[index]]} transition-all duration-500`}
+                />
+              ))}
             </div>
             <div className="flex flex-col text-5xl font-bold">
               <span>나의 기술 스택과 실력</span>
               <span>맞춤으로 준비하는 면접</span>
             </div>
-            <div className="flex flex-col text-2xl font-medium">
-              <span>CS 모의고사 풀이부터</span>
-              <span>매일 알림으로 받는 기술 면접까지</span>
+            <div className="flex flex-col gap-2">
+              <div className="flex flex-col text-2xl font-semibold">
+                <span>CS 모의고사 풀이부터</span>
+                <span>매일 알림으로 받는 기술 면접까지</span>
+              </div>
+              <span className="text-xl font-medium text-primary-500">간편하게 오늘의 문제부터 받아보세요.</span>
             </div>
-            <span className="text-xl font-medium text-primary-500">간편하게 오늘의 문제부터 받아보세요.</span>
           </div>
           <SubmitButton text="알림 받으러 가기" color="secondary" onClick={onClick} />
         </div>
