@@ -9,7 +9,6 @@ import {
   InterviewResultResponse,
   MemberAnswerRequest,
 } from '@/types/interview';
-import { LikeResponse } from '@/types/common';
 
 type GetStreakResponse = Streak[];
 
@@ -22,7 +21,7 @@ export const useGetStreak = () =>
   });
 
 // 오늘의 문제 조회
-const getInterview = () => {
+const getInterview = (): Promise<InterviewResponse> => {
   const data = api.get('interview').json<InterviewResponse>();
   return data;
 };
@@ -33,20 +32,17 @@ export const useGetInterview = () => {
     queryFn: getInterview,
     staleTime: 1000 * 60 * 10, // 10분
     gcTime: 1000 * 60 * 60, // 1시간
-    refetchOnMount: false,
-    refetchOnWindowFocus: false,
-    retry: false,
   });
 };
 
 // 답안 제출
-export const createMemberAnswer = async (id: number, answer: string) => {
+export const createMemberAnswer = async (id: number, answer: string): Promise<MemberAnswerRequest> => {
   const data = await api.post(`interview/${id}`, { json: { answer } }).json<MemberAnswerRequest>();
   return data;
 };
 
 // 결과 조회
-const getInterviewResult = (interviewAnswerId: number) => {
+const getInterviewResult = (interviewAnswerId: number): Promise<InterviewResultResponse> => {
   const data = api.get(`interview/result/${interviewAnswerId}`).json<InterviewResultResponse>();
   return data;
 };
@@ -57,14 +53,11 @@ export const useGetInterviewResult = (interviewAnswerId: number) => {
     queryFn: () => getInterviewResult(interviewAnswerId),
     staleTime: 1000 * 60 * 10, // 10분
     gcTime: 1000 * 60 * 60, // 1시간
-    refetchOnMount: false,
-    refetchOnWindowFocus: false,
-    retry: false,
   });
 };
 
 // 지난 오늘의 문제 전체 조회
-const getInterviewList = () => {
+const getInterviewList = (): Promise<InterviewListResponse> => {
   const data = api.get('interview/me').json<InterviewListResponse>();
   return data;
 };
@@ -73,14 +66,11 @@ export const useGetInterviewList = () => {
   return useQuery({
     queryKey: ['interviewList'],
     queryFn: getInterviewList,
-    refetchOnMount: false,
-    refetchOnWindowFocus: false,
-    retry: false,
   });
 };
 
 // 다른 사람 답변 전체 조회
-const getInterviewAnswerList = (interviewId: number) => {
+const getInterviewAnswerList = (interviewId: number): Promise<InterviewAnswerListResponse> => {
   const data = api.get(`interview/${interviewId}/all`).json<InterviewAnswerListResponse>();
   return data;
 };
@@ -89,14 +79,14 @@ export const useGetInterviewAnswerList = (interviewId: number) => {
   return useQuery({
     queryKey: ['interviewAnswerList', interviewId],
     queryFn: () => getInterviewAnswerList(interviewId),
-    refetchOnMount: false,
-    refetchOnWindowFocus: false,
-    retry: false,
   });
 };
 
 // 다른 사람 답변 상세 조회
-const getInterviewAnswerDetail = (interviewId: number, interviewAnswerId: number) => {
+const getInterviewAnswerDetail = (
+  interviewId: number,
+  interviewAnswerId: number,
+): Promise<InterviewAnswerDetailResponse> => {
   const data = api.get(`interview/${interviewId}/${interviewAnswerId}`).json<InterviewAnswerDetailResponse>();
   return data;
 };
@@ -105,18 +95,5 @@ export const useGetInterviewAnswerDetail = (interviewId: number, interviewAnswer
   return useQuery({
     queryKey: ['interviewAnswerDetail', interviewId, interviewAnswerId],
     queryFn: () => getInterviewAnswerDetail(interviewId, interviewAnswerId),
-    refetchOnMount: false,
-    refetchOnWindowFocus: false,
-    retry: false,
   });
-};
-
-// 다른 사람 답변 좋아요 토글
-const createLike = (interviewAnswerId: number) => {
-  const data = api.get(`interview/${interviewAnswerId}/like`).json<LikeResponse>();
-  return data;
-};
-
-export const useCreateLike = (interviewAnswerId: number, liked: number) => {
-  return;
 };

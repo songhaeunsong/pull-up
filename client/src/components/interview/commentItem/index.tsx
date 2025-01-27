@@ -1,21 +1,23 @@
 interface CommentItemProps {
-  userId: number;
+  userEmail: string;
   commentId: number;
   commentUserEmail: string;
+  commentUserName: string;
   content: string;
-  handleUpdate: (comment: { id: number; email: string; content: string }) => void;
-  handleDelete: (e: React.MouseEvent<HTMLButtonElement>) => void;
-  onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
-  onCancelClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
-  onConfirmClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  handleUpdate: (comment: string, commentId: number) => void;
+  handleDelete: (commentId: number) => void;
+  onChange: (e: React.ChangeEvent<HTMLTextAreaElement>, commentId: number) => void;
+  onCancelClick: (commentId: number) => void;
+  onConfirmClick: (commentId: number) => void;
   value: string;
   updated: boolean;
 }
 
 const CommentItem = ({
-  userId,
+  userEmail,
   commentId,
   commentUserEmail,
+  commentUserName,
   content,
   handleDelete,
   handleUpdate,
@@ -29,26 +31,17 @@ const CommentItem = ({
     <div className="flex w-full flex-col gap-4 py-2">
       <div className="flex flex-col gap-4 px-2">
         <div className="flex justify-between">
-          <div className="text-xl font-medium text-primary-500">{commentUserEmail}</div>
-          {userId === commentId &&
+          <div className="text-xl font-medium text-primary-500">{commentUserName}</div>
+          {userEmail === commentUserEmail &&
             (!updated ? (
               <div className="flex gap-2 text-lg text-primary-400">
-                <button
-                  onClick={() =>
-                    handleUpdate({
-                      id: commentId,
-                      email: commentUserEmail,
-                      content: content,
-                    })
-                  }
-                >
-                  수정
-                </button>
-                |<button onClick={handleDelete}>삭제</button>
+                <button onClick={() => handleUpdate(content, commentId)}>수정</button>|
+                <button onClick={() => handleDelete(commentId)}>삭제</button>
               </div>
             ) : (
               <div className="flex gap-2 text-lg text-primary-400">
-                <button onClick={onCancelClick}>취소</button>|<button onClick={onConfirmClick}>완료</button>
+                <button onClick={() => onCancelClick(commentId)}>취소</button>|
+                <button onClick={() => onConfirmClick(commentId)}>완료</button>
               </div>
             ))}
         </div>
@@ -57,9 +50,9 @@ const CommentItem = ({
           disabled={!updated}
           placeholder={content}
           value={value}
-          onChange={onChange}
+          onChange={(e) => onChange(e, commentId)}
           className={`resize-none rounded-lg text-xl text-black outline-none placeholder:text-black focus:border focus:outline-none ${
-            !updated ? '' : 'border border-primary-300 p-3'
+            userEmail === commentUserEmail && updated ? 'border border-primary-300 p-3' : ''
           }`}
         />
       </div>

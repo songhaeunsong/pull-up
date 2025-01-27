@@ -57,3 +57,6 @@ export type InterviewAnswerDetailResponse = Pick<
   InterviewAnswer,
   'interviewAnswerId' | 'memberName' | 'date' | 'keywords' | 'answer' | 'likeCount' | 'commentCount'
 > & { commentList: Pick<Comment, 'commentId' | 'otherMemberName' | 'email' | 'comment'>[] };
+
+// 댓글 작성 요청 타입
+export type CommentRequest = Pick<Comment, 'interviewAnswerId' | 'comment'>;

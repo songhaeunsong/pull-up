@@ -1,3 +1,4 @@
+import { useCreateComment, useDeleteComment, useUpdateComment } from '@/api/comment';
 import { useGetInterviewAnswerDetail } from '@/api/interview';
 import RouteHeader from '@/components/common/routeheader';
 import CommentItem from '@/components/interview/commentItem';
@@ -9,7 +10,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 const InterviewAnswerDetail = () => {
-  const dummyUser = { id: 1 };
+  const dummyUser = { email: 'email@gmail.com' };
 
   const navigate = useNavigate();
   const { interviewId, interviewAnswerId } = useParams();
@@ -32,9 +33,9 @@ const InterviewAnswerDetail = () => {
       },
       {
         commentId: 2,
-        otherMemberName: '홍길원',
-        email: 'email@gmail.com',
-        comment: '면접 때 도움이 되었습니다. 매우 유용해요 ㅎㅎ',
+        email: 'email2@gmail.com',
+        otherMemberName: '홍길투',
+        comment: '면접 때 도움이 되었습니다.',
       },
     ],
   });
@@ -45,20 +46,87 @@ const InterviewAnswerDetail = () => {
     }
   }, [interviewAnswer]);
 
-  const [inputValue, setInputValue] = useState(''); // 댓글 입력
+  // 댓글 작성
+  const [inputValue, setInputValue] = useState('');
 
   const onChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setInputValue(e.target.value);
   };
 
-  const onSubmit = () => {
-    console.log('제출: ', inputValue);
+  const createCommentMutation = useCreateComment(Number(interviewId), Number(interviewAnswerId), {
+    interviewAnswerId: Number(interviewAnswerId),
+    comment: inputValue,
+  });
+
+  const onSubmit = async () => {
+    createCommentMutation.mutate();
     setInputValue('');
   };
 
   const onKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === 'Enter') {
       onSubmit();
+    }
+  };
+
+  // 댓글 수정
+  const [updatedComments, setUpdatedComments] = useState<{
+    [key: number]: { updated: boolean; value: string };
+  }>({});
+
+  const [activeCommentId, setActiveCommentId] = useState<number | null>(null);
+
+  const updateCommentMutation = useUpdateComment(
+    Number(interviewId),
+    Number(interviewAnswerId),
+    activeCommentId ?? 0,
+    updatedComments[activeCommentId ?? 0]?.value ?? '',
+  );
+
+  const onCommentChange = (e: React.ChangeEvent<HTMLTextAreaElement>, commentId: number) => {
+    setUpdatedComments((prev) => ({
+      ...prev,
+      [commentId]: { ...prev[commentId], value: e.target.value },
+    }));
+  };
+
+  const handleCommentUpdate = (comment: string, commentId: number) => {
+    setActiveCommentId(commentId);
+    setUpdatedComments((prev) => ({
+      ...prev,
+      [commentId]: { updated: true, value: comment },
+    }));
+  };
+
+  const onCancelClick = (commentId: number) => {
+    setActiveCommentId(null);
+    setUpdatedComments((prev) => ({
+      ...prev,
+      [commentId]: { ...prev[commentId], updated: false },
+    }));
+  };
+
+  const onConfirmClick = async (commentId: number) => {
+    try {
+      await updateCommentMutation.mutateAsync();
+      setUpdatedComments((prev) => ({
+        ...prev,
+        [commentId]: { ...prev[commentId], updated: false },
+      }));
+      setActiveCommentId(null);
+    } catch (error) {
+      console.error('댓글 수정 실패:', error);
+    }
+  };
+
+  // 댓글 삭제
+  const deleteCommentMutation = useDeleteComment(Number(interviewId), Number(interviewAnswerId));
+
+  const handleCommentDelete = async (commentId: number) => {
+    try {
+      await deleteCommentMutation.mutateAsync(commentId);
+    } catch (error) {
+      console.error('댓글 삭제 실패:', error);
     }
   };
 
@@ -71,30 +139,6 @@ const InterviewAnswerDetail = () => {
       ...interviewAnswerData,
       likeCount: interviewAnswerData.likeCount + 1,
     });
-  };
-
-  const [commentValue, setCommentValue] = useState('');
-  const [updated, setUpdated] = useState(false);
-  const handleCommentUpdate = (comment: { id: number; email: string; content: string }) => {
-    setUpdated(!updated);
-    setCommentValue(comment.content);
-  };
-
-  const handleCommentDelete = () => {
-    console.log('댓글 삭제');
-  };
-
-  const onCommentChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    setCommentValue(e.target.value);
-  };
-
-  const onCancelClick = () => {
-    setUpdated(!updated);
-  };
-
-  const onConfirmClick = () => {
-    setUpdated(!updated);
-    console.log('댓글 수정 완료');
   };
 
   return (
@@ -124,17 +168,18 @@ const InterviewAnswerDetail = () => {
           {interviewAnswerData.commentList.map((comment, index) => (
             <div key={index}>
               <CommentItem
-                userId={dummyUser.id}
+                userEmail={dummyUser.email}
                 commentId={comment.commentId}
-                commentUserEmail={comment.otherMemberName}
+                commentUserEmail={comment.email}
+                commentUserName={comment.otherMemberName}
                 content={comment.comment}
                 handleDelete={handleCommentDelete}
                 handleUpdate={handleCommentUpdate}
                 onCancelClick={onCancelClick}
                 onChange={onCommentChange}
                 onConfirmClick={onConfirmClick}
-                value={commentValue}
-                updated={updated}
+                value={updatedComments[comment.commentId]?.value ?? comment.comment}
+                updated={updatedComments[comment.commentId]?.updated ?? false}
               />
             </div>
           ))}

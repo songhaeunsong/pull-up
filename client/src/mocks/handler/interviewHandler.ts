@@ -167,9 +167,9 @@ export const interviewHandler = [
             },
             {
               commentId: 2,
-              otherMemberName: '홍길원',
-              email: 'email@gmail.com',
-              comment: '면접 때 도움이 되었습니다. 매우 유용해요 ㅎㅎ',
+              otherMemberName: '홍길투',
+              email: 'email2@gmail.com',
+              comment: '면접 때 도움이 되었습니다.',
             },
           ],
         },

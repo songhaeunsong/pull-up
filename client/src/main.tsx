@@ -4,7 +4,15 @@ import App from './App.tsx';
 import './index.css';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 
-export const queryClient = new QueryClient();
+export const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnMount: false,
+      refetchOnWindowFocus: false,
+      retry: false,
+    },
+  },
+});
 
 async function enableMocking() {
   if (import.meta.env.VITE_MOCK_SERVICE !== 'develop') return;
