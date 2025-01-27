@@ -19,7 +19,6 @@ export interface ExamDetail {
   bookmarkStatus: boolean;
   explanation: string;
   correctRate: number;
-  round: string;
 }
 
 // 모의고사 생성 요청
@@ -29,7 +28,13 @@ export type ExamCreateRequest = Pick<Exam, 'subjects'> & { difficultyLevel: 'HAR
 export type ExamDetailsResponse = Pick<ExamDetail, 'problemId' | 'problem' | 'options' | 'problemType' | 'subject'>[];
 
 // 모의고사 채점 요청 타입
-export type ExamResultRequest = Pick<ExamDetail, 'problemId' | 'chosenAnswer'>[];
+export type ExamResultRequest = {
+  problemAndChosenAnswers: Pick<ExamDetail, 'problemId' | 'chosenAnswer'>[];
+};
 
 // 모의고사 채점 결과 조회 응답 타입
-export type ExamResultResponse = ExamDetail[];
+export type ExamResultResponse = {
+  round: string;
+  score: number;
+  examResultDetailDtos: ExamDetail[];
+};

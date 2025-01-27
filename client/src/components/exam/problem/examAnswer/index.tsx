@@ -1,7 +1,9 @@
+import { useExamStore } from '@/stores/ExamStore';
 import AnswerOption from '../answeroption';
 interface ExamAnswerProps {
+  problemId: number;
   questionType: 'SHORT_ANSWER' | 'MULTIPLE_CHOICE';
-  options: { content: string; state: 'default' | 'selected' | 'wrong' | 'correct' }[];
+  //options: { text: string; state: 'default' | 'selected' | 'wrong' | 'correct' }[];
   chosenAnswer?: string;
   disabled?: boolean;
   onSelectOption?: (index: number) => void;
@@ -9,22 +11,26 @@ interface ExamAnswerProps {
 }
 
 const ExamAnswer = ({
+  problemId,
   questionType,
-  options,
-  chosenAnswer = '',
   onSelectOption,
   onTextAnswerChange,
   disabled = false,
 }: ExamAnswerProps) => {
+  const { answers, options } = useExamStore();
+  const chosenAnswer = answers[problemId] || '';
+  const problemOptions = options[problemId] || [];
+  console.log(problemOptions);
+
   return (
     <div className="flex w-full flex-col gap-3">
-      {questionType === 'SHORT_ANSWER' ? (
+      {questionType === 'MULTIPLE_CHOICE' ? (
         // 객관식 문제
-        options.map((option, index) => (
+        problemOptions.map((option, index) => (
           <AnswerOption
             key={index}
             id={index + 1}
-            content={option.content}
+            content={option.text}
             state={option.state ?? 'default'}
             onClick={() => onSelectOption?.(index)}
             disabled={disabled}

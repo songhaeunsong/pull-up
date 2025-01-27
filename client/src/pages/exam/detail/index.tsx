@@ -2,66 +2,64 @@ import ExamProblem from '@/components/exam/problem';
 import InfoSection from '@/components/exam/infoSection';
 import SubmitButton from '@/components/common/submitButton';
 import ProblemStatusButton from '@/components/exam/infoSection/problemStatusButton';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useGetExamDetails } from '@/api/exam';
-import { ExamDetailsResponse } from '@/types/exam';
+import { useExamStore } from '@/stores/ExamStore';
 
 const ExamDetailPage = () => {
   const navigate = useNavigate();
   const { examId } = useParams();
 
-  // React Query를 사용해 모의고사 문제 가져오기
   const { data: examProblems } = useGetExamDetails(Number(examId));
-  const [data, setData] = useState<ExamDetailsResponse>([
-    {
-      problemId: 1,
-      problem: 'http는 무엇일까요?',
-      options: ['데이터 압축 지원', 'https에서 s 뺀 것', '안녕', '하세요'],
-      subject: '네트워크',
-      problemType: 'MULTIPLE_CHOICE',
-    },
-  ]);
-  // 정답 상태 관리
-  const [answers, setAnswers] = useState<{ [key: number]: string | number }>({});
+  //const [data, setData] = useState<ExamDetailsResponse>([]);
+  const { answers, setSolutionPage, initializeFromDetail } = useExamStore();
 
   useEffect(() => {
+    setSolutionPage(false);
     if (examProblems) {
-      setData(examProblems);
+      initializeFromDetail(examProblems);
     }
-  }, [examProblems]);
+  }, [examProblems, setSolutionPage]);
 
   if (!examProblems) {
     return <div>시험 데이터를 불러오는 데 실패했습니다.</div>;
   }
 
-  const handleAnswerSelect = (problemId: number, answer: string | number) => {
-    setAnswers((prev) => ({
-      ...prev,
-      [problemId]: answer,
-    }));
-  };
+  const onSubmit = async () => {
+    try {
+      // // ExamResultRequest 형식으로 변환
+      // const requestBody: ExamResultRequest = {
+      //   problemAndChosenAnswers: Object.keys(answers).map((problemId) => ({
+      //     problemId: Number(problemId),
+      //     chosenAnswer: answers[Number(problemId)],
+      //   })),
+      // };
 
-  const onSubmit = () => {
-    navigate(`/exam/${examId}/result`);
+      // // API 호출
+      // await postExamAnswer(Number(examId), requestBody);
+
+      // 결과 페이지로 이동
+      navigate(`/exam/${examId}/result`);
+    } catch (error) {
+      console.error('답안 제출 실패:', error);
+    }
   };
 
   return (
     <div className="mt-16 flex h-full w-full gap-20 bg-Main px-16 py-10">
       {/* 문제 리스트 */}
       <div className="flex w-[920px] flex-1 flex-col gap-10">
-        {data.map((problem) => (
+        {examProblems.map((problem) => (
           <ExamProblem
             key={problem.problemId}
             problem={{
               problemId: problem.problemId,
-              content: problem.problem,
+              question: problem.problem,
               subject: problem.subject,
               questionType: problem.problemType,
-              options: problem.options?.map((option) => ({ content: option, state: 'default' })),
+              options: problem.options,
             }}
-            onSelectOption={(index) => handleAnswerSelect(problem.problemId, index + 1)}
-            onTextAnswerChange={(answer) => handleAnswerSelect(problem.problemId, answer)}
           />
         ))}
       </div>

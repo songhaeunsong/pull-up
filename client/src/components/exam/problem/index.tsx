@@ -1,47 +1,33 @@
 import ExamAnswer from './examAnswer';
 import Icon from '@/components/common/icon';
-import { useState } from 'react';
+import { useExamStore } from '@/stores/ExamStore';
 
 interface ExamProblemProps {
   problem: {
     problemId: number;
-    content: string;
+    question: string;
     subject: string;
-    isBookmarked?: boolean;
     questionType: 'SHORT_ANSWER' | 'MULTIPLE_CHOICE';
     chosenAnswer?: string;
     options?: string[];
+    answer?: string;
   };
-  disabled?: boolean;
-  onSelectOption: (index: number) => void;
-  onTextAnswerChange: (answer: string) => void;
 }
-const ExamProblem = ({ problem, disabled = false, onSelectOption, onTextAnswerChange }: ExamProblemProps) => {
-  const [options, setOptions] = useState(
-    (problem.options ?? []).map((option) => ({
-      ...option,
-      state: option.state ?? 'default',
-    })),
-  );
 
-  const [bookmark, setBookmark] = useState(problem.isBookmarked ?? false);
-
+const ExamProblem = ({ problem }: ExamProblemProps) => {
+  const { answers, setAnswer, updateOptionState, isSolutionPage, bookmarks, toggleBookmark } = useExamStore();
   const handleOptionClick = (index: number) => {
-    if (disabled) return;
-    setOptions((prevOptions) =>
-      prevOptions.map((option, idx) => ({
-        ...option,
-        state: idx === index ? 'selected' : 'default',
-      })),
-    );
-    onSelectOption(index);
+    setAnswer(problem.problemId, problem.options![index]);
+    updateOptionState(problem.problemId, index, 'selected');
+  };
+
+  const handleTextChange = (text: string) => {
+    setAnswer(problem.problemId, text);
   };
 
   const handleBookmarkClick = () => {
-    setBookmark((prev) => !prev);
+    toggleBookmark(problem.problemId);
   };
-
-  console.log(options);
 
   return (
     <div className="flex flex-col gap-7 rounded-xl border border-primary-200 bg-white px-7 py-7">
@@ -50,12 +36,9 @@ const ExamProblem = ({ problem, disabled = false, onSelectOption, onTextAnswerCh
         <div className="flex items-center justify-between">
           <div className="flex cursor-pointer items-center gap-2">
             <span className="text-2xl font-bold text-stone-900">문제 {problem.problemId}</span>
-            {problem.isBookmarked !== undefined && (
-              <div
-                className={`cursor-pointer ${bookmark ? 'text-yellow-500' : 'text-gray-400'}`} // 북마크 상태에 따라 스타일 변경
-                onClick={handleBookmarkClick}
-              >
-                <Icon id={bookmark ? 'bookmark' : 'bookmark-empty'} size={24} />
+            {isSolutionPage && (
+              <div className="cursor-pointer" onClick={handleBookmarkClick}>
+                <Icon id={bookmarks[problem.problemId] ? 'bookmark' : 'bookmark-empty'} size={24} />
               </div>
             )}
           </div>
@@ -63,16 +46,16 @@ const ExamProblem = ({ problem, disabled = false, onSelectOption, onTextAnswerCh
             {problem.subject}
           </div>
         </div>
-        <span className="text-2xl font-semibold">{problem.content}</span>
+        <span className="text-2xl font-semibold">{problem.question}</span>
       </div>
       {/* 답안 선택 섹션 */}
       <ExamAnswer
         questionType={problem.questionType}
-        options={options}
-        chosenAnswer={problem.chosenAnswer}
+        chosenAnswer={answers[problem.problemId]}
         onSelectOption={handleOptionClick}
-        onTextAnswerChange={onTextAnswerChange}
-        disabled={disabled}
+        onTextAnswerChange={handleTextChange}
+        disabled={isSolutionPage}
+        problemId={problem.problemId}
       />
     </div>
   );

@@ -60,7 +60,7 @@ export const useGetExamDetails = (examId: number) => {
     queryKey: ['examDetails', examId],
     queryFn: async () => {
       const response = await getExamDetails(examId);
-      return response.examDetailsDtos; // examDetailsDtos 배열만 반환
+      return response.examDetailsDtos;
     },
     refetchOnMount: false,
     refetchOnWindowFocus: false,
@@ -75,16 +75,13 @@ export const postExamAnswer = async (examId: number, data: ExamResultRequest) =>
 
 // 모의고사 채점 결과 조회
 export const getExamResult = (examId: number) => {
-  return api.get(`exam/${examId}/result`).json<{ examResults: ExamResultResponse }>();
+  return api.get(`exam/${examId}/result`).json<ExamResultResponse>();
 };
 
 export const useGetExamResult = (examId: number) => {
   return useQuery({
     queryKey: ['examResult', examId],
-    queryFn: async () => {
-      const response = await getExamResult(examId);
-      return response.examResults;
-    },
+    queryFn: () => getExamResult(examId),
     refetchOnMount: false,
     refetchOnWindowFocus: false,
     retry: false,
