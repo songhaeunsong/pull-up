@@ -1,26 +1,14 @@
-import { useExamStore } from '@/stores/ExamStore';
+import { useExamAnswer } from '@/hooks/useExamAnswer';
+
 import AnswerOption from '../answeroption';
 interface ExamAnswerProps {
   problemId: number;
   questionType: 'SHORT_ANSWER' | 'MULTIPLE_CHOICE';
-  //options: { text: string; state: 'default' | 'selected' | 'wrong' | 'correct' }[];
-  chosenAnswer?: string;
-  disabled?: boolean;
-  onSelectOption?: (index: number) => void;
-  onTextAnswerChange?: (answer: string) => void;
 }
 
-const ExamAnswer = ({
-  problemId,
-  questionType,
-  onSelectOption,
-  onTextAnswerChange,
-  disabled = false,
-}: ExamAnswerProps) => {
-  const { answers, options } = useExamStore();
-  const chosenAnswer = answers[problemId] || '';
-  const problemOptions = options[problemId] || [];
-  console.log(problemOptions);
+const ExamAnswer = ({ problemId, questionType }: ExamAnswerProps) => {
+  const { chosenAnswer, problemOptions, handleTextChange, handleOptionClick, isSolutionPage } =
+    useExamAnswer(problemId);
 
   return (
     <div className="flex w-full flex-col gap-3">
@@ -32,8 +20,8 @@ const ExamAnswer = ({
             id={index + 1}
             content={option.text}
             state={option.state ?? 'default'}
-            onClick={() => onSelectOption?.(index)}
-            disabled={disabled}
+            onClick={() => handleOptionClick(index)}
+            disabled={isSolutionPage}
           />
         ))
       ) : (
@@ -42,8 +30,8 @@ const ExamAnswer = ({
           placeholder="정답을 입력하세요."
           className="w-full resize-none rounded-lg border bg-stone-50 px-4 py-2 text-xl text-stone-950 placeholder-stone-500 focus:outline-none"
           value={chosenAnswer}
-          disabled={disabled}
-          onChange={(e) => onTextAnswerChange?.(e.target.value)}
+          disabled={isSolutionPage}
+          onChange={handleTextChange}
         />
       )}
     </div>

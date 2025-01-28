@@ -7,14 +7,14 @@ interface Option {
 }
 
 interface ExamState {
+  isSolutionPage: boolean;
   answers: Record<number, string>;
   options: Record<number, Option[]>;
+  bookmarks: Record<number, boolean>;
+  setSolutionPage: (isSolution: boolean) => void;
+  setAnswer: (problemId: number, answer: string) => void;
   setOptions: (problemId: number, options: Option[]) => void;
   updateOptionState: (problemId: number, index: number, state: Option['state']) => void;
-  isSolutionPage: boolean;
-  setSolutionPage: (isSolution: boolean) => void;
-  bookmarks: Record<number, boolean>;
-  setAnswer: (problemId: number, answer: string) => void;
   toggleBookmark: (problemId: number) => void;
   initializeFromDetail: (examDetails: ExamDetailsResponse) => void;
   initializeFromResults: (examResults: ExamResultResponse['examResultDetailDtos']) => void;

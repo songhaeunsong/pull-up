@@ -1,6 +1,6 @@
 import ExamAnswer from './examAnswer';
 import Icon from '@/components/common/icon';
-import { useExamStore } from '@/stores/ExamStore';
+import { useExamStore } from '@/stores/examStore';
 
 interface ExamProblemProps {
   problem: {
@@ -15,15 +15,7 @@ interface ExamProblemProps {
 }
 
 const ExamProblem = ({ problem }: ExamProblemProps) => {
-  const { answers, setAnswer, updateOptionState, isSolutionPage, bookmarks, toggleBookmark } = useExamStore();
-  const handleOptionClick = (index: number) => {
-    setAnswer(problem.problemId, problem.options![index]);
-    updateOptionState(problem.problemId, index, 'selected');
-  };
-
-  const handleTextChange = (text: string) => {
-    setAnswer(problem.problemId, text);
-  };
+  const { isSolutionPage, bookmarks, toggleBookmark } = useExamStore();
 
   const handleBookmarkClick = () => {
     toggleBookmark(problem.problemId);
@@ -49,14 +41,7 @@ const ExamProblem = ({ problem }: ExamProblemProps) => {
         <span className="text-2xl font-semibold">{problem.question}</span>
       </div>
       {/* 답안 선택 섹션 */}
-      <ExamAnswer
-        questionType={problem.questionType}
-        chosenAnswer={answers[problem.problemId]}
-        onSelectOption={handleOptionClick}
-        onTextAnswerChange={handleTextChange}
-        disabled={isSolutionPage}
-        problemId={problem.problemId}
-      />
+      <ExamAnswer questionType={problem.questionType} problemId={problem.problemId} />
     </div>
   );
 };

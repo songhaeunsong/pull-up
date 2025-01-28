@@ -5,7 +5,7 @@ import ProblemStatusButton from '@/components/exam/infoSection/problemStatusButt
 import { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useGetExamDetails } from '@/api/exam';
-import { useExamStore } from '@/stores/ExamStore';
+import { useExamStore } from '@/stores/examStore';
 
 const ExamDetailPage = () => {
   const navigate = useNavigate();
@@ -20,11 +20,13 @@ const ExamDetailPage = () => {
     if (examProblems) {
       initializeFromDetail(examProblems);
     }
-  }, [examProblems, setSolutionPage]);
+  }, [examProblems, initializeFromDetail, setSolutionPage]);
 
   if (!examProblems) {
     return <div>시험 데이터를 불러오는 데 실패했습니다.</div>;
   }
+
+  console.log(answers);
 
   const onSubmit = async () => {
     try {
