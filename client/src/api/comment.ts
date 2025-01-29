@@ -5,70 +5,49 @@ import { CommentRequest } from '@/types/interview';
 import { CreateResponse } from '@/types/common';
 
 // 댓글 작성
-const createComment = async (
-  interviewId: number,
-  interviewAnswerId: number,
-  comment: CommentRequest,
-): Promise<CreateResponse> => {
-  const data = await api
-    .post(`interview/${interviewId}/${interviewAnswerId}/comment`, { json: { comment } })
-    .json<CreateResponse>();
+const createComment = async (interviewAnswerId: number, comment: CommentRequest): Promise<CreateResponse> => {
+  const data = await api.post(`interview/${interviewAnswerId}/comment`, { json: { comment } }).json<CreateResponse>();
   return data;
 };
 
-export const useCreateComment = (interviewId: number, interviewAnswerId: number, comment: CommentRequest) => {
+export const useCreateComment = (interviewAnswerId: number, comment: CommentRequest) => {
   return useMutation<CreateResponse, Error, void>({
-    mutationKey: ['comment', interviewId, interviewAnswerId],
-    mutationFn: () => createComment(interviewId, interviewAnswerId, comment),
+    mutationFn: () => createComment(interviewAnswerId, comment),
     onSuccess: () => {
-      // 답변 상세 조회 쿼리 무효화
       queryClient.invalidateQueries({
-        queryKey: ['interviewAnswerDetail', interviewId, interviewAnswerId],
+        queryKey: ['interviewAnswerDetail', interviewAnswerId],
       });
     },
   });
 };
 
 // 댓글 수정
-const updateComment = async (
-  interviewId: number,
-  interviewAnswerId: number,
-  commentId: number,
-  comment: string,
-): Promise<void> => {
-  return await api
-    .patch(`interview/${interviewId}/${interviewAnswerId}/comment/${commentId}`, { json: { comment } })
-    .json();
+const updateComment = async (interviewAnswerId: number, commentId: number, comment: string): Promise<void> => {
+  return await api.patch(`interview//${interviewAnswerId}/comment/${commentId}`, { json: { comment } }).json();
 };
 
-export const useUpdateComment = (
-  interviewId: number,
-  interviewAnswerId: number,
-  commentId: number,
-  comment: string,
-) => {
+export const useUpdateComment = (interviewAnswerId: number, commentId: number, comment: string) => {
   return useMutation<void, Error, void>({
-    mutationKey: ['updateComment', commentId],
-    mutationFn: () => updateComment(interviewId, interviewAnswerId, commentId, comment),
+    mutationFn: () => updateComment(interviewAnswerId, commentId, comment),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ['interviewAnswerDetail', interviewId, interviewAnswerId],
+        queryKey: ['interviewAnswerDetail', interviewAnswerId],
       });
     },
   });
 };
 
 // 댓글 삭제
-const deleteComment = async (interviewId: number, interviewAnswerId: number, commentId: number) => {
-  return await api.delete(`interview/${interviewId}/${interviewAnswerId}/comment/${commentId}`);
+const deleteComment = async (interviewAnswerId: number, commentId: number) => {
+  return await api.delete(`interview/${interviewAnswerId}/comment/${commentId}`);
 };
 
-export const useDeleteComment = (interviewId: number, interviewAnswerId: number) => {
+export const useDeleteComment = (interviewAnswerId: number) => {
   return useMutation({
-    mutationFn: (commentId: number) => deleteComment(interviewId, interviewAnswerId, commentId),
+    mutationFn: (commentId: number) => deleteComment(interviewAnswerId, commentId),
     onSuccess: () => {
       queryClient.invalidateQueries({
-        queryKey: ['interviewAnswerDetail', interviewId, interviewAnswerId],
+        queryKey: ['interviewAnswerDetail', interviewAnswerId],
       });
     },
   });

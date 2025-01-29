@@ -53,7 +53,7 @@ const InterviewAnswerDetail = () => {
     setInputValue(e.target.value);
   };
 
-  const createCommentMutation = useCreateComment(Number(interviewId), Number(interviewAnswerId), {
+  const createCommentMutation = useCreateComment(Number(interviewAnswerId), {
     interviewAnswerId: Number(interviewAnswerId),
     comment: inputValue,
   });
@@ -77,7 +77,6 @@ const InterviewAnswerDetail = () => {
   const [activeCommentId, setActiveCommentId] = useState<number | null>(null);
 
   const updateCommentMutation = useUpdateComment(
-    Number(interviewId),
     Number(interviewAnswerId),
     activeCommentId ?? 0,
     updatedComments[activeCommentId ?? 0]?.value ?? '',
@@ -120,7 +119,7 @@ const InterviewAnswerDetail = () => {
   };
 
   // 댓글 삭제
-  const deleteCommentMutation = useDeleteComment(Number(interviewId), Number(interviewAnswerId));
+  const deleteCommentMutation = useDeleteComment(Number(interviewAnswerId));
 
   const handleCommentDelete = async (commentId: number) => {
     try {

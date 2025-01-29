@@ -93,7 +93,7 @@ const getInterviewAnswerDetail = (
 
 export const useGetInterviewAnswerDetail = (interviewId: number, interviewAnswerId: number) => {
   return useQuery({
-    queryKey: ['interviewAnswerDetail', interviewId, interviewAnswerId],
+    queryKey: ['interviewAnswerDetail', interviewAnswerId],
     queryFn: () => getInterviewAnswerDetail(interviewId, interviewAnswerId),
   });
 };
