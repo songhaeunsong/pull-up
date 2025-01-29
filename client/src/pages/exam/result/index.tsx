@@ -7,7 +7,7 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { useGetExamResult } from '@/api/exam';
 import { ExamResultResponse } from '@/types/exam';
 import { useEffect, useState } from 'react';
-import { useExamStore } from '@/stores/ExamStore';
+import { useExamStore } from '@/stores/examStore';
 
 const ExamResultPage = () => {
   const navigate = useNavigate();
@@ -24,7 +24,7 @@ const ExamResultPage = () => {
       console.log('Zustand State after initialization:', {
         answers: useExamStore.getState().answers,
         options: useExamStore.getState().options,
-        bookmarks: useExamStore.getState().bookmarks,
+        bookmark: useExamStore.getState().bookmark,
       });
     }
   }, [examResult, initializeFromResults, setSolutionPage]);
@@ -41,9 +41,10 @@ const ExamResultPage = () => {
     <div className="flex w-full gap-20 bg-Main px-16 py-10">
       {/* Problem & Solution Section */}
       <div className="flex w-[920px] flex-1 flex-col gap-10">
-        {examResultDetailDtos.map((problem) => (
+        {examResultDetailDtos.map((problem, index) => (
           <div key={problem.problemId} className="flex flex-col gap-2">
             <ExamProblem
+              index={index + 1}
               problem={{
                 problemId: problem.problemId,
                 question: problem.problem,
@@ -71,10 +72,10 @@ const ExamResultPage = () => {
           </InfoSection>
           <InfoSection title="풀이 현황" icon="problem">
             <div className="grid grid-cols-5 gap-3">
-              {examResultDetailDtos.map((problem) => (
+              {examResultDetailDtos.map((problem, index) => (
                 <ProblemStatusButton
+                  index={index + 1}
                   key={problem.problemId}
-                  text={problem.problemId.toString()}
                   status={problem.answerStatus ? 'correct' : 'wrong'} // 문제의 정답 여부를 기반으로 상태 설정
                   onClick={() => {
                     document.getElementById(`problem-${problem.problemId}`)?.scrollIntoView({ behavior: 'smooth' }); // 문제로 이동

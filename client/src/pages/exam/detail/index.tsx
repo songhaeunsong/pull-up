@@ -4,7 +4,7 @@ import SubmitButton from '@/components/common/submitButton';
 import ProblemStatusButton from '@/components/exam/infoSection/problemStatusButton';
 import { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
-import { useGetExamDetails } from '@/api/exam';
+import { postExamAnswer, useGetExamDetails } from '@/api/exam';
 import { useExamStore } from '@/stores/examStore';
 
 const ExamDetailPage = () => {
@@ -30,16 +30,15 @@ const ExamDetailPage = () => {
 
   const onSubmit = async () => {
     try {
-      // // ExamResultRequest 형식으로 변환
-      // const requestBody: ExamResultRequest = {
-      //   problemAndChosenAnswers: Object.keys(answers).map((problemId) => ({
-      //     problemId: Number(problemId),
-      //     chosenAnswer: answers[Number(problemId)],
-      //   })),
-      // };
-
-      // // API 호출
-      // await postExamAnswer(Number(examId), requestBody);
+      // ExamResultRequest 형식으로 변환
+      const requestBody = {
+        problemAndChosenAnswers: Object.keys(answers).map((problemId) => ({
+          problemId: Number(problemId),
+          chosenAnswer: answers[Number(problemId)] ?? '',
+        })),
+      };
+      // API 호출
+      await postExamAnswer(Number(examId), requestBody);
 
       // 결과 페이지로 이동
       navigate(`/exam/${examId}/result`);
@@ -52,9 +51,10 @@ const ExamDetailPage = () => {
     <div className="mt-16 flex h-full w-full gap-20 bg-Main px-16 py-10">
       {/* 문제 리스트 */}
       <div className="flex w-[920px] flex-1 flex-col gap-10">
-        {examProblems.map((problem) => (
+        {examProblems.map((problem, index) => (
           <ExamProblem
             key={problem.problemId}
+            index={index + 1}
             problem={{
               problemId: problem.problemId,
               question: problem.problem,
@@ -74,10 +74,10 @@ const ExamDetailPage = () => {
           </InfoSection>
           <InfoSection title="풀이 현황" icon="problem">
             <div className="grid grid-cols-5 gap-3">
-              {examProblems.map((problem) => (
+              {examProblems.map((problem, index) => (
                 <ProblemStatusButton
                   key={problem.problemId}
-                  text={problem.problemId.toString()}
+                  index={index + 1}
                   status={answers[problem.problemId] ? 'solved' : 'default'}
                   onClick={() => {
                     document.getElementById(`problem-${problem.problemId}`)?.scrollIntoView({ behavior: 'smooth' });

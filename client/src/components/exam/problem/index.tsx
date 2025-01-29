@@ -3,6 +3,7 @@ import Icon from '@/components/common/icon';
 import { useExamStore } from '@/stores/examStore';
 
 interface ExamProblemProps {
+  index: number;
   problem: {
     problemId: number;
     question: string;
@@ -14,12 +15,8 @@ interface ExamProblemProps {
   };
 }
 
-const ExamProblem = ({ problem }: ExamProblemProps) => {
-  const { isSolutionPage, bookmarks, toggleBookmark } = useExamStore();
-
-  const handleBookmarkClick = () => {
-    toggleBookmark(problem.problemId);
-  };
+const ExamProblem = ({ index, problem }: ExamProblemProps) => {
+  const { isSolutionPage, bookmark, toggleBookmark } = useExamStore();
 
   return (
     <div className="flex flex-col gap-7 rounded-xl border border-primary-200 bg-white px-7 py-7">
@@ -27,11 +24,14 @@ const ExamProblem = ({ problem }: ExamProblemProps) => {
       <div className="flex flex-col gap-2">
         <div className="flex items-center justify-between">
           <div className="flex cursor-pointer items-center gap-2">
-            <span className="text-2xl font-bold text-stone-900">문제 {problem.problemId}</span>
+            <span className="text-2xl font-bold text-stone-900">문제 {index}</span>
             {isSolutionPage && (
-              <div className="cursor-pointer" onClick={handleBookmarkClick}>
-                <Icon id={bookmarks[problem.problemId] ? 'bookmark' : 'bookmark-empty'} size={24} />
-              </div>
+              <button
+                onClick={() => toggleBookmark(problem.problemId)}
+                aria-label={bookmark[problem.problemId] ? '북마크 해제' : '북마크 추가'}
+              >
+                <Icon id={bookmark[problem.problemId] ? 'bookmark' : 'bookmark-empty'} size={24} />
+              </button>
             )}
           </div>
           <div className="rounded-lg border border-secondary-600 bg-secondary-50 px-3 py-1 text-secondary-600">

@@ -10,7 +10,7 @@ interface ExamState {
   isSolutionPage: boolean;
   answers: Record<number, string>;
   options: Record<number, Option[]>;
-  bookmarks: Record<number, boolean>;
+  bookmark: Record<number, boolean>;
   setSolutionPage: (isSolution: boolean) => void;
   setAnswer: (problemId: number, answer: string) => void;
   setOptions: (problemId: number, options: Option[]) => void;
@@ -23,7 +23,7 @@ interface ExamState {
 export const useExamStore = create<ExamState>((set) => ({
   answers: {},
   options: {},
-  bookmarks: {},
+  bookmark: {},
   isSolutionPage: false,
   setAnswer: (problemId, answer) =>
     set((state) => ({
@@ -45,7 +45,7 @@ export const useExamStore = create<ExamState>((set) => ({
   setSolutionPage: (isSolution) => set({ isSolutionPage: isSolution }),
   toggleBookmark: (problemId) =>
     set((state) => ({
-      bookmarks: { ...state.bookmarks, [problemId]: !state.bookmarks[problemId] },
+      bookmark: { ...state.bookmark, [problemId]: !state.bookmark[problemId] },
     })),
 
   initializeFromDetail: (examDetails) => {
@@ -66,11 +66,11 @@ export const useExamStore = create<ExamState>((set) => ({
   initializeFromResults: (examResults) => {
     const answers: Record<number, string> = {};
     const options: Record<number, Option[]> = {};
-    const bookmarks: Record<number, boolean> = {};
+    const bookmark: Record<number, boolean> = {};
 
     examResults.forEach((result) => {
       answers[result.problemId] = result.chosenAnswer || '';
-      bookmarks[result.problemId] = result.bookmarkStatus || false;
+      bookmark[result.problemId] = result.bookmarkStatus || false;
       if (result.problemType === 'MULTIPLE_CHOICE' && result.options.length > 0) {
         options[result.problemId] = result.options.map((option: string) => ({
           text: option,
@@ -78,6 +78,6 @@ export const useExamStore = create<ExamState>((set) => ({
         }));
       }
     });
-    set({ answers, options, bookmarks, isSolutionPage: true });
+    set({ answers, options, bookmark, isSolutionPage: true });
   },
 }));

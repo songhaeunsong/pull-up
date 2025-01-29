@@ -24,12 +24,35 @@ export const examHandler = [
               subject: '운영체제',
               problemType: 'SHORT_ANSWER',
             },
+            {
+              problemId: 7,
+              problem: 'Which operating system is open-source?',
+              options: ['Linux', 'Windows', 'MacOS', 'Android'],
+              subject: 'OPERATING_SYSTEM',
+              problemType: 'MULTIPLE_CHOICE',
+            },
           ],
         },
         { status: 200 },
       );
     }
     return HttpResponse.json({ status: 404 });
+  }),
+
+  http.post('http://localhost:8080/api/v1/exam/:examId', async ({ params, request }) => {
+    const { examId } = params;
+    const requestBody = (await request.json()) as {
+      problemAndChosenAnswers: { problemId: number; chosenAnswer: string }[];
+    };
+
+    return HttpResponse.json(
+      {
+        message: '답안 제출 성공',
+        examId,
+        submittedAnswers: requestBody,
+      },
+      { status: 200 },
+    );
   }),
 
   // 모의고사 채점 결과 조회

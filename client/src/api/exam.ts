@@ -69,8 +69,11 @@ export const useGetExamDetails = (examId: number) => {
 };
 
 // 모의고사 답안 제출
-export const postExamAnswer = async (examId: number, data: ExamResultRequest) => {
-  return await api.post(`exam/${examId}`, { json: { data } });
+export const postExamAnswer = async (examId: number, requestBody: ExamResultRequest) => {
+  return await api.post(`exam/${examId}`, {
+    json: requestBody,
+    headers: { 'Content-Type': 'application/json' },
+  });
 };
 
 // 모의고사 채점 결과 조회

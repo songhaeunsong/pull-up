@@ -4,8 +4,10 @@ export const useExamAnswer = (problemId: number) => {
   const { answers, options, isSolutionPage, setAnswer, updateOptionState } = useExamStore();
 
   const handleTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
+    const value = e.target.value;
     if (isSolutionPage) return;
-    setAnswer(problemId, e.target.value);
+    if (value.trim() === '' && value !== '') return; // 공백만 입력하는 것을 방지
+    setAnswer(problemId, value);
   };
 
   const handleOptionClick = (index: number) => {
