@@ -1,8 +1,10 @@
+import { Level } from '@/types/exam';
+
 interface LevelSelectorProps {
-  id: string;
+  id: Level;
   name: string;
   isSelected: boolean;
-  onClick: (id: string) => void;
+  onClick: (id: Level) => void;
 }
 
 const LevelSelector = ({ id, name, isSelected, onClick }: LevelSelectorProps) => {

@@ -25,59 +25,70 @@ export const useExamStore = create<ExamState>((set) => ({
   options: {},
   bookmark: {},
   isSolutionPage: false,
+
+  setSolutionPage: (isSolution) => set({ isSolutionPage: isSolution }),
+
   setAnswer: (problemId, answer) =>
     set((state) => ({
       answers: { ...state.answers, [problemId]: answer },
     })),
+
   setOptions: (problemId, options) =>
     set((state) => ({
       options: { ...state.options, [problemId]: options },
     })),
+
   updateOptionState: (problemId, index, newState) =>
     set((state) => ({
       options: {
         ...state.options,
-        [problemId]: state.options[problemId].map((option, idx) =>
-          idx === index ? { ...option, state: newState } : { ...option, state: 'default' },
-        ),
+        [problemId]: state.options[problemId].map((option, idx) => ({
+          ...option,
+          state: idx === index ? newState : 'default',
+        })),
       },
     })),
-  setSolutionPage: (isSolution) => set({ isSolutionPage: isSolution }),
+
   toggleBookmark: (problemId) =>
     set((state) => ({
       bookmark: { ...state.bookmark, [problemId]: !state.bookmark[problemId] },
     })),
 
   initializeFromDetail: (examDetails) => {
-    const options: Record<number, Option[]> = {};
-
-    examDetails.forEach((detail) => {
-      if (detail.problemType === 'MULTIPLE_CHOICE' && detail.options.length > 0) {
-        options[detail.problemId] = detail.options.map((option: string) => ({
+    const options: Record<number, Option[]> = examDetails
+      .filter((detail) => detail.problemType === 'MULTIPLE_CHOICE')
+      .reduce<Record<number, Option[]>>((acc, detail) => {
+        acc[detail.problemId] = detail.options.map((option: string) => ({
           text: option,
           state: 'default',
         }));
-      }
-    });
+        return acc;
+      }, {});
 
     set({ options, isSolutionPage: false });
   },
 
   initializeFromResults: (examResults) => {
-    const answers: Record<number, string> = {};
-    const options: Record<number, Option[]> = {};
-    const bookmark: Record<number, boolean> = {};
+    const { answers, options, bookmark } = examResults.reduce(
+      (acc, result) => {
+        acc.answers[result.problemId] = result.chosenAnswer || '';
+        acc.bookmark[result.problemId] = result.bookmarkStatus || false;
 
-    examResults.forEach((result) => {
-      answers[result.problemId] = result.chosenAnswer || '';
-      bookmark[result.problemId] = result.bookmarkStatus || false;
-      if (result.problemType === 'MULTIPLE_CHOICE' && result.options.length > 0) {
-        options[result.problemId] = result.options.map((option: string) => ({
-          text: option,
-          state: option === result.answer ? 'correct' : option === result.chosenAnswer ? 'wrong' : 'default',
-        }));
-      }
-    });
+        if (result.problemType === 'MULTIPLE_CHOICE') {
+          acc.options[result.problemId] = result.options.map((option: string) => ({
+            text: option,
+            state: option === result.answer ? 'correct' : option === result.chosenAnswer ? 'wrong' : 'default',
+          }));
+        }
+        return acc;
+      },
+      {
+        answers: {} as Record<number, string>,
+        options: {} as Record<number, Option[]>,
+        bookmark: {} as Record<number, boolean>,
+      },
+    );
+
     set({ answers, options, bookmark, isSolutionPage: true });
   },
 }));

@@ -1,11 +1,12 @@
 import Icon from '@/components/common/icon';
+import { Subject } from '@/types/member';
 
 export interface SubjectSelectorProps {
-  id: string;
+  id: Subject;
   name: string;
   icon: string;
   isSelected: boolean;
-  onClick: (id: string) => void;
+  onClick: (id: Subject) => void;
 }
 
 const SubjectSelector = ({ id, name, icon, isSelected, onClick }: SubjectSelectorProps) => {

@@ -1,6 +1,19 @@
 import { http, HttpResponse } from 'msw';
+import { ExamCreateRequest } from '@/types/exam';
 
 export const examHandler = [
+  // 모의고사 문제 생성
+  http.post('http://localhost:8080/api/v1/exam/me', async ({ request }) => {
+    const req = (await request.json()) as ExamCreateRequest;
+
+    if (!req.subjects || !req.difficultyLevel) {
+      return HttpResponse.json({ message: 'subjects와 difficultyLevel이 필요합니다.' }, { status: 400 });
+    }
+
+    const responseData = { examId: 1 };
+    return HttpResponse.json(responseData, { status: 201 });
+  }),
+
   // 모의고사 문제 조회
   http.get('http://localhost:8080/api/v1/exam/:examId', async ({ params }) => {
     const { examId } = params;
@@ -39,6 +52,7 @@ export const examHandler = [
     return HttpResponse.json({ status: 404 });
   }),
 
+  // 모의고사 채점
   http.post('http://localhost:8080/api/v1/exam/:examId', async ({ params, request }) => {
     const { examId } = params;
     const requestBody = (await request.json()) as {

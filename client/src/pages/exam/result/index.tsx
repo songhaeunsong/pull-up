@@ -38,7 +38,7 @@ const ExamResultPage = () => {
   const { round, score, examResultDetailDtos } = examResult;
 
   return (
-    <div className="flex w-full gap-20 bg-Main px-16 py-10">
+    <div className="mt-16 flex w-full gap-20 bg-Main px-16 py-10">
       {/* Problem & Solution Section */}
       <div className="flex w-[920px] flex-1 flex-col gap-10">
         {examResultDetailDtos.map((problem, index) => (

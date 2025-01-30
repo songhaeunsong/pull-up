@@ -47,7 +47,12 @@ export const useGetRecentExam = () =>
 
 // 모의고사 생성
 export const postExam = async (data: ExamCreateRequest) => {
-  return await api.post('/exam/me', { json: data }).json<{ examId: number }>();
+  return await api
+    .post('exam/me', {
+      json: data,
+      headers: { 'Content-Type': 'application/json' },
+    })
+    .json<{ examId: number }>();
 };
 
 // 모의고사 조회
@@ -69,9 +74,9 @@ export const useGetExamDetails = (examId: number) => {
 };
 
 // 모의고사 답안 제출
-export const postExamAnswer = async (examId: number, requestBody: ExamResultRequest) => {
+export const postExamAnswer = async (examId: number, data: ExamResultRequest) => {
   return await api.post(`exam/${examId}`, {
-    json: requestBody,
+    json: data,
     headers: { 'Content-Type': 'application/json' },
   });
 };

@@ -4,26 +4,30 @@ import { SUBJECT_OPTIONS } from './subjectSelector/SubjectOptions';
 import { LEVELS_OPTIONS } from './levelSelector/levelOptions';
 import SubjectSelector from './subjectSelector';
 import LevelSelector from './levelSelector';
+import { Level } from '@/types/exam';
+import { Subject } from '@/types/member';
 
 interface CsConditionSelectorProps {
   isExam?: boolean;
   text: string;
-  onClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  onClick: (level: Level | null, subjects: Subject[]) => void;
 }
 
 const CsConditionSelector = ({ isExam = false, text, onClick }: CsConditionSelectorProps) => {
-  const [selectedLevelId, setSelectedLevelId] = useState<string | null>(null);
-  const [selectedSubjectIds, setSelectedSubjectIds] = useState<string[]>([]);
+  const [selectedLevel, setSelectedLevel] = useState<Level | null>(null);
+  const [selectedSubjects, setSelectedSubjects] = useState<Subject[]>([]);
 
-  const handleLevelClick = (id: string) => {
-    setSelectedLevelId(id);
+  const handleLevelClick = (id: Level) => setSelectedLevel(id);
+
+  const handleSubjectClick = (id: Subject) => {
+    setSelectedSubjects((prev) => (prev.includes(id) ? prev.filter((subjectId) => subjectId !== id) : [...prev, id]));
   };
 
-  const handleSubjectClick = (id: string) => {
-    setSelectedSubjectIds((prev) => (prev.includes(id) ? prev.filter((subjectId) => subjectId !== id) : [...prev, id]));
+  const handleSubmit = () => {
+    onClick(selectedLevel, selectedSubjects);
   };
 
-  const isDisabled = selectedSubjectIds.length === 0 || (isExam && !selectedLevelId);
+  const isDisabled = selectedSubjects.length === 0 || (isExam && !selectedLevel);
 
   return (
     <div className="flex h-auto w-[450px] min-w-[450px] flex-col gap-2 rounded-2xl bg-white p-8 shadow-md">
@@ -37,7 +41,7 @@ const CsConditionSelector = ({ isExam = false, text, onClick }: CsConditionSelec
                 id={subject.id}
                 name={subject.name}
                 icon={subject.icon}
-                isSelected={selectedSubjectIds.includes(subject.id)}
+                isSelected={selectedSubjects.includes(subject.id)}
                 onClick={handleSubjectClick}
               />
             ))}
@@ -52,14 +56,19 @@ const CsConditionSelector = ({ isExam = false, text, onClick }: CsConditionSelec
                   key={level.id}
                   id={level.id}
                   name={level.name}
-                  isSelected={selectedLevelId === level.id}
+                  isSelected={selectedLevel === level.id}
                   onClick={handleLevelClick}
                 />
               ))}
             </div>
           </div>
         )}
-        <SubmitButton text={text} onClick={onClick} disabled={isDisabled} color={isDisabled ? 'gray' : 'primary'} />
+        <SubmitButton
+          text={text}
+          onClick={handleSubmit}
+          disabled={isDisabled}
+          color={isDisabled ? 'gray' : 'primary'}
+        />
       </div>
     </div>
   );

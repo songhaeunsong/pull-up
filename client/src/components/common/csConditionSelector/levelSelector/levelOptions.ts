@@ -1,5 +1,7 @@
-export const LEVELS_OPTIONS = [
-  { id: '1', name: '상' },
-  { id: '2', name: '중' },
-  { id: '3', name: '하' },
+import { Level } from '@/types/exam';
+
+export const LEVELS_OPTIONS: Array<{ id: Level; name: string }> = [
+  { id: 'HARD', name: '상' },
+  { id: 'MEDIUM', name: '중' },
+  { id: 'EASY', name: '하' },
 ];

@@ -10,9 +10,7 @@ import { useExamStore } from '@/stores/examStore';
 const ExamDetailPage = () => {
   const navigate = useNavigate();
   const { examId } = useParams();
-
   const { data: examProblems } = useGetExamDetails(Number(examId));
-  //const [data, setData] = useState<ExamDetailsResponse>([]);
   const { answers, setSolutionPage, initializeFromDetail } = useExamStore();
 
   useEffect(() => {
@@ -39,7 +37,6 @@ const ExamDetailPage = () => {
       };
       // API 호출
       await postExamAnswer(Number(examId), requestBody);
-
       // 결과 페이지로 이동
       navigate(`/exam/${examId}/result`);
     } catch (error) {
@@ -48,7 +45,7 @@ const ExamDetailPage = () => {
   };
 
   return (
-    <div className="mt-16 flex h-full w-full gap-20 bg-Main px-16 py-10">
+    <div className="mt-16 flex w-full gap-20 bg-Main px-16 py-10">
       {/* 문제 리스트 */}
       <div className="flex w-[920px] flex-1 flex-col gap-10">
         {examProblems.map((problem, index) => (

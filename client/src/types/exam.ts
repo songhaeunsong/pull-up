@@ -21,8 +21,10 @@ export interface ExamDetail {
   correctRate: number;
 }
 
+export type Level = 'HARD' | 'MEDIUM' | 'EASY';
+
 // 모의고사 생성 요청
-export type ExamCreateRequest = Pick<Exam, 'subjects'> & { difficultyLevel: 'HARD' | 'MEDIUM' | 'EASY' };
+export type ExamCreateRequest = Pick<Exam, 'subjects'> & { difficultyLevel: Level };
 
 // 모의고사 문제 조회 응답 타입
 export type ExamDetailsResponse = Pick<ExamDetail, 'problemId' | 'problem' | 'options' | 'problemType' | 'subject'>[];
