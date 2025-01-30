@@ -1,15 +1,17 @@
-import ExamProblem from '@/components/exam/problem';
-import InfoSection from '@/components/exam/infoSection';
-import SubmitButton from '@/components/common/submitButton';
-import ProblemStatusButton from '@/components/exam/infoSection/problemStatusButton';
 import { useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { postExamAnswer, useGetExamDetails } from '@/api/exam';
 import { useExamStore } from '@/stores/examStore';
+import Timer from '@/components/exam/timer';
+import ExamProblem from '@/components/exam/problem';
+import InfoSection from '@/components/exam/infoSection';
+import SubmitButton from '@/components/common/submitButton';
+import ProblemStatusButton from '@/components/exam/infoSection/problemStatusButton';
 
 const ExamDetailPage = () => {
   const navigate = useNavigate();
   const { examId } = useParams();
+
   const { data: examProblems } = useGetExamDetails(Number(examId));
   const { answers, setSolutionPage, initializeFromDetail } = useExamStore();
 
@@ -24,7 +26,9 @@ const ExamDetailPage = () => {
     return <div>시험 데이터를 불러오는 데 실패했습니다.</div>;
   }
 
-  console.log(answers);
+  const isAllSolved = examProblems.every(
+    (problem) => answers[problem.problemId] && answers[problem.problemId].trim() !== '',
+  );
 
   const onSubmit = async () => {
     try {
@@ -49,17 +53,18 @@ const ExamDetailPage = () => {
       {/* 문제 리스트 */}
       <div className="flex w-[920px] flex-1 flex-col gap-10">
         {examProblems.map((problem, index) => (
-          <ExamProblem
-            key={problem.problemId}
-            index={index + 1}
-            problem={{
-              problemId: problem.problemId,
-              question: problem.problem,
-              subject: problem.subject,
-              questionType: problem.problemType,
-              options: problem.options,
-            }}
-          />
+          <div key={problem.problemId} id={`problem-${problem.problemId}`}>
+            <ExamProblem
+              index={index + 1}
+              problem={{
+                problemId: problem.problemId,
+                question: problem.problem,
+                subject: problem.subject,
+                questionType: problem.problemType,
+                options: problem.options,
+              }}
+            />
+          </div>
         ))}
       </div>
 
@@ -67,7 +72,9 @@ const ExamDetailPage = () => {
       <div className="relative w-[380px] min-w-[380px] flex-shrink-0">
         <div className="sticky top-10 flex flex-col gap-10">
           <InfoSection title="남은 시간" icon="time">
-            <span>00: 24: 32</span>
+            <span>
+              <Timer initialTime={1500} onTimeOver={onSubmit} />
+            </span>
           </InfoSection>
           <InfoSection title="풀이 현황" icon="problem">
             <div className="grid grid-cols-5 gap-3">
@@ -77,13 +84,20 @@ const ExamDetailPage = () => {
                   index={index + 1}
                   status={answers[problem.problemId] ? 'solved' : 'default'}
                   onClick={() => {
-                    document.getElementById(`problem-${problem.problemId}`)?.scrollIntoView({ behavior: 'smooth' });
+                    document
+                      .getElementById(`problem-${problem.problemId}`)
+                      ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
                   }}
                 />
               ))}
             </div>
           </InfoSection>
-          <SubmitButton text="제출하기" onClick={onSubmit} />
+          <SubmitButton
+            text="제출하기"
+            onClick={onSubmit}
+            disabled={!isAllSolved}
+            color={!isAllSolved ? 'gray' : 'primary'}
+          />
         </div>
       </div>
     </div>

@@ -42,7 +42,7 @@ const ExamResultPage = () => {
       {/* Problem & Solution Section */}
       <div className="flex w-[920px] flex-1 flex-col gap-10">
         {examResultDetailDtos.map((problem, index) => (
-          <div key={problem.problemId} className="flex flex-col gap-2">
+          <div key={problem.problemId} id={`problem-${problem.problemId}`} className="flex flex-col gap-2">
             <ExamProblem
               index={index + 1}
               problem={{
@@ -78,7 +78,9 @@ const ExamResultPage = () => {
                   key={problem.problemId}
                   status={problem.answerStatus ? 'correct' : 'wrong'} // 문제의 정답 여부를 기반으로 상태 설정
                   onClick={() => {
-                    document.getElementById(`problem-${problem.problemId}`)?.scrollIntoView({ behavior: 'smooth' }); // 문제로 이동
+                    document
+                      .getElementById(`problem-${problem.problemId}`)
+                      ?.scrollIntoView({ behavior: 'smooth', block: 'center' }); // 문제로 이동
                   }}
                 />
               ))}
