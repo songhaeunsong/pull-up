@@ -10,4 +10,11 @@ export interface Card {
 export interface Player {
   memberId: number;
   name: string;
+  score: number;
+}
+
+export interface StompRoomInfo {
+  roomId: string;
+  player1P: Player;
+  player2P: Player;
 }

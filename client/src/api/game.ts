@@ -9,12 +9,6 @@ interface PostCreateGameResponse extends Player {
   player1P: Player;
 }
 
-interface StompJoinGameResponse extends Player {
-  roomId: string;
-  player1P: Player;
-  player2P: Player;
-}
-
 const getWinningRate = async () => {
   const response = await api.get<WinningRate>('game/me/winning-rate');
   const data = await response.json();
