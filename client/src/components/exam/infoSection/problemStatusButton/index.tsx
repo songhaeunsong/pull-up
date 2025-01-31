@@ -1,10 +1,10 @@
 interface ProblemStatusButtonProps {
-  text: string;
+  index: number;
   status?: 'default' | 'solved' | 'wrong' | 'correct';
   onClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
-const ProblemStatusButton = ({ text, onClick, status = 'default' }: ProblemStatusButtonProps) => {
+const ProblemStatusButton = ({ index, onClick, status = 'default' }: ProblemStatusButtonProps) => {
   const COLOR_CLASSES = {
     default: 'bg-stone-100 text-stone-700',
     solved: 'bg-primary-500 text-white',
@@ -14,7 +14,7 @@ const ProblemStatusButton = ({ text, onClick, status = 'default' }: ProblemStatu
 
   return (
     <button onClick={onClick} className={`${COLOR_CLASSES[status]} h-12 w-12 rounded-lg text-lg font-semibold`}>
-      {text}
+      {index}
     </button>
   );
 };

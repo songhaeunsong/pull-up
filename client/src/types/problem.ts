@@ -7,12 +7,14 @@ export interface Problem {
   date: string;
 }
 
-export type ProblemBrief = Omit<Problem, 'data'>;
-
 export interface ProblemDetail {
   question: string;
   options: string[];
   answer: string;
-  explaination: string;
+  explanation: string;
   correctRate: number;
+  subject: string;
+  bookmarkStatus: boolean;
 }
+
+export type ProblemBrief = Omit<Problem, 'date'>;
