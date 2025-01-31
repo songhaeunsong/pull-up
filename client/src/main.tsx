@@ -10,13 +10,7 @@ async function enableMocking() {
   if (import.meta.env.VITE_MOCK_SERVICE !== 'develop') return;
   const { worker } = await import('./mocks/browser.ts');
 
-  return worker.start({
-    onUnhandledRequest(req) {
-      if (req.url.startsWith('chrome-extension://')) {
-        return;
-      }
-    },
-  });
+  return worker.start();
 }
 
 enableMocking().then(() => {

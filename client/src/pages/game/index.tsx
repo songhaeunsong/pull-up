@@ -1,4 +1,7 @@
-import GameModals from '@/components/game/gameModals';
+import Modal from '@/components/common/modal';
+import CreateRoom from '@/components/game/gameModalComponent/CreateRoom';
+import InputCode from '@/components/game/gameModalComponent/InputCode';
+import MatchRandomly from '@/components/game/gameModalComponent/MatchRandomly';
 
 const GamePage = () => {
   return (
@@ -10,7 +13,17 @@ const GamePage = () => {
           </div>
           <div className="flex flex-col items-center gap-6">
             <h3 className="text-6xl font-extrabold">카드게임으로 공부하기</h3>
-            <GameModals />
+            <div className="flex gap-6">
+              <Modal triggerName="랜덤 매칭" triggerColor="primary">
+                <MatchRandomly />
+              </Modal>
+              <Modal triggerName="방 생성" triggerColor="primary">
+                <CreateRoom />
+              </Modal>
+              <Modal triggerName="코드 입력" triggerColor="primary">
+                <InputCode />
+              </Modal>
+            </div>
           </div>
         </div>
       </div>

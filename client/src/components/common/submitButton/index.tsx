@@ -11,7 +11,7 @@ const SubmitButton = ({ onClick, text, color = 'primary', disabled = false }: Su
   const COLOR_PROPS = {
     primary: 'bg-primary-500 text-white',
     secondary: 'bg-secondary-500 text-white',
-    gray: 'bg-gray-100 text-gray-500',
+    gray: 'bg-gray-200 text-gray-500',
   };
 
   return (

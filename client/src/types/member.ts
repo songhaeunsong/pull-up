@@ -1,10 +1,10 @@
 export type Subject =
-  | 'COMPUTERARCHITECTURE'
-  | 'OPERATINGSYSTEM'
+  | 'COMPUTER_ARCHITECTURE'
+  | 'OPERATING_SYSTEM'
   | 'NETWORK'
   | 'DATABASE'
   | 'ALGORITHM'
-  | 'DATASTRUCTURE';
+  | 'DATA_STRUCTURE';
 
 export interface Member {
   name: string;

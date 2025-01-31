@@ -1,8 +1,9 @@
 import { cn } from '@/lib/utils';
-import { Card } from '@/types/game';
+import { Card } from './GameBoard';
 
 interface GameCardProps {
   card: Card;
+  playerColor: string;
   isSelected: boolean;
   onClick: () => void;
 }
@@ -12,17 +13,17 @@ const TEXT_SIZE = {
   question: 'text-base bg-white',
 };
 
-const GameCard = ({ card, isSelected, onClick }: GameCardProps) => {
+const GameCard = ({ card, playerColor, isSelected, onClick }: GameCardProps) => {
   return (
     <>
-      {card.disabled ? (
+      {card.isTaken ? (
         <div className="m-1 rounded-md bg-primary-600 p-2"></div>
       ) : (
         <div
           className={cn(
-            { [`border-[#7aff51]`]: isSelected, [`border-white`]: !isSelected },
+            { [`border-[${playerColor}]`]: isSelected, [`border-white`]: !isSelected },
             TEXT_SIZE[card.type],
-            'm-1 flex cursor-pointer items-center justify-center rounded-md border-4 p-2',
+            'm-1 flex cursor-pointer items-center justify-center rounded-md border-2 p-2',
           )}
           onClick={onClick}
         >

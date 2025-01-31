@@ -7,7 +7,6 @@ const instance = ky.create({
   headers: {
     'content-type': 'application/json',
   },
-  retry: 1,
 });
 
 const api = instance.extend({
