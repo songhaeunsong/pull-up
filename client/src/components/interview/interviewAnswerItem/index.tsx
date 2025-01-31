@@ -1,26 +1,23 @@
 import Icon from '@/components/common/icon';
-import KeywordList from '../keywordlist';
+import KeywordList from '../keywordList';
 import SmallChip from '../../common/smallchip';
 
-interface OtherAnswerItemProps {
-  id: string;
-  userEmail: string;
+interface InterviewAnswerItemProps {
+  id: number;
+  userName: string;
   content: string;
-  keywords?: {
-    title: string;
-    correct: boolean;
-  }[];
+  keywords?: string[];
   date: string;
   liked: boolean;
   likeCount: number;
   commentCount: number;
-  handleLikeClick: (id: string) => void;
-  onAnswerClick?: (id: string) => void;
+  handleLikeClick: (id: number) => void;
+  onInterviewAnswerClick?: (id: number) => void;
 }
 
-const OtherAnswerItem = ({
+const InterviewAnswerItem = ({
   id,
-  userEmail,
+  userName,
   content,
   keywords,
   date,
@@ -28,25 +25,26 @@ const OtherAnswerItem = ({
   likeCount,
   commentCount,
   handleLikeClick,
-  onAnswerClick,
-}: OtherAnswerItemProps) => {
+  onInterviewAnswerClick,
+}: InterviewAnswerItemProps) => {
   return (
     <div className="flex flex-col gap-6">
-      <div className="flex flex-col gap-4 px-4">
+      <div className="flex flex-col gap-4">
         <div className="flex w-full items-center justify-between">
-          <SmallChip title={userEmail} color="border-secondary-600 bg-secondary-50 text-secondary-600" />
+          <SmallChip title={userName} color="border-secondary-600 bg-secondary-50 text-secondary-600" />
           <span className="text-xl text-stone-700">{date}</span>
         </div>
         {keywords && (
           <div className="flex flex-col gap-4">
             <hr />
-            <KeywordList keywords={keywords} />
+            <KeywordList keywords={keywords} color="purple" />
           </div>
         )}
         <div className="flex w-full flex-col gap-4">
           <button
-            className="w-full text-justify text-xl"
-            onClick={() => onAnswerClick?.(id)}
+            disabled={!onInterviewAnswerClick}
+            className="w-full break-all text-left text-xl"
+            onClick={() => onInterviewAnswerClick?.(id)}
             aria-label={`답변 상세 보기: ${content}`}
           >
             {content}
@@ -68,4 +66,4 @@ const OtherAnswerItem = ({
   );
 };
 
-export default OtherAnswerItem;
+export default InterviewAnswerItem;
