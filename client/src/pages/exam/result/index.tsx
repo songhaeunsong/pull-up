@@ -12,22 +12,31 @@ import { useExamStore } from '@/stores/examStore';
 const ExamResultPage = () => {
   const navigate = useNavigate();
   const { examId } = useParams();
-  const { setSolutionPage, initializeFromResults } = useExamStore();
+  const { setSolutionPage, initializeAndSetOptions, setAnswer, toggleBookmark } = useExamStore();
   const { data: examResult } = useGetExamResult(Number(examId));
   const [data, setData] = useState<ExamResultResponse>();
 
   useEffect(() => {
     setSolutionPage(true); // 결과 페이지로 설정
     if (examResult) {
-      initializeFromResults(examResult.examResultDetailDtos);
-      // Zustand 상태를 콘솔에 출력
-      console.log('Zustand State after initialization:', {
-        answers: useExamStore.getState().answers,
-        options: useExamStore.getState().options,
-        bookmark: useExamStore.getState().bookmark,
+      // 각 문제에 대해 상태 초기화
+      examResult.examResultDetailDtos.forEach((problem) => {
+        initializeAndSetOptions(problem.problemId, problem.options, {
+          answer: problem.answer,
+          chosenAnswer: problem.chosenAnswer,
+        });
+        // 선택한 답변 저장
+        if (problem.chosenAnswer) {
+          setAnswer(problem.problemId, problem.chosenAnswer);
+        }
+
+        // 북마크 상태 설정
+        if (problem.bookmarkStatus) {
+          toggleBookmark(problem.problemId);
+        }
       });
     }
-  }, [examResult, initializeFromResults, setSolutionPage]);
+  }, [examResult, initializeAndSetOptions, setAnswer, toggleBookmark, setSolutionPage]);
 
   if (!examResult) {
     return <div>시험 결과를 불러오는 데 실패했습니다.</div>;

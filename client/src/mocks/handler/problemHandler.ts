@@ -52,4 +52,42 @@ export const problemHandler = [
       { status: 200 },
     );
   }),
+
+  http.get('http://localhost:8080/api/v1/problem/archive/all', async () => {
+    return HttpResponse.json({
+      bookmarkedProblemDtos: [
+        {
+          problemId: 19,
+          question: 'What is the core component of an operating system?',
+          subject: 'OPERATING_SYSTEM',
+          date: '2025-01-23T10:54:51.615038',
+        },
+        {
+          problemId: 12,
+          question: 'What uniquely identifies a record in a table?',
+          subject: 'DATABASE',
+          date: '2025-01-22T20:20:22.067247',
+        },
+      ],
+    });
+  }),
+
+  http.get('http://localhost:8080/api/v1/problem/:problemId', async ({ params }) => {
+    const { problemId } = params;
+    if (problemId) {
+      return HttpResponse.json(
+        {
+          question: 'What is the main data structure used in databases for indexing?',
+          options: ['B-Tree', 'Hash Table', 'Linked List', 'Array'],
+          answer: 'B-Tree',
+          explanation: 'explain...어쩌구',
+          correctRate: 70,
+          subject: 'DATABASE',
+        },
+        { status: 200 },
+      );
+    }
+
+    return HttpResponse.json({ status: 404 });
+  }),
 ];

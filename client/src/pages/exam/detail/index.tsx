@@ -1,4 +1,4 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { postExamAnswer, useGetExamDetails } from '@/api/exam';
 import { useExamStore } from '@/stores/examStore';
@@ -13,14 +13,22 @@ const ExamDetailPage = () => {
   const { examId } = useParams();
 
   const { data: examProblems } = useGetExamDetails(Number(examId));
-  const { answers, setSolutionPage, initializeFromDetail } = useExamStore();
+  const { answers, resetExamState, setAnswer, setSolutionPage, initializeAndSetOptions } = useExamStore();
+  const [isInitialized, setIsInitialized] = useState(false);
 
   useEffect(() => {
+    if (!examProblems || isInitialized) return;
+
+    resetExamState();
     setSolutionPage(false);
-    if (examProblems) {
-      initializeFromDetail(examProblems);
-    }
-  }, [examProblems, initializeFromDetail, setSolutionPage]);
+
+    examProblems.forEach((problem) => {
+      initializeAndSetOptions(problem.problemId, problem.options);
+      setAnswer(problem.problemId, '');
+    });
+
+    setIsInitialized(true); // 초기화 완료 표시
+  }, [examProblems, isInitialized, resetExamState, initializeAndSetOptions, setSolutionPage, setAnswer]);
 
   if (!examProblems) {
     return <div>시험 데이터를 불러오는 데 실패했습니다.</div>;
@@ -49,7 +57,7 @@ const ExamDetailPage = () => {
   };
 
   return (
-    <div className="mt-16 flex w-full gap-20 bg-Main px-16 py-10">
+    <div className="flex w-full gap-20 bg-Main px-16 pb-10 pt-28">
       {/* 문제 리스트 */}
       <div className="flex w-[920px] flex-1 flex-col gap-10">
         {examProblems.map((problem, index) => (

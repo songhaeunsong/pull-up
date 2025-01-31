@@ -2,15 +2,15 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import RouteHeader from '@/components/common/routeheader';
 import ReviewList from '@/components/dashboard/reviewList';
-import { useGetWrongQuestionAll } from '@/api/problem';
+import { useGetWrongProblemAll } from '@/api/problem';
 
 const Wrong = () => {
   const navigate = useNavigate();
   const [searchValue, setSearchValue] = useState('');
-  const { data: wrongQuestions } = useGetWrongQuestionAll();
+  const { data: wrongProblems } = useGetWrongProblemAll();
 
   const wrongProblemDtos =
-    wrongQuestions?.wrongProblemDtos.map((item) => ({
+    wrongProblems?.wrongProblemDtos.map((item) => ({
       id: item.problemId,
       title: item.question,
       date: item.date.split('T')[0],

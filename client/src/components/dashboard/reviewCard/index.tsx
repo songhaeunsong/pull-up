@@ -21,7 +21,7 @@ const ReviewCard = ({ id, title, subtitle, tags, isProblem }: ReviewCardProps) =
 
   return (
     <Link
-      to={isProblem ? `/problem/${id}` : `/exam/${id}/result`}
+      to={isProblem ? `/exam/problem/${id}` : `/exam/${id}/result`}
       className="flex min-w-[500px] flex-col gap-3 rounded-lg px-3 py-2 shadow-sm"
     >
       <div className="flex w-full items-start justify-between">
