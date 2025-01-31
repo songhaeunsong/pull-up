@@ -24,8 +24,8 @@ export const useCreateComment = (interviewAnswerId: number, comment: CommentRequ
           ...old.commentList,
           {
             commentId: 0,
-            otherMemberName: '작성자',
-            email: '이메일',
+            otherMemberName: '홍길원',
+            email: 'email@gmail.com',
             comment: comment.comment,
           },
         ],
@@ -63,7 +63,9 @@ export const useUpdateComment = (interviewAnswerId: number, commentId: number, c
 
       queryClient.setQueryData(['interviewAnswerDetail', interviewAnswerId], (old: InterviewAnswerDetailResponse) => ({
         ...old,
-        commentList: old.commentList.map((item) => (item.commentId === commentId ? { ...item, item: comment } : item)),
+        commentList: old.commentList.map((item) =>
+          item.commentId === commentId ? { ...item, comment: comment } : item,
+        ),
       }));
 
       return { previousData };
@@ -98,6 +100,7 @@ export const useDeleteComment = (interviewAnswerId: number) => {
       queryClient.setQueryData(['interviewAnswerDetail', interviewAnswerId], (old: InterviewAnswerDetailResponse) => ({
         ...old,
         commentList: old.commentList.filter((comment) => comment.commentId !== commentId),
+        commentCount: old.commentCount - 1,
       }));
 
       return { previousData };

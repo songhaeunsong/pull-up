@@ -25,7 +25,6 @@ export interface InterviewAnswer {
 
 export interface Comment {
   commentId: number;
-  interviewAnswerId: number;
   otherMemberName: string;
   email: string;
   comment: string;
@@ -59,4 +58,4 @@ export type InterviewAnswerDetailResponse = Pick<
 > & { commentList: Pick<Comment, 'commentId' | 'otherMemberName' | 'email' | 'comment'>[] };
 
 // 댓글 작성 요청 타입
-export type CommentRequest = Pick<Comment, 'interviewAnswerId' | 'comment'>;
+export type CommentRequest = Pick<Comment, 'comment'> & { interviewAnswerId: number };
