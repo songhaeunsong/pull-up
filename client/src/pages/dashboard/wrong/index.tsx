@@ -2,20 +2,25 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import RouteHeader from '@/components/common/routeheader';
 import ReviewList from '@/components/dashboard/reviewList';
-import { useGetWrongProblemAll } from '@/api/problem';
+
+const dummyData = [
+  {
+    id: 1,
+    title: 'HTTP와 HTTPS의 차이는?',
+    date: '2025-1-22',
+    tags: '알고리즘',
+  },
+  {
+    id: 2,
+    title: 'HTTP와 HTTPS의 차이는?',
+    date: '2025-01-01',
+    tags: '자료구조',
+  },
+];
 
 const Wrong = () => {
   const navigate = useNavigate();
   const [searchValue, setSearchValue] = useState('');
-  const { data: wrongProblems } = useGetWrongProblemAll();
-
-  const wrongProblemDtos =
-    wrongProblems?.wrongProblemDtos.map((item) => ({
-      id: item.problemId,
-      title: item.question,
-      date: item.date.split('T')[0],
-      tags: item.subject,
-    })) || [];
 
   const onHandleBack = () => {
     navigate('/dashboard');
@@ -28,7 +33,7 @@ const Wrong = () => {
   return (
     <section className="flex w-full flex-col gap-3">
       <RouteHeader prev="마이페이지" title="내가 틀린 문제" onBackClick={onHandleBack} />
-      <ReviewList searchValue={searchValue} onSearchChange={handleSearchChange} data={wrongProblemDtos} />
+      <ReviewList searchValue={searchValue} onSearchChange={handleSearchChange} data={dummyData} />
     </section>
   );
 };

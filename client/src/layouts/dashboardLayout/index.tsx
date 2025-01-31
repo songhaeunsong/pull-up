@@ -13,7 +13,7 @@ const DashBoardLayout = () => {
   return (
     <div className="flex pt-16">
       <div className="box-border flex flex-1 gap-4 bg-Main p-8">
-        <main className="flex h-full flex-1 overflow-y-auto">
+        <main className="flex flex-1 overflow-y-auto">
           <Outlet />
         </main>
         <SideBar image={image} name={name} email={email} subjects={subjects} />

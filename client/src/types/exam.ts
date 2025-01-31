@@ -12,31 +12,24 @@ export interface ExamDetail {
   problem: string;
   options: string[];
   subject: string;
-  problemType: 'MULTIPLE_CHOICE' | 'SHORT_ANSWER';
+  problemType: '객관식' | '주관식';
   chosenAnswer: string;
   answer: string;
   answerStatus: boolean;
   bookmarkStatus: boolean;
-  explanation: string;
+  explaination: string;
   correctRate: number;
+  round: number;
 }
 
-export type Level = 'HARD' | 'MEDIUM' | 'EASY';
-
 // 모의고사 생성 요청
-export type ExamCreateRequest = Pick<Exam, 'subjects'> & { difficultyLevel: Level };
+export type ExamCreateRequest = Pick<Exam, 'subjects'> & { difficultyLevel: 'HARD' | 'MEDIUM' | 'EASY' };
 
 // 모의고사 문제 조회 응답 타입
 export type ExamDetailsResponse = Pick<ExamDetail, 'problemId' | 'problem' | 'options' | 'problemType' | 'subject'>[];
 
 // 모의고사 채점 요청 타입
-export type ExamResultRequest = {
-  problemAndChosenAnswers: Pick<ExamDetail, 'problemId' | 'chosenAnswer'>[];
-};
+export type ExamResultRequest = Pick<ExamDetail, 'problemId' | 'chosenAnswer'>[];
 
 // 모의고사 채점 결과 조회 응답 타입
-export type ExamResultResponse = {
-  round: string;
-  score: number;
-  examResultDetailDtos: ExamDetail[];
-};
+export type ExamResultResponse = ExamDetail[];

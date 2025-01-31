@@ -3,7 +3,11 @@ import { SUBJECT_OPTIONS } from '@/components/common/csConditionSelector/subject
 import { Button } from '@/components/ui/button';
 import { useState } from 'react';
 
-const CreateRoom = () => {
+interface CreateRoomProps {
+  handleGameState: () => void;
+}
+
+const CreateRoom = ({ handleGameState }: CreateRoomProps) => {
   const [selectedSubjectIds, setSelectedSubjectIds] = useState<string[]>([]);
   const isDisabled = selectedSubjectIds.length === 0;
 
@@ -27,7 +31,9 @@ const CreateRoom = () => {
       </div>
       <div className="flex w-full flex-col gap-2">
         <span className="text-center">링크를 생성하고 친구에게 전달해주세요!</span>
-        <Button disabled={isDisabled}>코드 생성</Button>
+        <Button disabled={isDisabled} onClick={handleGameState}>
+          코드 생성
+        </Button>
       </div>
     </div>
   );

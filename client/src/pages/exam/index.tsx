@@ -1,32 +1,17 @@
-import CsConditionSelector from '@/components/common/csConditionSelector';
+import Modal from '@/components/common/csConditionSelector/temp';
 import exam1 from '/assets/images/exam1.png';
 import { useNavigate } from 'react-router-dom';
-import { postExam } from '@/api/exam';
-import { Subject } from '@/types/member';
-import { Level } from '@/types/exam';
 
 const ExamPage = () => {
   const navigate = useNavigate();
-
-  const onSubmit = async (level: Level | null, subjects: Subject[]) => {
-    try {
-      const requestBody = {
-        difficultyLevel: level ?? 'EASY',
-        subjects: subjects,
-      };
-      const response = await postExam(requestBody);
-
-      navigate(`/exam/${response.examId}`);
-    } catch (error) {
-      console.error('모의고사 생성 실패: ', error);
-    }
+  const onSubmit = () => {
+    navigate('/exam/solve');
   };
-
   return (
     <>
-      <div className="mt-16 flex h-full w-full items-center justify-around bg-Main py-10">
-        <CsConditionSelector text={'모의고사 만들기'} onClick={onSubmit} isExam={true} />
-        <img src={exam1} alt="exam1" className="h-auto w-[600px]" />
+      <div className="flex min-h-full w-full items-center justify-center gap-20 bg-Main py-10">
+        <Modal text={'모의고사 만들기'} onClick={onSubmit} />
+        <img src={exam1} alt="exam1" className="w-[720px] object-contain" />
       </div>
     </>
   );
