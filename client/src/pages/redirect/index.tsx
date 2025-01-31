@@ -11,7 +11,8 @@ const RedirectPage = () => {
       if (!auth.isSignedUp) {
         navigate('/signup');
       } else {
-        navigate(auth.isSolvedToday ? '/today/result' : '/today');
+        // 오늘의 질문 id 받아오기
+        navigate(auth.isSolvedToday ? '/interview/result' : '/interview');
       }
     }
 
