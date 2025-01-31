@@ -4,6 +4,8 @@ import { interviewHandler } from './interviewHandler';
 import { problemHandler } from './problemHandler';
 import { commentHandler } from './commentHandler';
 import { gameHandler } from './gameHandler';
+import { problemHandler } from './problemHandler';
+import { commentHandler } from './commentHandler';
 
 export const handlers = [
   ...authHandler,
