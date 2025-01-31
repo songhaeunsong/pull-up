@@ -1,13 +1,14 @@
 import Icon from '@/components/common/icon';
 import SearchBar from '@/components/common/searchbar';
 import { useState } from 'react';
-import MenuList from '../sidemenu/menulist';
+import MenuItem from '../sideMenu/menuitem';
 
 interface SearchModalProps {
   onClose: () => void;
+  onInterviewClick: (interviewId: number) => void;
 }
 
-const SearchModal = ({ onClose }: SearchModalProps) => {
+const SearchModal = ({ onClose, onInterviewClick }: SearchModalProps) => {
   const [value, setValue] = useState('');
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -16,11 +17,16 @@ const SearchModal = ({ onClose }: SearchModalProps) => {
 
   // 더미데이터
   const dummyData = [
-    'OOP의 5가지 설계 원칙 (SOLID)이란 무엇인가요?',
-    'OOP의 5가지 설계 원칙 (SOLID)이란 무엇인가요?',
-    'OOP의 5가지 설계 원칙 (SOLID)이란 무엇인가요?',
-    'OOP의 5가지 설계 원칙 (SOLID)이란 무엇인가요?',
-    'OOP의 5가지 설계 원칙 (SOLID)이란 무엇인가요?',
+    {
+      interviewId: 1,
+      interviewAnswerId: 1,
+      question: 'OOP의 5가지 설계 원칙 (SOLID)이란 무엇인가요?',
+    },
+    {
+      interviewId: 2,
+      interviewAnswerId: 2,
+      question: 'Checked Exception과 Unchecked Exception의 차이는 ?',
+    },
   ];
 
   return (
@@ -34,8 +40,10 @@ const SearchModal = ({ onClose }: SearchModalProps) => {
         </div>
         <div className="flex min-h-0 w-full flex-1 flex-col gap-3">
           <div className="flex-none text-lg font-semibold">오늘의 질문</div>
-          <div className="flex-1 overflow-y-auto">
-            <MenuList items={dummyData} />
+          <div className="flex flex-1 flex-col gap-2 overflow-y-auto">
+            {dummyData.map((item, id) => (
+              <MenuItem key={id} title={item.question} onInterviewClick={() => onInterviewClick(item.interviewId)} />
+            ))}
           </div>
         </div>
       </div>

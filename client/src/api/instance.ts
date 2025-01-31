@@ -2,7 +2,7 @@ import ky from 'ky';
 import { handleToken } from '@/utils/authService';
 
 const instance = ky.create({
-  prefixUrl: import.meta.env.VITE_BASE_API,
+  prefixUrl: import.meta.env.VITE_BASE_URL,
   credentials: 'include',
   headers: {
     'content-type': 'application/json',
