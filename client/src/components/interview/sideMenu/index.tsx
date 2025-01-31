@@ -4,7 +4,7 @@ import MenuItem from './menuitem';
 
 interface SideMenuProps {
   isOpen: boolean;
-  interviewList: InterviewListResponse;
+  interviewList: InterviewListResponse[];
   handleMenuClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
   handleSearchClick: () => void;
   onInterviewClick: (interviewId: number) => void;

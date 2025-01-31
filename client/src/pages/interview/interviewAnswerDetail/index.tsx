@@ -1,5 +1,5 @@
 import { useCreateComment, useDeleteComment, useUpdateComment } from '@/api/comment';
-import { useGetInterviewAnswerDetail } from '@/api/interview';
+import { useCreateInterviewAnswerLike, useGetInterviewAnswerDetail } from '@/api/interview';
 import RouteHeader from '@/components/common/routeheader';
 import CommentItem from '@/components/interview/commentItem';
 import InputForm from '@/components/interview/inputForm';
@@ -22,6 +22,7 @@ const InterviewAnswerDetail = () => {
     keywords: ['java', 'exception'],
     answer:
       'Checked Exception과 Unchecked Exception은 Java에서 예외를 처리하는 두 가지 주요 방식으로, 컴파일러가 강제하는지 여부에 따라 구분됩니다. Checked Exception은 컴파일러가 try-catch로 처리하거나 throws로 선언할 것을 강제합니다. `IOException`, `SQLException` 등이 그 예입니다. 이를 통해 예측 가능한 오류 처리가 가능하지만, 코드가 다소 장황해질 수 있습니다. Unchecked Exception은 컴파일러가 처리 여부를 강제하지 않으며, 런타임 시 발생합니다. `NullPointerException`, `ArrayIndexOutOfBoundsException` 등이 여기에 해당합니다. 코드가 간결해지지만, 미처 처리되지 않은 오류로 인해 런타임 에러가 발생할 가능성이 있습니다. 결론적으로, Checked Exception은 예측 가능하고 복구 가능한 오류에 적합하며, Unchecked Exception은 프로그래밍 로직 오류나 예외적인 상황에 더 적합합니다. 상황에 따라 적절히 선택하여 사용하는 것이 중요합니다.',
+    isLiked: true,
     likeCount: 1000,
     commentCount: 1000,
     commentList: [
@@ -45,6 +46,11 @@ const InterviewAnswerDetail = () => {
       setInterviewAnswerData(interviewAnswer);
     }
   }, [interviewAnswer]);
+
+  const likeMutation = useCreateInterviewAnswerLike(Number(interviewId), Number(interviewAnswerId));
+  const handleLikeClick = () => {
+    likeMutation.mutate();
+  };
 
   // 댓글 작성
   const [inputValue, setInputValue] = useState('');
@@ -70,78 +76,54 @@ const InterviewAnswerDetail = () => {
   };
 
   // 댓글 수정
-  const [updatedComments, setUpdatedComments] = useState<{
-    [key: number]: { updated: boolean; value: string };
-  }>({});
-
-  const [activeCommentId, setActiveCommentId] = useState<number | null>(null);
+  const [updatedComment, setUpdatedComment] = useState<{
+    id: number;
+    content: string;
+  }>();
 
   const updateCommentMutation = useUpdateComment(
     Number(interviewAnswerId),
-    activeCommentId ?? 0,
-    updatedComments[activeCommentId ?? 0]?.value ?? '',
+    Number(updatedComment?.id),
+    updatedComment?.content ?? '',
   );
 
-  const onCommentChange = (e: React.ChangeEvent<HTMLTextAreaElement>, commentId: number) => {
-    setUpdatedComments((prev) => ({
-      ...prev,
-      [commentId]: { ...prev[commentId], value: e.target.value },
-    }));
-  };
-
+  // 댓글 수정 활성화
   const handleCommentUpdate = (comment: string, commentId: number) => {
-    setActiveCommentId(commentId);
-    setUpdatedComments((prev) => ({
+    setUpdatedComment({ id: commentId, content: comment });
+  };
+
+  const onCommentChange = (e: React.ChangeEvent<HTMLTextAreaElement>, commentId: number) => {
+    setUpdatedComment((prev) => ({
       ...prev,
-      [commentId]: { updated: true, value: comment },
+      id: commentId,
+      content: e.target.value,
     }));
   };
 
-  const onCancelClick = (commentId: number) => {
-    setActiveCommentId(null);
-    setUpdatedComments((prev) => ({
-      ...prev,
-      [commentId]: { ...prev[commentId], updated: false },
-    }));
+  // 수정 취소
+  const onCancelClick = () => {
+    setUpdatedComment({ id: 0, content: '' });
   };
 
-  const onConfirmClick = async (commentId: number) => {
-    try {
-      await updateCommentMutation.mutateAsync();
-      setUpdatedComments((prev) => ({
-        ...prev,
-        [commentId]: { ...prev[commentId], updated: false },
-      }));
-      setActiveCommentId(null);
-    } catch (error) {
-      console.error('댓글 수정 실패:', error);
-    }
+  // 수정 완료
+  const onConfirmClick = async () => {
+    updateCommentMutation.mutate();
+    setUpdatedComment({ id: 0, content: '' });
   };
 
   // 댓글 삭제
   const deleteCommentMutation = useDeleteComment(Number(interviewAnswerId));
 
   const handleCommentDelete = async (commentId: number) => {
-    try {
-      await deleteCommentMutation.mutateAsync(commentId);
-    } catch (error) {
-      console.error('댓글 삭제 실패:', error);
-    }
+    deleteCommentMutation.mutate(commentId);
   };
 
   const onBackClick = () => {
     navigate(`/interview/result/${interviewId}/answers`);
   };
 
-  const handleLikeClick = () => {
-    setInterviewAnswerData({
-      ...interviewAnswerData,
-      likeCount: interviewAnswerData.likeCount + 1,
-    });
-  };
-
   return (
-    <div className="h-full bg-Main px-20 py-10">
+    <div className="min-h-full bg-Main px-20 py-10">
       <div className="mt-16 flex flex-col gap-6 rounded-2xl border border-primary-200 bg-white p-6">
         <RouteHeader prev="다른 사람의 답변 목록" title="답변 상세 보기" onBackClick={onBackClick} />
         <InterviewAnswerItem
@@ -152,7 +134,7 @@ const InterviewAnswerDetail = () => {
           date={convertDate(interviewAnswerData.date)}
           likeCount={interviewAnswerData.likeCount}
           commentCount={interviewAnswerData.commentCount}
-          liked={false}
+          liked={interviewAnswerData.isLiked}
           handleLikeClick={handleLikeClick}
         />
         <InputForm
@@ -177,8 +159,8 @@ const InterviewAnswerDetail = () => {
                 onCancelClick={onCancelClick}
                 onChange={onCommentChange}
                 onConfirmClick={onConfirmClick}
-                value={updatedComments[comment.commentId]?.value ?? comment.comment}
-                updated={updatedComments[comment.commentId]?.updated ?? false}
+                value={updatedComment?.id === comment.commentId ? updatedComment?.content : comment.comment}
+                updated={updatedComment?.id === comment.commentId}
               />
             </div>
           ))}

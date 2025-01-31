@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import api from './instance';
 import { Streak } from '@/types/chart';
 import {
@@ -9,6 +9,8 @@ import {
   InterviewResultResponse,
   MemberAnswerRequest,
 } from '@/types/interview';
+import { LikeResponse } from '@/types/common';
+import { queryClient } from '@/main';
 
 type GetStreakResponse = Streak[];
 
@@ -57,8 +59,8 @@ export const useGetInterviewResult = (interviewAnswerId: number) => {
 };
 
 // 지난 오늘의 문제 전체 조회
-const getInterviewList = (): Promise<InterviewListResponse> => {
-  const data = api.get('interview/me').json<InterviewListResponse>();
+const getInterviewList = (): Promise<InterviewListResponse[]> => {
+  const data = api.get('interview/me').json<InterviewListResponse[]>();
   return data;
 };
 
@@ -70,8 +72,8 @@ export const useGetInterviewList = () => {
 };
 
 // 다른 사람 답변 전체 조회
-const getInterviewAnswerList = (interviewId: number): Promise<InterviewAnswerListResponse> => {
-  const data = api.get(`interview/${interviewId}/all`).json<InterviewAnswerListResponse>();
+const getInterviewAnswerList = (interviewId: number): Promise<InterviewAnswerListResponse[]> => {
+  const data = api.get(`interview/${interviewId}/all`).json<InterviewAnswerListResponse[]>();
   return data;
 };
 
@@ -95,5 +97,71 @@ export const useGetInterviewAnswerDetail = (interviewId: number, interviewAnswer
   return useQuery({
     queryKey: ['interviewAnswerDetail', interviewAnswerId],
     queryFn: () => getInterviewAnswerDetail(interviewId, interviewAnswerId),
+  });
+};
+
+// 다른 사람 답변 좋아요
+const createInterviewAnswerLike = async (interviewAnswerId: number): Promise<LikeResponse> => {
+  const data = await api.post(`interview/${interviewAnswerId}/like`).json<LikeResponse>();
+  return data;
+};
+
+export const useCreateInterviewAnswerLike = (interviewId: number, interviewAnswerId: number) => {
+  return useMutation({
+    mutationFn: () => createInterviewAnswerLike(interviewAnswerId),
+    onMutate: async () => {
+      // 쿼리 취소
+      await Promise.all([
+        queryClient.cancelQueries({ queryKey: ['interviewAnswerList', interviewId] }),
+        queryClient.cancelQueries({ queryKey: ['interviewAnswerDetail', interviewAnswerId] }),
+      ]);
+
+      // 쿼리의 이전 데이터 저장
+      const previousListData = queryClient.getQueryData(['interviewAnswerList', interviewId]);
+      const previousDetailData = queryClient.getQueryData(['interviewAnswerDetail', interviewAnswerId]);
+
+      // 데이터 업데이트
+      if (previousListData) {
+        queryClient.setQueryData(['interviewAnswerList', interviewId], (old: InterviewAnswerListResponse[]) =>
+          old?.map((answer) =>
+            answer.interviewAnswerId === interviewAnswerId
+              ? {
+                  ...answer,
+                  isLiked: !answer.isLiked,
+                  likeCount: answer.isLiked ? answer.likeCount - 1 : answer.likeCount + 1,
+                }
+              : answer,
+          ),
+        );
+      }
+
+      if (previousDetailData) {
+        queryClient.setQueryData(
+          ['interviewAnswerDetail', interviewAnswerId],
+          (old: InterviewAnswerDetailResponse) => ({
+            ...old,
+            isLiked: !old.isLiked,
+            likeCount: old.isLiked ? old.likeCount - 1 : old.likeCount + 1,
+          }),
+        );
+      }
+
+      return { previousListData, previousDetailData };
+    },
+    onError: (err, _, context) => {
+      // 에러 시 데이터 롤백
+      if (context?.previousListData) {
+        console.error('좋아요 요청을 실패했습니다.', err);
+        queryClient.setQueryData(['interviewAnswerList', interviewId], context.previousListData);
+      }
+      if (context?.previousDetailData) {
+        queryClient.setQueryData(['interviewAnswerDetail', interviewAnswerId], context.previousDetailData);
+      }
+    },
+    onSettled: () => {
+      // 쿼리 모두 무효화
+      queryClient.invalidateQueries({ queryKey: ['interviewAnswerList', interviewId] });
+      queryClient.invalidateQueries({ queryKey: ['interviewAnswerDetail', interviewAnswerId] });
+    },
   });
 };

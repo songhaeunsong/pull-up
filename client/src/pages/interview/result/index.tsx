@@ -21,7 +21,6 @@ const InterviewResultPage = () => {
     question: 'Checked Exception과 Unchecked Exception의 차이는 ?',
     memberAnswer:
       'SOLID는 객체지향 프로그래밍의 5가지 핵심 설계 원칙을 말합니다. 각각의 원칙들이 소프트웨어의 유지보수성과 확장성을 높이는 데 매우 중요한 역할을 합니다. 첫째로, 단일 책임 원칙(SRP)입니다. 이는 "한 클래스는 한 가지 책임만 가져야 한다"는 원칙입니다. 예를 들어, 주문 시스템에서 OrderService라는 클래스가 있다면, 이 클래스는 주문 처리에 관한 책임만 가져야 하고, 결제나 배송 관련 로직은 별도의 클래스로 분리해야 합니다.',
-    grade: 'A+',
     keywords: ['Java', 'Exception'],
     strength: 'SOLID가 무엇인지 명확하게 정의하면서 시작해 질문의 핵심을 바로 짚었습니다',
     weakness: 'SOLID의 나머지 4가지 원칙에 대한 설명이 누락되어 있습니다',
@@ -37,7 +36,7 @@ const InterviewResultPage = () => {
   }, [result]);
 
   const { data: interviewList } = useGetInterviewList();
-  const [interviewListData, setInterviewListData] = useState<InterviewListResponse>([
+  const [interviewListData, setInterviewListData] = useState<InterviewListResponse[]>([
     {
       interviewId: 1,
       interviewAnswerId: 1,
@@ -101,7 +100,6 @@ const InterviewResultPage = () => {
 
           <div className="flex flex-[5.5]">
             <InterviewFeedback
-              grade={resultData.grade}
               keywords={resultData.keywords}
               strength={resultData.strength}
               weakness={resultData.weakness}

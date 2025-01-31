@@ -43,7 +43,7 @@ const InterviewAnswerItem = ({
         <div className="flex w-full flex-col gap-4">
           <button
             disabled={!onInterviewAnswerClick}
-            className="w-full text-justify text-xl"
+            className="w-full break-all text-left text-xl"
             onClick={() => onInterviewAnswerClick?.(id)}
             aria-label={`답변 상세 보기: ${content}`}
           >
