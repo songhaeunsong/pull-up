@@ -19,7 +19,7 @@ const useWebSocket = () => {
     if (!client.current) {
       console.log('Websocket: 새로운 인스턴스 생성');
       client.current = new Client({
-        webSocketFactory: () => new SockJS(`${import.meta.env.VITE_BASE_URL}/game-websocket`),
+        webSocketFactory: () => new SockJS(`${import.meta.env.VITE_WEBSOCKET_URL}/game-websocket`),
         debug: (str) => console.log(str),
         reconnectDelay: 5000,
         heartbeatIncoming: 4000,
