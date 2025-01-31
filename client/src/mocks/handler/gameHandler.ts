@@ -20,7 +20,7 @@ const cards = [
 ];
 
 export const gameHandler = [
-  http.post('http://localhost:8080/game/room', async ({ request }) => {
+  http.post('http://localhost:8080/api/v1/game/room', async ({ request }) => {
     const { memberId } = (await request.json()) as { memberId: string };
 
     if (typeof memberId === 'string') {
@@ -40,7 +40,7 @@ export const gameHandler = [
     }
   }),
 
-  http.get('http://localhost:8080/game/problems?limit=15', async () => {
+  http.get('http://localhost:8080/api/v1/game/problems?limit=15', async () => {
     return HttpResponse.json(cards, {
       status: 200,
     });
