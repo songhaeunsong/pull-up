@@ -27,7 +27,7 @@ export const interviewHandler = [
   }),
 
   // 답안 제출
-  http.post('http://localhost:8080/api/v1/interview/:interviewId', async ({ params, request }) => {
+  http.post('http://localhost:8080/api/v1/interview/:interviewId/submit', async ({ params, request }) => {
     const { interviewId } = params;
     const { answer } = (await request.json()) as { answer: string };
 
@@ -81,7 +81,7 @@ export const interviewHandler = [
   }),
 
   // 지난 오늘의 문제 전체 목록 조회
-  http.get('http://localhost:8080/api/v1/interview/me', async () => {
+  http.get('http://localhost:8080/api/v1/interview/me/all', async () => {
     const isError = false;
 
     if (!isError) {
