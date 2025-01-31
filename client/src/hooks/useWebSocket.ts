@@ -1,38 +1,39 @@
 import { useEffect, useRef, useState } from 'react';
+import { useLocation } from 'react-router-dom';
 import { Client } from '@stomp/stompjs';
 import SockJS from 'sockjs-client';
+import { RoomStatus, StompRoomInfo } from '@/types/game';
 
 const useWebSocket = () => {
   const client = useRef<Client | null>(null);
-  const [roomStatus, setRoomStatus] = useState('WAITING'); // 방 상태
-  const [roomInfo, setRoomInfo] = useState({
+  const location = useLocation();
+
+  const [roomStatus, setRoomStatus] = useState<RoomStatus>('WAITING');
+  const [roomInfo, setRoomInfo] = useState<StompRoomInfo>({
     roomId: '',
     player1P: { memberId: 0, name: '', score: 0 },
     player2P: { memberId: 0, name: '', score: 0 },
   });
 
   useEffect(() => {
-    console.log('roomInfo', roomInfo);
-  }, [roomInfo]);
-
-  useEffect(() => {
-    console.log('SockJS 연결 초기화');
-
-    client.current = new Client({
-      webSocketFactory: () => new SockJS(`${import.meta.env.VITE_BASE_URL}/game-websocket`),
-      debug: (str) => console.log(str),
-      reconnectDelay: 5000,
-      heartbeatIncoming: 4000,
-      heartbeatOutgoing: 4000,
-    });
+    if (!client.current) {
+      console.log('Websocket: 새로운 인스턴스 생성');
+      client.current = new Client({
+        webSocketFactory: () => new SockJS(`${import.meta.env.VITE_BASE_URL}/game-websocket`),
+        debug: (str) => console.log(str),
+        reconnectDelay: 5000,
+        heartbeatIncoming: 4000,
+        heartbeatOutgoing: 4000,
+      });
+    }
 
     client.current.onConnect = () => {
-      console.log('WebSocket 연결 성공');
+      console.log('WebSocket: 연결 성공');
 
       // 방 상태 구독
       client.current!.subscribe('/topic/room-status', (message) => {
         const updatedStatus = JSON.parse(message.body);
-        console.log('수신한 방 상태:', updatedStatus);
+        console.log('Websocket: 수신한 방 상태:', updatedStatus);
         setRoomStatus(updatedStatus.body.status);
         setRoomInfo({
           roomId: updatedStatus.body.roomId,
@@ -68,25 +69,26 @@ const useWebSocket = () => {
     };
 
     client.current.onStompError = (frame) => {
-      console.error('STOMP 에러:', frame.headers['message']);
+      console.error('Websocket: STOMP 에러:', frame.headers['message']);
     };
 
     client.current.activate();
 
     return () => {
-      if (client.current) {
+      if (client.current && !location.pathname.startsWith('/game')) {
+        console.log('Websocket: 연결 해제');
         client.current.deactivate();
       }
     };
-  }, []);
+  }, [location.pathname]);
 
   const sendMessage = (destination: string, payload: unknown) => {
     if (!client.current || !client.current.connected) {
-      console.error('WebSocket이 아직 연결되지 않았습니다.');
+      console.error('Websocket: WebSocket이 아직 연결되지 않았습니다.');
       return;
     }
 
-    console.log('WebSocket 메시지 전송 중:', destination, payload);
+    console.log('WebSocket: 메시지 전송 중:', destination, payload);
     client.current.publish({ destination, body: JSON.stringify(payload) });
   };
 
