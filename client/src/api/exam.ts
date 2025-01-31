@@ -13,7 +13,7 @@ interface GetExamAllResponse {
   };
 }
 
-const getScore = () => api.get<Score[]>('/exam/me/score');
+const getScore = () => api.get<Score[]>('exam/me/score');
 
 export const useGetScore = () =>
   useQuery({
@@ -21,7 +21,7 @@ export const useGetScore = () =>
     queryFn: () => getScore(),
   });
 
-const getCorrectRate = () => api.get<CorrectRate[]>('/exam/me/correct-rate');
+const getCorrectRate = () => api.get<CorrectRate[]>('exam/me/correct-rate');
 
 export const useGetCorrectRate = () =>
   useQuery({
@@ -29,36 +29,46 @@ export const useGetCorrectRate = () =>
     queryFn: () => getCorrectRate(),
   });
 
-const getExamAll = () => api.get<GetExamAllResponse>('/exam/me/all');
+// 최근에 푼 모의고사 전체 조회
+const getExamAll = () => api.get<GetExamAllResponse>('exam/me/all').json();
 
 export const useGetExamAll = () =>
   useQuery({
-    queryKey: ['correctRates'],
+    queryKey: ['examAll'],
     queryFn: () => getExamAll(),
   });
 
-const getRecentExam = () => api.get<Exam>('/exam/me/recent');
+// 최근에 푼 모의고사 단건 조회
+const getRecentExam = () => api.get<Exam>('exam/me/recent').json();
 
 export const useGetRecentExam = () =>
   useQuery({
-    queryKey: ['correctRates'],
+    queryKey: ['recentExam'],
     queryFn: () => getRecentExam(),
   });
 
 // 모의고사 생성
 export const postExam = async (data: ExamCreateRequest) => {
-  return await api.post('/exam/me', { json: data }).json<{ examId: number }>();
+  return await api
+    .post('exam/me', {
+      json: data,
+      headers: { 'Content-Type': 'application/json' },
+    })
+    .json<{ examId: number }>();
 };
 
 // 모의고사 조회
 const getExamDetails = (examId: number) => {
-  return api.get(`/exam/${examId}`).json<ExamDetailsResponse>();
+  return api.get(`exam/${examId}`).json<{ examDetailsDtos: ExamDetailsResponse }>();
 };
 
 export const useGetExamDetails = (examId: number) => {
   return useQuery({
     queryKey: ['examDetails', examId],
-    queryFn: () => getExamDetails(examId),
+    queryFn: async () => {
+      const response = await getExamDetails(examId);
+      return response.examDetailsDtos;
+    },
     refetchOnMount: false,
     refetchOnWindowFocus: false,
     retry: false,
@@ -67,12 +77,15 @@ export const useGetExamDetails = (examId: number) => {
 
 // 모의고사 답안 제출
 export const postExamAnswer = async (examId: number, data: ExamResultRequest) => {
-  return await api.post(`/exam/${examId}`, { json: { data } });
+  return await api.post(`exam/${examId}`, {
+    json: data,
+    headers: { 'Content-Type': 'application/json' },
+  });
 };
 
 // 모의고사 채점 결과 조회
 export const getExamResult = (examId: number) => {
-  return api.get(`/exam/${examId}/result`).json<ExamResultResponse>();
+  return api.get(`exam/${examId}/result`).json<ExamResultResponse>();
 };
 
 export const useGetExamResult = (examId: number) => {

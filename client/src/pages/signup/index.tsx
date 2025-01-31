@@ -1,4 +1,4 @@
-import Modal from '@/components/common/csConditionSelector/temp';
+import CsConditionSelector from '@/components/common/csConditionSelector';
 import { useNavigate } from 'react-router-dom';
 
 const SignUpPage = () => {
@@ -21,7 +21,9 @@ const SignUpPage = () => {
     >
       <div className="relative flex h-full w-full items-center justify-around p-20">
         {/* 좌측 컨테이너 */}
-        <Modal text="회원가입" onClick={onConfirmSignUp} isExam={false} />
+        <div className="flex flex-col gap-12">
+          <CsConditionSelector text="회원가입" onClick={onConfirmSignUp} />
+        </div>
         {/* 우측 컨테이너 */}
         <img src="/assets/images/exam1.png" alt="대문 이미지" className="h-auto w-[600px]" />
       </div>

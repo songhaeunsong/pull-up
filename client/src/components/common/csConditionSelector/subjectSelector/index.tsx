@@ -1,17 +1,18 @@
 import Icon from '@/components/common/icon';
+import { Subject } from '@/types/member';
 
 export interface SubjectSelectorProps {
-  id: string;
+  id: Subject;
   name: string;
   icon: string;
   isSelected: boolean;
-  onClick: (id: string) => void;
+  onClick: (id: Subject) => void;
 }
 
 const SubjectSelector = ({ id, name, icon, isSelected, onClick }: SubjectSelectorProps) => {
   return (
     <div onClick={() => onClick(id)} className="flex cursor-pointer items-center justify-between gap-1">
-      <div className="flex items-center gap-6 text-xl font-semibold">
+      <div className="flex items-center gap-6 text-lg font-semibold">
         <Icon id={icon} size={50} />
         <span>{name}</span>
       </div>
