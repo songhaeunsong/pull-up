@@ -2,82 +2,115 @@ import { useGetProblem, usePostCreateGame } from '@/api/game';
 import Modal from '../common/modal';
 import CreateRoom from './gameModalComponent/CreateRoom';
 import JoinGame from './gameModalComponent/JoinGame';
-import Waiting from './gameModalComponent/Waiting';
-import { useEffect, useState } from 'react';
-import { toast } from 'react-toastify';
+import Waiting from './gameModalComponent/waiting/Waiting';
+import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { RoomStatus } from '@/types/game';
+import useWebSocket from '@/hooks/useWebSocket';
+import WaitingAfterCreating from './gameModalComponent/waiting/WaitingAfterCreating';
+import { toast } from 'react-toastify';
 
 const GameModals = () => {
-  const [roomStatus, setRoomStatus] = useState<RoomStatus>('WAITING'); // 임시 (추후 웹소켓으로 대체)
   const navigate = useNavigate();
 
-  const { data: problems } = useGetProblem(roomStatus);
+  const { roomStatus, roomInfo, sendMessage } = useWebSocket();
 
+  const { data: problems } = useGetProblem(roomStatus);
   const postCreateGame = usePostCreateGame();
-  //   const { roomStatus, roomInfo, setRoomInfo } = useWebSocket();
+
   const [isReady, setIsReady] = useState(false);
 
-  const roomInfo = {
-    roomId: 1234,
-    player1P: { memberId: 1, name: '송하은', score: 0 },
-    player2P: { memberId: 2, name: '정지안', score: 0 },
-  }; // 웹소켓으로 대체
+  const [codeForInviting, setCodeForInviting] = useState('');
+  const [codeForJoinning, setCodeForJoinning] = useState('');
 
-  const [code, setCode] = useState('');
-
-  const sendMessage = (destination: string, payload: unknown) => {
-    console.log(destination, payload);
-  }; // 임시 (추후 웹소켓으로 대체)
-
-  const [member, setMember] = useState({
-    id: '1',
+  const [member1, setMember1] = useState({
+    id: '2',
     name: '송하은',
     email: 'test1@test.test',
-  });
+  }); // 더미 데이터
+
+  const [member2, setMember2] = useState({
+    id: '3',
+    name: '정지안',
+    email: 'test2@test.test',
+  }); // 더미 데이터
+
+  const createRoomTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const joinRoomTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+
+  const createRoomTimeout = () => {
+    createRoomTimeoutRef.current = setTimeout(() => {
+      if (roomStatus !== 'READY') {
+        toast.error('방을 다시 만들어주세요!', {
+          position: 'bottom-center',
+        });
+        setIsReady(false);
+      }
+    }, 1000 * 60);
+  };
+
+  const joinRoomTimeout = () => {
+    joinRoomTimeoutRef.current = setTimeout(() => {
+      if (roomStatus !== 'READY') {
+        toast.error('코드와 일치하는 방이 없습니다.', {
+          position: 'bottom-center',
+        });
+        setIsReady(false);
+      }
+    }, 3000);
+  };
 
   const handleCodeChange = (newCode: string) => {
-    setCode(newCode);
+    setCodeForJoinning(newCode);
   };
 
   const handleCreateRoom = async () => {
     setIsReady(true);
-    const { roomId } = await postCreateGame(member.id);
-    console.log('게임 생성 성공:', roomId);
+    const { roomId } = await postCreateGame(member1.id); // member.id 제거 예정
+    setCodeForInviting(roomId);
+
+    createRoomTimeout();
   };
 
   const handleJoinRoom = async () => {
     setIsReady(true);
 
-    try {
-      await sendMessage('/app/room/join', {
-        roomId: code,
-        playerId: member.id,
-      });
+    sendMessage('/app/room/join', {
+      roomId: codeForJoinning,
+      playerId: member2.id,
+    });
 
-      setTimeout(() => {
-        setRoomStatus('READY');
-      }, 2000); // // 임시 (추후 웹소켓으로 대체) => 없어도 되는 코드
-    } catch {
-      toast.error('입력하신 코드와 일치하는 방이 없습니다.', {
-        position: 'bottom-center',
-      });
-      setIsReady(false);
-    }
-    setCode('');
-  };
+    setCodeForJoinning('');
 
-  const handleCloseModal = (isOpen: boolean) => {
-    if (!isOpen) {
-      setIsReady(false);
-    }
+    joinRoomTimeout();
   };
 
   useEffect(() => {
     if (roomStatus === 'READY' && problems) {
-      navigate(`/game/${roomInfo.roomId}`);
+      if (createRoomTimeoutRef.current) {
+        clearTimeout(createRoomTimeoutRef.current);
+      }
+      if (joinRoomTimeoutRef.current) {
+        clearTimeout(joinRoomTimeoutRef.current);
+      }
+
+      setTimeout(() => {
+        navigate(`/game/${roomInfo.roomId}`);
+      }, 3000);
     }
   }, [problems, roomStatus]);
+
+  const handleCloseModal = (isOpen: boolean) => {
+    if (!isOpen) {
+      if (createRoomTimeoutRef.current) {
+        clearTimeout(createRoomTimeoutRef.current);
+      }
+      if (joinRoomTimeoutRef.current) {
+        clearTimeout(joinRoomTimeoutRef.current);
+      }
+
+      setIsReady(false);
+    }
+  };
 
   return (
     <div className="flex gap-6">
@@ -89,7 +122,7 @@ const GameModals = () => {
         <Waiting text="2P를 찾고 있어요!" />
       </Modal>
       <Modal triggerName="방 생성" triggerColor="primary" onOpenChange={(isOpen: boolean) => handleCloseModal(isOpen)}>
-        {isReady ? <Waiting text="친구가 입장하면 시작합니다." /> : <CreateRoom handleGameState={handleCreateRoom} />}
+        {isReady ? <WaitingAfterCreating code={codeForInviting} /> : <CreateRoom handleGameState={handleCreateRoom} />}
       </Modal>
       <Modal
         triggerName="코드 입력"
@@ -99,7 +132,7 @@ const GameModals = () => {
         {isReady ? (
           <Waiting text="입장 중..." />
         ) : (
-          <JoinGame code={code} onCodeChange={handleCodeChange} handleGameState={handleJoinRoom} />
+          <JoinGame code={codeForJoinning} onCodeChange={handleCodeChange} handleGameState={handleJoinRoom} />
         )}
       </Modal>
     </div>

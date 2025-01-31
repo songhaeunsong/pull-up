@@ -1,11 +1,11 @@
 import { useGetProblem } from '@/api/game';
 import GameBoard from '@/components/game/gameStage/GameBoard';
 import GameScoreBoard from '@/components/game/gameStage/GameScoreBoard';
-import { RoomStatus } from '@/types/game';
+import useWebSocket from '@/hooks/useWebSocket';
 import { useState } from 'react';
 
 const GameStage = () => {
-  const [roomStatus, setRoomStatus] = useState<RoomStatus>('READY'); // 임시 (추후 웹소켓으로 대체)
+  const { roomStatus } = useWebSocket();
   const { data: problems, isLoading } = useGetProblem(roomStatus);
 
   const [myId, setMyId] = useState(1); // 임시, 서버에서 받아오기 (아이디, 이름)

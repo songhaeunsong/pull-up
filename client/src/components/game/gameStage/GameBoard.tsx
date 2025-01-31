@@ -1,12 +1,11 @@
 import { useState } from 'react';
 import GameCard from './GameCard';
 import { Card } from '@/types/game';
+import useWebSocket from '@/hooks/useWebSocket';
 
 const GameBoard = ({ problems }: { problems: Card[] }) => {
-  const sendMessage = (destination: string, payload: unknown) => {
-    console.log('구독: ', destination, payload);
-  }; // 더미
-  const roomInfo = { roomId: '1234' }; // 더미
+  const { sendMessage, roomInfo } = useWebSocket();
+
   const myId = 1; // 서버에 요청 보내서 가져오기
   const [selectedCards, setSelectedCards] = useState<number[]>([]);
 
@@ -38,6 +37,7 @@ const GameBoard = ({ problems }: { problems: Card[] }) => {
       setTimeout(() => setSelectedCards([]), 300);
     }
   };
+
   return (
     <div className="grid grid-cols-4 grid-rows-4 rounded-md bg-primary-400 p-1 shadow-sm">
       {problems.map((card, i) => (
