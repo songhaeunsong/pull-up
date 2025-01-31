@@ -13,7 +13,7 @@ interface GetExamAllResponse {
   };
 }
 
-const getScore = () => api.get<Score[]>('/exam/me/score');
+const getScore = () => api.get<Score[]>('exam/me/score');
 
 export const useGetScore = () =>
   useQuery({
@@ -21,7 +21,7 @@ export const useGetScore = () =>
     queryFn: () => getScore(),
   });
 
-const getCorrectRate = () => api.get<CorrectRate[]>('/exam/me/correct-rate');
+const getCorrectRate = () => api.get<CorrectRate[]>('exam/me/correct-rate');
 
 export const useGetCorrectRate = () =>
   useQuery({
@@ -29,19 +29,21 @@ export const useGetCorrectRate = () =>
     queryFn: () => getCorrectRate(),
   });
 
-const getExamAll = () => api.get<GetExamAllResponse>('/exam/me/all');
+// 최근에 푼 모의고사 전체 조회
+const getExamAll = () => api.get<GetExamAllResponse>('exam/me/all').json();
 
 export const useGetExamAll = () =>
   useQuery({
-    queryKey: ['correctRates'],
+    queryKey: ['examAll'],
     queryFn: () => getExamAll(),
   });
 
-const getRecentExam = () => api.get<Exam>('/exam/me/recent');
+// 최근에 푼 모의고사 단건 조회
+const getRecentExam = () => api.get<Exam>('exam/me/recent').json();
 
 export const useGetRecentExam = () =>
   useQuery({
-    queryKey: ['correctRates'],
+    queryKey: ['recentExam'],
     queryFn: () => getRecentExam(),
   });
 

@@ -152,4 +152,59 @@ export const examHandler = [
     }
     return HttpResponse.json({ status: 404 });
   }),
+
+  // 최근 푼 모의고사 전체 조회
+  http.get('http://localhost:8080/api/v1/exam/me/all', async ({ request }) => {
+    const url = new URL(request.url);
+    const page = url.searchParams.get('page') || 1;
+    const size = url.searchParams.get('size') || 10;
+
+    const data = {
+      getExamResponses: [
+        {
+          examId: 7,
+          examName: '제 1회 모의고사',
+          date: '2025-01-01T19:00:00',
+          subjects: ['ALGORITHM', 'NETWORK', 'OPERATING_SYSTEM', 'DATABASE'],
+        },
+        {
+          examId: 9,
+          examName: '제 2회 모의고사',
+          date: '2025-01-03T19:00:00',
+          subjects: ['OPERATING_SYSTEM', 'DATABASE', 'ALGORITHM', 'NETWORK'],
+        },
+        {
+          examId: 13,
+          examName: '제 4회 모의고사',
+          date: '2025-01-22T20:20:22.022201',
+          subjects: ['OPERATING_SYSTEM', 'DATABASE'],
+        },
+        {
+          examId: 12,
+          examName: '제 5회 모의고사',
+          date: '2025-01-24T20:20:22.022201',
+          subjects: ['OPERATING_SYSTEM', 'DATABASE'],
+        },
+      ],
+      pageable: {
+        page: 0,
+        size: 3,
+        totalPages: 1,
+        totalElements: 3,
+      },
+    };
+
+    return HttpResponse.json(
+      {
+        content: data.getExamResponses,
+        pageable: {
+          page: page, // 1부터 시작하는 페이지 번호로 반환
+          size,
+          totalPages: data.pageable.totalPages,
+          totalElements: data.pageable.totalElements,
+        },
+      },
+      { status: 200 },
+    );
+  }),
 ];

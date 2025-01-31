@@ -2,7 +2,12 @@ import { Problem, ProblemBrief, ProblemDetail } from '@/types/problem';
 import api from './instance';
 import { useQuery } from '@tanstack/react-query';
 
-const getWrongQuestionAll = () => api.get<Problem[]>('/problem/wrong-question/me/all');
+// 틀린 문제 전체 조회
+interface GetWrongQuestionAllResponse {
+  wrongProblemDtos: Problem[];
+}
+
+const getWrongQuestionAll = () => api.get<GetWrongQuestionAllResponse>('problem/me/all').json();
 
 export const useGetWrongQuestionAll = () =>
   useQuery({
@@ -10,15 +15,16 @@ export const useGetWrongQuestionAll = () =>
     queryFn: () => getWrongQuestionAll(),
   });
 
-const getRecentWrongQuestion = () => api.get<ProblemBrief[]>('/problem/wrong-question/recent');
-
+// 내가 틀린 문제 최근 10건 조회
+const getRecentWrongQuestion = () => api.get<ProblemBrief[]>('problem/wrong/recent').json();
 export const useGetRecentWrongQuestion = () =>
   useQuery({
     queryKey: ['recentWrongQuestions'],
     queryFn: () => getRecentWrongQuestion(),
   });
 
-const getQuestionDetail = (problemId: number) => api.get<ProblemDetail>(`/problem/question/${problemId}`);
+// 문제 단건 조회
+const getQuestionDetail = (problemId: number) => api.get<ProblemDetail>(`problem/${problemId}`).json();
 
 export const useGetQuestionDetail = (problemId: number) =>
   useQuery({
@@ -26,7 +32,8 @@ export const useGetQuestionDetail = (problemId: number) =>
     queryFn: () => getQuestionDetail(problemId),
   });
 
-const getProblemArchiveAll = () => api.get<Problem[]>('/problem/archive/all');
+// 북마크 문제 전체 조회
+const getProblemArchiveAll = () => api.get<Problem[]>('problem/archive/all').json();
 
 export const useGetProblemArchiveAll = () =>
   useQuery({
