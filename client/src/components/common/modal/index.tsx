@@ -8,17 +8,16 @@ interface Modalprops {
   triggerName: string;
   triggerColor: 'primary' | 'secondary' | 'gray';
   children: ReactNode;
-  onOpenChange?: (isOpen: boolean) => void;
 }
 
-const Modal = ({ triggerName, triggerColor, children, onOpenChange }: Modalprops) => {
+const Modal = ({ triggerName, triggerColor, children }: Modalprops) => {
   return (
-    <Dialog onOpenChange={onOpenChange}>
+    <Dialog>
       <DialogTrigger asChild>
         <Button variant={triggerColor}>{triggerName}</Button>
       </DialogTrigger>
       <DialogContent className="bg-white sm:max-w-[425px]">
-        <DialogTitle></DialogTitle>
+        <DialogTitle className="text-center text-lg font-bold">{triggerName}</DialogTitle>
         <DialogDescription className="hidden"></DialogDescription>
         <div className="flex w-full flex-col items-center">{children}</div>
       </DialogContent>

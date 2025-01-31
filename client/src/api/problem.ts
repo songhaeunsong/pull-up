@@ -2,34 +2,46 @@ import { Problem, ProblemBrief, ProblemDetail } from '@/types/problem';
 import api from './instance';
 import { useQuery } from '@tanstack/react-query';
 
-const getWrongQuestionAll = () => api.get<Problem[]>('/problem/wrong-question/me/all');
+// 틀린 문제 전체 조회
+interface GetWrongProblemAllResponse {
+  wrongProblemDtos: Problem[];
+}
 
-export const useGetWrongQuestionAll = () =>
+// 아카이브 문제 전체 조회
+interface GetArchivedProblemAllResponse {
+  bookmarkedProblemDtos: Problem[];
+}
+
+const getWrongProblemAll = () => api.get<GetWrongProblemAllResponse>('problem/me/all').json();
+
+export const useGetWrongProblemAll = () =>
   useQuery({
-    queryKey: ['wrongQuestions'],
-    queryFn: () => getWrongQuestionAll(),
+    queryKey: ['wrongProblems'],
+    queryFn: () => getWrongProblemAll(),
   });
 
-const getRecentWrongQuestion = () => api.get<ProblemBrief[]>('/problem/wrong-question/recent');
-
-export const useGetRecentWrongQuestion = () =>
+// 내가 틀린 문제 최근 10건 조회
+const getRecentWrongProblem = () => api.get<ProblemBrief[]>('problem/wrong/recent').json();
+export const useGetRecentWrongProblem = () =>
   useQuery({
-    queryKey: ['recentWrongQuestions'],
-    queryFn: () => getRecentWrongQuestion(),
+    queryKey: ['recentWrongProblems'],
+    queryFn: () => getRecentWrongProblem(),
   });
 
-const getQuestionDetail = (problemId: number) => api.get<ProblemDetail>(`/problem/question/${problemId}`);
+// 문제 단건 조회
+const getProblemDetail = (problemId: number) => api.get<ProblemDetail>(`problem/${problemId}`).json();
 
-export const useGetQuestionDetail = (problemId: number) =>
+export const useGetProblemDetail = (problemId: number) =>
   useQuery({
-    queryKey: ['question', problemId],
-    queryFn: () => getQuestionDetail(problemId),
+    queryKey: ['problemDetail', problemId],
+    queryFn: () => getProblemDetail(problemId),
   });
 
-const getProblemArchiveAll = () => api.get<Problem[]>('/problem/archive/all');
+// 북마크 문제 전체 조회
+const getArchivedProblemAll = () => api.get<GetArchivedProblemAllResponse>('problem/archive/all').json();
 
-export const useGetProblemArchiveAll = () =>
+export const useGetArchivedProblemAll = () =>
   useQuery({
-    queryKey: ['problemArchives'],
-    queryFn: () => getProblemArchiveAll(),
+    queryKey: ['archivedProblems'],
+    queryFn: () => getArchivedProblemAll(),
   });
