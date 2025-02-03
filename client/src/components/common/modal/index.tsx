@@ -20,7 +20,7 @@ const Modal = ({ triggerName, triggerColor, children, onOpenChange }: Modalprops
       <DialogContent className="max-w-[300px] bg-white sm:max-w-[425px]">
         <DialogTitle></DialogTitle>
         <DialogDescription className="hidden"></DialogDescription>
-        <div className="flex w-full flex-col items-center">{children}</div>
+        <div className="flex w-full flex-col items-center text-sm">{children}</div>
       </DialogContent>
     </Dialog>
   );
