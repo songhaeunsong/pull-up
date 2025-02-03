@@ -113,7 +113,7 @@ const GameModals = () => {
   };
 
   return (
-    <div className="flex gap-6">
+    <div className="flex gap-4 sm:gap-6">
       <Modal
         triggerName="랜덤 매칭"
         triggerColor="primary"
