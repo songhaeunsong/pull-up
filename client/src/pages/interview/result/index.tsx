@@ -72,9 +72,11 @@ const InterviewResultPage = () => {
   const formatDate = convertDate(resultData.date).split('-');
 
   return (
-    <div className="min-h-full bg-Main px-10 py-10">
+    <div className="min-h-full bg-Main p-6 md:p-10">
       {/* 사이드바 넓이 만큼 왼쪽 마진 조절 */}
-      <div className={`relative flex pt-16 transition-all duration-500 ${isSideMenuOpen ? 'ml-[350px]' : 'ml-0'}`}>
+      <div
+        className={`relative flex pt-28 transition-all duration-500 md:pt-16 ${isSideMenuOpen ? 'md:ml-[280px] lg:ml-[300px]' : 'ml-0'}`}
+      >
         <SideMenu
           isOpen={isSideMenuOpen}
           interviewList={interviewListData}
@@ -83,17 +85,24 @@ const InterviewResultPage = () => {
           onInterviewClick={onInterviewClick}
         />
 
-        <div className="flex w-full gap-8">
+        <div className="flex w-full flex-col gap-8 lg:flex-row">
           <div className="flex h-fit flex-[4.5] flex-col gap-6">
             <button className="flex items-center gap-4">
-              {!isSideMenuOpen ? <Icon id="menu" size={24} onClick={() => setIsSideMenuOpen(true)} /> : <></>}
-              <span className="text-2xl font-semibold">{`${formatDate[0]}년 ${formatDate[1]}월 ${formatDate[2]}일`}</span>
+              {!isSideMenuOpen ? (
+                <Icon id="menu" size={20} onClick={() => setIsSideMenuOpen(true)} className="h-auto md:w-6" />
+              ) : (
+                <></>
+              )}
+              <span className="text-xl font-semibold md:text-2xl">{`${formatDate[0]}년 ${formatDate[1]}월 ${formatDate[2]}일`}</span>
             </button>
             <InterviewDetail title={resultData.question} content={resultData.answer} />
             <div className="flex w-full justify-end">
-              <button className="flex items-center gap-2 rounded-lg bg-primary-500 px-5 py-3" onClick={onButtonClick}>
-                <span className="text-xl font-semibold text-white">다른 사람의 답변</span>
-                <Icon id="move" size={20} />
+              <button
+                className="flex items-center gap-2 rounded-lg bg-primary-500 px-4 py-2 md:px-5 md:py-3"
+                onClick={onButtonClick}
+              >
+                <span className="text-lg font-semibold text-white md:text-xl">다른 사람의 답변</span>
+                <Icon id="move" size={16} className="h-auto md:w-5" />
               </button>
             </div>
           </div>

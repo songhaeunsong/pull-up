@@ -2,7 +2,7 @@ import { BeforeRequestHook } from 'ky';
 
 export const OAuthLogin = (domain: string): void => {
   if (import.meta.env.VITE_MOCK_SERVICE === 'develop') {
-    window.location.href = `/redirect?code=test_code`; // msw
+    window.location.href = `/api/v1/auth/signin`; // msw
   } else {
     window.location.href = `https://api.pull-up.store/oauth2/authorization/${domain}`;
   }

@@ -7,13 +7,10 @@ const tokens = {
 
 export const authHandler = [
   // 로그인
-  http.post('http://localhost:8080/api/v1/auth/signin', async ({ request }) => {
-    const { code } = (await request.json()) as { code: string };
-
-    if (typeof code === 'string') {
-      tokens.accessToken = 'abcd';
-      tokens.refreshToken = 'abc-12323';
-
+  http.post('https://api.pull-up.store/auth/signin', async () => {
+    tokens.accessToken = 'abcd';
+    tokens.refreshToken = 'abc-12323';
+    if (tokens.accessToken && tokens.refreshToken) {
       return HttpResponse.json(
         {
           isSignedUp: true,
@@ -40,7 +37,7 @@ export const authHandler = [
   }),
 
   // 토큰 재발급
-  http.post('http://localhost:8080/api/v1/auth/reissue', ({ cookies }) => {
+  http.post('https://api.pull-up.store/auth/reissue', ({ cookies }) => {
     if (!cookies.refreshToken || cookies.refreshToken !== tokens.refreshToken) {
       return HttpResponse.json(
         {
@@ -57,7 +54,7 @@ export const authHandler = [
   }),
 
   // 로그아웃
-  http.post('http://localhost:8080/api/v1/auth/logout', ({ cookies }) => {
+  http.post('https://api.pull-up.store/auth/logout', ({ cookies }) => {
     if (!cookies.refreshToken) {
       return HttpResponse.json({ message: 'Unathorized' }, { status: 400 });
     }

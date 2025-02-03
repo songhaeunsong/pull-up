@@ -7,7 +7,7 @@ likeStatusMap.set('2', false);
 
 export const interviewHandler = [
   // 오늘의 문제 조회
-  http.get('http://localhost:8080/api/v1/interview', async () => {
+  http.get('https://api.pull-up.store/interview', async () => {
     const isError = false;
 
     if (!isError) {
@@ -27,7 +27,7 @@ export const interviewHandler = [
   }),
 
   // 답안 제출
-  http.post('http://localhost:8080/api/v1/interview/:interviewId/submit', async ({ params, request }) => {
+  http.post('https://api.pull-up.store/interview/:interviewId/submit', async ({ params, request }) => {
     const { interviewId } = params;
     const { answer } = (await request.json()) as { answer: string };
 
@@ -49,7 +49,7 @@ export const interviewHandler = [
   }),
 
   // 결과 조회
-  http.get('http://localhost:8080/api/v1/interview/result/:interviewAnswerId', async ({ params }) => {
+  http.get('https://api.pull-up.store/interview/result/:interviewAnswerId', async ({ params }) => {
     const { interviewAnswerId } = params;
 
     if (interviewAnswerId) {
@@ -81,7 +81,7 @@ export const interviewHandler = [
   }),
 
   // 지난 오늘의 문제 전체 목록 조회
-  http.get('http://localhost:8080/api/v1/interview/me/all', async () => {
+  http.get('https://api.pull-up.store/interview/me/all', async () => {
     const isError = false;
 
     if (!isError) {
@@ -110,7 +110,7 @@ export const interviewHandler = [
   }),
 
   // 다른 사람 답변 전체 목록 조회
-  http.get('http://localhost:8080/api/v1/interview/:interviewId/all', async ({ params }) => {
+  http.get('https://api.pull-up.store/interview/:interviewId/all', async ({ params }) => {
     const { interviewId } = params;
 
     if (interviewId) {
@@ -151,7 +151,7 @@ export const interviewHandler = [
   }),
 
   // 다른 사람 답변 상세 조회
-  http.get('http://localhost:8080/api/v1/interview/:interviewId/:interviewAnswerId', async ({ params }) => {
+  http.get('https://api.pull-up.store/interview/:interviewId/:interviewAnswerId', async ({ params }) => {
     const { interviewId, interviewAnswerId } = params;
 
     if (interviewId && interviewAnswerId) {
@@ -192,7 +192,7 @@ export const interviewHandler = [
   }),
 
   // 다른 사람 답변 좋아요
-  http.post('http://localhost:8080/api/v1/interview/:interviewAnswerId/like', async ({ params }) => {
+  http.post('https://api.pull-up.store/interview/:interviewAnswerId/like', async ({ params }) => {
     const { interviewAnswerId } = params;
 
     const currentStatus = likeStatusMap.get(String(interviewAnswerId));
