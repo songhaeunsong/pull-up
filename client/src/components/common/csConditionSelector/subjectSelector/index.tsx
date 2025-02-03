@@ -12,14 +12,14 @@ export interface SubjectSelectorProps {
 const SubjectSelector = ({ id, name, icon, isSelected, onClick }: SubjectSelectorProps) => {
   return (
     <div onClick={() => onClick(id)} className="flex cursor-pointer items-center justify-between gap-1">
-      <div className="flex items-center gap-6 text-lg font-semibold">
-        <Icon id={icon} size={50} />
+      <div className="flex items-center gap-6 font-semibold md:text-lg">
+        <Icon id={icon} size={40} className="h-auto md:w-[50px]" />
         <span>{name}</span>
       </div>
       <Icon
-        className={isSelected ? 'text-primary-500' : 'text-gray-400'}
+        className={`h-auto md:w-[30px] ${isSelected ? 'text-primary-500' : 'text-gray-400'}`}
         id={isSelected ? 'check' : 'check-empty'}
-        size={30}
+        size={24}
       />
     </div>
   );

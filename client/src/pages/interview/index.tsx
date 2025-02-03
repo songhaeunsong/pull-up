@@ -58,7 +58,7 @@ const InterviewPage = () => {
   return (
     <div className="flex w-full items-center justify-center bg-gradient-to-b from-primary-50 to-white px-10 py-10">
       <div className="flex w-[873px] flex-col items-center justify-center gap-12 pt-16">
-        <div className="text-3xl font-extrabold">
+        <div className="text-xl font-extrabold md:text-2xl lg:text-3xl">
           <span className="text-primary-600">{`${username}`}</span>
           <span>님 만을 위한 오늘의 맞춤 문제🎯</span>
         </div>
@@ -69,7 +69,7 @@ const InterviewPage = () => {
           onHintClick={onHintClick}
         />
         <div className="flex w-full flex-col justify-start gap-2">
-          <span className="text-xl font-semibold">나의 답변</span>
+          <span className="text-lg font-semibold lg:text-xl">나의 답변</span>
           <InputForm
             id="todayQuestion"
             placeholder="질문에 대한 답을 남겨주세요."
