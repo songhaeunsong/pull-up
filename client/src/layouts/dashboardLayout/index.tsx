@@ -12,7 +12,7 @@ const DashBoardLayout = () => {
 
   return (
     <div className="flex pt-16">
-      <div className="box-border flex flex-1 gap-4 bg-Main p-8">
+      <div className="box-border flex flex-1 flex-col-reverse gap-4 bg-Main p-8 lg:flex-row">
         <main className="flex h-full flex-1 overflow-y-auto">
           <Outlet />
         </main>
