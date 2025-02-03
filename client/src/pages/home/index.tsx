@@ -14,7 +14,7 @@ const HomePage = () => {
 
   return (
     <div
-      className="relative h-full w-full pt-16"
+      className="relative flex min-h-full min-w-full items-center pt-16"
       style={{
         background: `
         radial-gradient(circle at 50% 50%, rgb(255, 255, 255) 0%, transparent 100%),
@@ -24,7 +24,7 @@ const HomePage = () => {
       `,
       }}
     >
-      <div className="relative flex h-full w-full items-center justify-around p-20">
+      <div className="relative flex h-full w-full items-center justify-around p-6 md:p-10 lg:p-20">
         {/* 좌측 컨테이너 */}
         <div className="flex flex-col gap-10">
           <div className="flex flex-col gap-6">
@@ -37,22 +37,28 @@ const HomePage = () => {
                 />
               ))}
             </div>
-            <div className="flex flex-col text-5xl font-bold">
+            <div className="flex flex-col items-center text-2xl font-bold md:items-start md:text-3xl lg:text-4xl xl:text-5xl">
               <span>나의 기술 스택과 실력</span>
               <span>맞춤으로 준비하는 면접</span>
             </div>
             <div className="flex flex-col gap-2">
-              <div className="flex flex-col text-2xl font-semibold">
+              <div className="flex flex-col items-center text-xl font-semibold md:items-start md:text-2xl">
                 <span>CS 모의고사 풀이부터</span>
                 <span>매일 알림으로 받는 기술 면접까지</span>
               </div>
-              <span className="text-xl font-medium text-primary-500">간편하게 오늘의 문제부터 받아보세요.</span>
+              <span className="text-lg font-medium text-primary-500 md:text-xl">
+                간편하게 오늘의 문제부터 받아보세요.
+              </span>
             </div>
           </div>
           <SubmitButton text="알림 받으러 가기" color="secondary" onClick={onClick} />
         </div>
         {/* 우측 컨테이너 */}
-        <img src="/assets/images/exam1.png" alt="대문 이미지" className="h-auto w-[600px]" />
+        <img
+          src="/assets/images/exam1.png"
+          alt="대문 이미지"
+          className="hidden h-auto w-[300px] md:block lg:w-[400px] xl:w-[600px]"
+        />
       </div>
     </div>
   );

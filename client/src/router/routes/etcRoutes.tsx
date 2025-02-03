@@ -23,7 +23,7 @@ const etcRoutes = [
     element: <SignUpPage />,
   },
   {
-    path: 'redirect',
+    path: 'api/v1/auth/signin',
     element: <RedirectPage />,
   },
   {

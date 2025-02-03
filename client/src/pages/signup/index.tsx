@@ -19,13 +19,17 @@ const SignUpPage = () => {
       `,
       }}
     >
-      <div className="relative flex h-full w-full items-center justify-around p-20">
+      <div className="relative flex h-full w-full items-center justify-around lg:p-10 xl:p-20">
         {/* 좌측 컨테이너 */}
         <div className="flex flex-col gap-12">
           <CsConditionSelector text="회원가입" onClick={onConfirmSignUp} />
         </div>
         {/* 우측 컨테이너 */}
-        <img src="/assets/images/exam1.png" alt="대문 이미지" className="h-auto w-[600px]" />
+        <img
+          src="/assets/images/exam1.png"
+          alt="대문 이미지"
+          className="hidden h-auto w-[400px] lg:block xl:w-[600px]"
+        />
       </div>
     </div>
   );

@@ -5,6 +5,7 @@ import { useNavigate } from 'react-router-dom';
 const RedirectPage = () => {
   const navigate = useNavigate();
   const { data: auth, isLoading } = useAuthInfo();
+  console.log('useAuthInfo response:', auth);
 
   useEffect(() => {
     if (!isLoading && auth) {
