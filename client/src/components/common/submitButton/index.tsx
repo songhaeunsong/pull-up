@@ -18,7 +18,7 @@ const SubmitButton = ({ onClick, text, color = 'primary', disabled = false }: Su
     <button
       onClick={onClick}
       disabled={disabled}
-      className={cn(COLOR_PROPS[color], 'w-full rounded-xl py-5 text-xl font-semibold')}
+      className={cn(COLOR_PROPS[color], 'w-full rounded-xl py-4 text-lg font-semibold xl:py-5 xl:text-xl')}
     >
       {text}
     </button>

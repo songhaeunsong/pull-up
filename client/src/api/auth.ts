@@ -5,22 +5,13 @@ import { useQuery } from '@tanstack/react-query';
 
 // 로그인
 const login = async () => {
-  const code = new URLSearchParams(window.location.search).get('code');
-  if (!code) throw new Error('OAuth 코드가 발급되지 않았습니다.');
-
-  const data = await api
-    .post('auth/signin', {
-      json: { code },
-    })
-    .json<AuthResponseType>();
+  const data = await api.post('auth/signin').json<AuthResponseType>();
   return data;
 };
 
 export const useAuthInfo = () => {
-  const code = new URLSearchParams(window.location.search).get('code');
-
   return useQuery({
-    queryKey: ['auth', code],
+    queryKey: ['auth'],
     queryFn: login,
   });
 };

@@ -14,16 +14,20 @@ const SignInPage = () => {
         `,
       }}
     >
-      <div className="flex w-[500px] flex-col justify-center gap-10">
-        <div className="flex pl-16">
-          <div className="flex flex-col">
-            <span className="text-2xl font-semibold">기술 면접 준비 보조 플랫폼</span>
-            <span className="text-[80px] font-bold">Pull Up!</span>
+      <div className="mx-6 flex w-[400px] flex-col justify-center gap-10 lg:w-[500px]">
+        <div className="flex justify-center md:justify-start md:pl-20 lg:pl-16">
+          <div className="flex flex-col items-center md:items-start">
+            <span className="text-lg font-semibold md:text-xl lg:text-2xl">기술 면접 준비 보조 플랫폼</span>
+            <span className="text-5xl font-bold md:text-[60px] lg:text-[80px]">Pull Up!</span>
           </div>
-          <img src="/assets/images/logoIcon.png" alt="로고 아이콘" className="h-auto w-auto -translate-x-5" />
+          <img
+            src="/assets/images/logoIcon.png"
+            alt="로고 아이콘"
+            className="hidden h-auto w-[100px] -translate-x-3 md:block lg:w-auto lg:-translate-x-5"
+          />
         </div>
 
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col items-center gap-4">
           <OAuthButton image="google" title="Google" onClick={() => OAuthLogin('google')} />
           <OAuthButton image="naver" title="Naver" onClick={() => OAuthLogin('naver')} />
           <OAuthButton image="kakao" title="Kakao" onClick={() => OAuthLogin('kakao')} />

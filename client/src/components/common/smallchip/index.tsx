@@ -4,7 +4,7 @@ interface SmallChipProps {
 }
 
 const SmallChip = ({ title, color }: SmallChipProps) => {
-  return <div className={`rounded-2xl border px-6 py-1 text-sm font-medium ${color}`}>{title}</div>;
+  return <div className={`rounded-2xl border px-3 py-1 text-xs font-medium lg:px-6 lg:text-sm ${color}`}>{title}</div>;
 };
 
 export default SmallChip;

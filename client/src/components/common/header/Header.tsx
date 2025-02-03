@@ -1,3 +1,4 @@
+import { cn } from '@/lib/utils';
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 
@@ -25,7 +26,11 @@ const Header = () => {
   };
 
   return (
-    <header className="fixed top-0 z-10 flex w-full items-center justify-between bg-white/50 p-4 px-10 text-black shadow-sm backdrop-blur-sm">
+    <header
+      className={cn(
+        'fixed top-0 z-10 hidden w-full items-center justify-between bg-white/50 p-4 px-10 text-black shadow-sm backdrop-blur-sm sm:flex',
+      )}
+    >
       <div className="text-3xl font-bold">
         {/* 로그인이면 로고->오늘의 문제, 비로그인이면 로고->메인인 */}
         <Link to={!userInfo ? '/' : '/today'}>Pull Up!</Link>
