@@ -10,7 +10,7 @@ interface InterviewCardProps {
 
 const InterviewCard = ({ title, keywords, onHintClick, hint }: InterviewCardProps) => {
   return (
-    <div className="relative h-[372px] w-full" style={{ perspective: '2000px' }}>
+    <div className="relative h-[340px] w-full lg:h-[372px]" style={{ perspective: '2000px' }}>
       <div
         className="relative h-full w-full transition-all duration-700 ease-in-out"
         style={{
@@ -30,7 +30,7 @@ const InterviewCard = ({ title, keywords, onHintClick, hint }: InterviewCardProp
               </button>
             </div>
             <div className="flex flex-1 items-center">
-              <span className="text-3xl font-extrabold">{title}</span>
+              <span className="text-2xl font-extrabold lg:text-3xl">{title}</span>
             </div>
             <div className="h-9"></div>
           </div>
@@ -55,7 +55,7 @@ const InterviewCard = ({ title, keywords, onHintClick, hint }: InterviewCardProp
             </div>
             <div className="flex flex-1 items-center">
               <div className="flex flex-col items-center gap-8">
-                <span className="text-3xl font-bold text-primary-500">키워드</span>
+                <span className="text-2xl font-bold text-primary-500 lg:text-3xl">키워드</span>
                 <div className="flex flex-wrap justify-center gap-3">
                   {keywords.map((keyword, index) => (
                     <Keyword key={index} title={keyword} color="gray" />
