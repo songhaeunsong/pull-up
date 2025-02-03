@@ -17,7 +17,7 @@ const Modal = ({ triggerName, triggerColor, children, onOpenChange }: Modalprops
       <DialogTrigger asChild>
         <Button variant={triggerColor}>{triggerName}</Button>
       </DialogTrigger>
-      <DialogContent className="bg-white sm:max-w-[425px]">
+      <DialogContent className="max-w-[300px] bg-white sm:max-w-[425px]">
         <DialogTitle></DialogTitle>
         <DialogDescription className="hidden"></DialogDescription>
         <div className="flex w-full flex-col items-center">{children}</div>
