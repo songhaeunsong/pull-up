@@ -5,8 +5,14 @@
 
 :root {
   color: #213547;
-  background-color: #ffffff;
+  background-color: #7b8291;
   font-family: 'Pretendard', Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+}
+
+@media (min-width: 640px) {
+  :root {
+    background-color: #ffffff;
+  }
 }
 
 body {

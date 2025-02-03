@@ -4,7 +4,7 @@ interface SubjectTagProps {
 
 const SubjectTag = ({ title }: SubjectTagProps) => {
   return (
-    <div className="px-2 py-1 rounded-lg border text-xs border-secondary-600 text-secondary-600 bg-secondary-50">
+    <div className="rounded-lg border border-secondary-600 bg-secondary-50 px-2 py-1 text-xs text-secondary-600">
       {title}
     </div>
   );
