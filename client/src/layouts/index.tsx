@@ -4,7 +4,7 @@ import { cn } from '@/lib/utils';
 import { Outlet } from 'react-router';
 
 const SM_STYLE = 'mx-auto max-w-[430px]';
-const BASIC_STYLE = 'sm:mx-0 sm:max-w-full sm:h-screen sm:w-full';
+const BASIC_STYLE = 'sm:mx-0 sm:max-w-full w-full h-screen';
 
 const MainLayout = () => {
   return (

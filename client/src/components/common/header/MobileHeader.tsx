@@ -53,7 +53,7 @@ const MobileHeader = () => {
         </Link>
       </div>
 
-      <nav className="flex space-x-10">
+      <nav className="flex space-x-8">
         {headerItems.map((item) => (
           <Link
             key={item.path}
