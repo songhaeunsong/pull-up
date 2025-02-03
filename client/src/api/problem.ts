@@ -45,3 +45,8 @@ export const useGetArchivedProblemAll = () =>
     queryKey: ['archivedProblems'],
     queryFn: () => getArchivedProblemAll(),
   });
+
+// 문제 북마크
+export const toggleProblemBookmark = async (problemId: number) => {
+  await api.post(`problem/${problemId}`);
+};
