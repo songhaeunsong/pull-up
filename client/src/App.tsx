@@ -17,7 +17,7 @@ const App = () => {
         pauseOnHover
         transition={Bounce}
       />
-      <RouterProvider router={router} />;
+      <RouterProvider router={router} />
     </>
   );
 };
