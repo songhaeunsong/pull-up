@@ -9,11 +9,12 @@ import { Subject } from '@/types/member';
 
 interface CsConditionSelectorProps {
   isExam?: boolean;
+  title: string;
   text: string;
   onClick: (level: Level | null, subjects: Subject[]) => void;
 }
 
-const CsConditionSelector = ({ isExam = false, text, onClick }: CsConditionSelectorProps) => {
+const CsConditionSelector = ({ isExam = false, title, text, onClick }: CsConditionSelectorProps) => {
   const [selectedLevel, setSelectedLevel] = useState<Level | null>(null);
   const [selectedSubjects, setSelectedSubjects] = useState<Subject[]>([]);
 
@@ -33,7 +34,7 @@ const CsConditionSelector = ({ isExam = false, text, onClick }: CsConditionSelec
     <div className="flex h-auto w-[300px] flex-col gap-2 rounded-2xl bg-white p-5 shadow-md md:min-w-[400px] md:p-8 xl:min-w-[450px]">
       <div className="flex flex-col gap-4">
         <div className="flex flex-col gap-2">
-          <div className="font-semibold text-stone-700 md:text-lg">시험 분야 선택</div>
+          <div className="font-semibold text-stone-700 md:text-lg">{title}</div>
           <div className="flex flex-col justify-center gap-2">
             {SUBJECT_OPTIONS.map((subject) => (
               <SubjectSelector

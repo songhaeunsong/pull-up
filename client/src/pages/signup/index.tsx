@@ -22,7 +22,7 @@ const SignUpPage = () => {
       <div className="relative flex h-full w-full items-center justify-around lg:p-10 xl:p-20">
         {/* 좌측 컨테이너 */}
         <div className="flex flex-col gap-12">
-          <CsConditionSelector text="회원가입" onClick={onConfirmSignUp} />
+          <CsConditionSelector title="관심 과목 선택" text="회원가입" onClick={onConfirmSignUp} />
         </div>
         {/* 우측 컨테이너 */}
         <img
