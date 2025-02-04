@@ -10,7 +10,7 @@ interface InterviewFeedbackProps {
 
 const InterviewFeedback = ({ keywords, strength, weakness, answer }: InterviewFeedbackProps) => {
   return (
-    <div className="flex h-full w-full flex-col items-start gap-6 rounded-2xl border border-primary-200 bg-white p-9">
+    <div className="flex h-full w-full flex-col items-start gap-6 rounded-2xl md:border md:border-primary-200 md:bg-white md:p-9">
       <div className="flex w-full justify-end">
         <KeywordList keywords={keywords} color="purple" />
       </div>

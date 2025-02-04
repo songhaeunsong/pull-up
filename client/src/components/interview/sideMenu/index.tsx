@@ -13,11 +13,11 @@ interface SideMenuProps {
 const SideMenu = ({ isOpen, interviewList, handleMenuClick, handleSearchClick, onInterviewClick }: SideMenuProps) => {
   return (
     <div
-      className={`fixed left-0 top-[68px] z-30 h-full border-r border-primary-200 bg-white transition-transform duration-300 ease-in-out ${
+      className={`fixed left-0 top-[94px] z-30 h-full border-r border-primary-200 bg-white transition-transform duration-300 ease-in-out md:top-[68px] ${
         isOpen ? 'translate-x-0' : '-translate-x-full'
       }`}
     >
-      <div className="flex h-full w-[350px] flex-col gap-9 px-6 py-10">
+      <div className="flex h-full w-[280px] flex-col gap-9 px-6 py-10 lg:w-[300px]">
         <div className="flex justify-between">
           <button onClick={handleMenuClick}>
             <Icon id="menu" />

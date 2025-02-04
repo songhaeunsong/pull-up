@@ -8,7 +8,7 @@ interface KeywordListProps {
 const KeywordList = ({ keywords, color }: KeywordListProps) => {
   return (
     <div className="flex items-center gap-2">
-      <div className="rounded-lg border-2 border-primary-200 bg-primary-50 px-3 py-1 font-semibold text-primary-500">
+      <div className="rounded-lg border border-primary-200 bg-primary-50 px-3 py-1 text-sm font-semibold text-primary-500 md:border-2 md:text-base">
         키워드
       </div>
       {keywords.map((keyword, id) => (

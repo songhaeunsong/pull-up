@@ -7,13 +7,10 @@ const tokens = {
 
 export const authHandler = [
   // 로그인
-  http.post('http://localhost:8080/api/v1/auth/signin', async ({ request }) => {
-    const { code } = (await request.json()) as { code: string };
-
-    if (typeof code === 'string') {
-      tokens.accessToken = 'abcd';
-      tokens.refreshToken = 'abc-12323';
-
+  http.post('http://localhost:8080/api/v1/auth/signin', async () => {
+    tokens.accessToken = 'abcd';
+    tokens.refreshToken = 'abc-12323';
+    if (tokens.accessToken && tokens.refreshToken) {
       return HttpResponse.json(
         {
           isSignedUp: true,

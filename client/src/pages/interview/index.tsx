@@ -56,7 +56,7 @@ const InterviewPage = () => {
   };
 
   return (
-    <div className="flex w-full items-center justify-center bg-gradient-to-b from-primary-50 to-white px-10 py-10">
+    <div className="flex min-h-full w-full items-center justify-center bg-gradient-to-b from-primary-50 to-white p-6 md:p-10">
       <div className="flex w-[873px] flex-col items-center justify-center gap-12 pt-[94px] sm:pt-16">
         <div className="text-xl font-extrabold md:text-2xl lg:text-3xl">
           <span className="text-primary-600">{`${username}`}</span>
