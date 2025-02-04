@@ -21,13 +21,15 @@ const InterviewResultPage = () => {
     interviewId: 1,
     question: 'Checked Exception과 Unchecked Exception의 차이는 ?',
     memberAnswer:
-      'SOLID는 객체지향 프로그래밍의 5가지 핵심 설계 원칙을 말합니다. 각각의 원칙들이 소프트웨어의 유지보수성과 확장성을 높이는 데 매우 중요한 역할을 합니다. 첫째로, 단일 책임 원칙(SRP)입니다. 이는 "한 클래스는 한 가지 책임만 가져야 한다"는 원칙입니다. 예를 들어, 주문 시스템에서 OrderService라는 클래스가 있다면, 이 클래스는 주문 처리에 관한 책임만 가져야 하고, 결제나 배송 관련 로직은 별도의 클래스로 분리해야 합니다.',
-    keywords: ['Java', 'Exception'],
-    strength: 'SOLID가 무엇인지 명확하게 정의하면서 시작해 질문의 핵심을 바로 짚었습니다',
-    weakness: 'SOLID의 나머지 4가지 원칙에 대한 설명이 누락되어 있습니다',
+      'Checked Exception은은 컴파일 시점에 체크되며 반드시 예외 처리를 해야 하고, Unchecked Exception은 런타임 시점에 발생하는 예외로 명시적인 예외 처리를 강제하지 않는다.',
+    keywords: ['컴파일 시점', '런타임 시점', '예외 처리 강제'],
+    strength:
+      'Checked Exception이 컴파일 시점에서 체크된다는 점과 예외 처리가 강제된다는 점을 잘 언급하였고, Unchecked Exception이 런타임 시점에서 발생하며 예외 처리가 강제되지 않는다는 점을 명확하게 설명하였습니다. 또한, 짧지만 핵심적인 내용을 담고 있어 면접관이 빠르게 이해할 수 있습니다.',
+    weakness:
+      'Checked Exception은 try-catch 또는 throws로 반드시 처리해야 한다는 점을 명확히 하면 좋습니다. 또한, Unchecked Exception의 경우 RuntimeException을 상속받아 명시적인 예외 처리를 강제하지 않는다는 점을 보강하면 더 완벽한 답변이 될 것 같습니다.',
     answer:
-      'SOLID는 객체지향 프로그래밍의 5가지 핵심 설계 원칙을 말합니다. 각각의 원칙들은 유지보수가 용이하고 확장성 있는 소프트웨어를 만들기 위한 기본 지침이 됩니다. 첫째, 단일 책임 원칙(Single Responsibility Principle)은 한 클래스가 하나의 책임만 가져야 한다는 원칙입니다. 예를 들어, 주문 처리 클래스는 주문 관련 로직만 다뤄야 하며, 결제나 배송 로직은 별도 클래스로 분리합니다.',
-    date: '2025-01-16T14:28:35.123456789',
+      'Checked Exception과 Unchecked Exception의 차이는 예외 처리의 강제 여부에 있습니다. Checked Exception은 컴파일 시점에 체크되며, IOException이나 SQLException처럼 반드시 try-catch로 처리하거나 throws로 선언해야 합니다. 반면, Unchecked Exception은 NullPointerException, ArrayIndexOutOfBoundsException처럼 RuntimeException을 상속받아 예외 처리를 강제하지 않으며, 주로 프로그래머의 실수로 인해 발생합니다. 예를 들어, 파일을 열 때 FileNotFoundException이 발생할 수 있으므로 예외 처리를 강제하지만, NullPointerException은 개발자가 적절한 로직을 구현하면 방지할 수 있습니다. 즉, Checked Exception은 프로그램 실행을 예측 가능한 예외에 대비하도록 강제하고, Unchecked Exception은 개발자의 책임으로 남기는 차이가 있습니다.',
+    date: '2025-02-05T14:28:35.123456789',
   });
 
   useEffect(() => {
@@ -116,7 +118,7 @@ const InterviewResultPage = () => {
             <TabsContent value="myAnswer">
               <InterviewMyAnswer
                 question={resultData.question}
-                answer={resultData.answer}
+                answer={resultData.memberAnswer}
                 onButtonClick={onButtonClick}
               />
             </TabsContent>
@@ -125,7 +127,7 @@ const InterviewResultPage = () => {
                 keywords={resultData.keywords}
                 strength={resultData.strength}
                 weakness={resultData.weakness}
-                answer={resultData.memberAnswer}
+                answer={resultData.answer}
               />
             </TabsContent>
           </Tabs>
@@ -133,10 +135,18 @@ const InterviewResultPage = () => {
 
         {/* 데스크탑 뷰 (lg 이상) */}
         <div className="hidden w-full flex-col gap-8 lg:flex lg:flex-row">
-          <div className="flex flex-[4.5]">
+          <div className="flex flex-[4.5] flex-col gap-6">
+            <button className="flex items-center gap-4">
+              {!isSideMenuOpen ? (
+                <Icon id="menu" size={20} onClick={() => setIsSideMenuOpen(true)} className="h-auto md:w-6" />
+              ) : null}
+              <span className="text-xl font-semibold md:text-2xl">
+                {`${formatDate[0]}년 ${formatDate[1]}월 ${formatDate[2]}일`}
+              </span>
+            </button>
             <InterviewMyAnswer
               question={resultData.question}
-              answer={resultData.answer}
+              answer={resultData.memberAnswer}
               onButtonClick={onButtonClick}
             />
           </div>
@@ -145,7 +155,7 @@ const InterviewResultPage = () => {
               keywords={resultData.keywords}
               strength={resultData.strength}
               weakness={resultData.weakness}
-              answer={resultData.memberAnswer}
+              answer={resultData.answer}
             />
           </div>
         </div>

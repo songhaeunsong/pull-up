@@ -13,7 +13,7 @@ export const authHandler = [
     if (tokens.accessToken && tokens.refreshToken) {
       return HttpResponse.json(
         {
-          isSignedUp: true,
+          isSignedUp: false,
           isSolvedToday: false,
           accessToken: tokens.accessToken,
         },
