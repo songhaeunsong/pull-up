@@ -13,6 +13,7 @@ const CreateRoom = ({ handleGameState }: CreateRoomProps) => {
 
   const handleSubjectClick = (id: string) => {
     setSelectedSubjectIds((prev) => (prev.includes(id) ? prev.filter((subjectId) => subjectId !== id) : [...prev, id]));
+    console.log('selectedSubjectIds', selectedSubjectIds);
   };
 
   return (

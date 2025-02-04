@@ -1,4 +1,4 @@
-export type RoomStatus = 'WAITING' | 'READY' | 'BOOM';
+export type RoomStatus = 'WAITING' | 'PLAYING' | 'FINISHED';
 
 export interface Card {
   cardId: number;
@@ -17,4 +17,14 @@ export interface StompRoomInfo {
   roomId: string;
   player1P: Player;
   player2P: Player;
+  problems: Card[];
+}
+
+export interface SubjectSelect {
+  algorithm: boolean;
+  computerArchitecture: boolean;
+  database: boolean;
+  dataStructure: boolean;
+  network: boolean;
+  operatingSystem: boolean;
 }
