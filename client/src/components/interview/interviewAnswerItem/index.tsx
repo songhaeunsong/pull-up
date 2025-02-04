@@ -32,7 +32,7 @@ const InterviewAnswerItem = ({
       <div className="flex flex-col gap-4">
         <div className="flex w-full items-center justify-between">
           <SmallChip title={userName} color="border-secondary-600 bg-secondary-50 text-secondary-600" />
-          <span className="text-xl text-stone-700">{date}</span>
+          <span className="text-lg text-stone-700 md:text-xl">{date}</span>
         </div>
         {keywords && (
           <div className="flex flex-col gap-4">
@@ -43,19 +43,23 @@ const InterviewAnswerItem = ({
         <div className="flex w-full flex-col gap-4">
           <button
             disabled={!onInterviewAnswerClick}
-            className="w-full break-all text-left text-xl"
+            className="w-full break-all text-left text-lg md:text-xl"
             onClick={() => onInterviewAnswerClick?.(id)}
             aria-label={`답변 상세 보기: ${content}`}
           >
             {content}
           </button>
-          <div className="flex w-full justify-end gap-4 text-xl font-medium text-stone-600">
+          <div className="flex w-full justify-end gap-4 text-lg font-medium text-stone-600 md:text-xl">
             <button onClick={() => handleLikeClick(id)} className="flex items-center gap-2">
-              {!liked ? <Icon id="heart-empty-green" /> : <Icon id="heart-green" />}
+              {!liked ? (
+                <Icon id="heart-empty-green" className="h-auton w-5 md:w-6" />
+              ) : (
+                <Icon id="heart-green" className="h-auton w-5 md:w-6" />
+              )}
               <span>{likeCount}</span>
             </button>
             <div className="flex items-center gap-2">
-              <Icon id="comment-green" />
+              <Icon id="comment-green" className="h-auton w-5 md:w-6" />
               <span>{commentCount}</span>
             </div>
           </div>

@@ -31,11 +31,11 @@ const SearchModal = ({ onClose, onInterviewClick }: SearchModalProps) => {
 
   return (
     <div className="fixed inset-0 z-40 flex items-start justify-center bg-black/50 pt-[200px]">
-      <div className="flex h-[400px] w-[600px] flex-col gap-6 rounded-3xl bg-white p-8 shadow-md">
-        <div className="flex w-full flex-none gap-6">
+      <div className="flex h-[350px] w-[300px] flex-col gap-6 rounded-3xl bg-white p-6 shadow-md md:h-[400px] md:w-[600px] md:p-8">
+        <div className="flex w-full flex-none gap-3 md:gap-6">
           <SearchBar value={value} onChange={onChange} />
           <button onClick={onClose}>
-            <Icon id="close" size={30} />
+            <Icon id="close" size={24} className="h-auto md:w-[30px]" />
           </button>
         </div>
         <div className="flex min-h-0 w-full flex-1 flex-col gap-3">

@@ -27,15 +27,15 @@ const CommentItem = ({
     <div className="flex w-full flex-col gap-4 py-2">
       <div className="flex flex-col gap-4 px-2">
         <div className="flex justify-between">
-          <div className="text-xl font-medium text-primary-500">{comment.otherMemberName}</div>
+          <div className="text-lg font-medium text-primary-500 md:text-xl">{comment.otherMemberName}</div>
           {userEmail === comment.email &&
             (!updated ? (
-              <div className="flex gap-2 text-lg text-primary-400">
+              <div className="flex gap-2 text-primary-400 md:text-lg">
                 <button onClick={() => handleUpdate(comment.comment, comment.commentId)}>수정</button>|
                 <button onClick={() => handleDelete(comment.commentId)}>삭제</button>
               </div>
             ) : (
-              <div className="flex gap-2 text-lg text-primary-400">
+              <div className="flex gap-2 text-primary-400 md:text-lg">
                 <button onClick={() => onCancelClick(comment.commentId)}>취소</button>|
                 <button onClick={() => onConfirmClick(comment.commentId)}>완료</button>
               </div>
@@ -47,7 +47,7 @@ const CommentItem = ({
           placeholder={comment.comment}
           value={value}
           onChange={(e) => onChange(e, comment.commentId)}
-          className={`resize-none rounded-lg text-xl text-black outline-none placeholder:text-black focus:border focus:outline-none ${
+          className={`resize-none rounded-lg text-lg text-black outline-none placeholder:text-black focus:border focus:outline-none md:text-xl ${
             userEmail === comment.email && updated ? 'border border-primary-300 p-3' : ''
           }`}
         />
