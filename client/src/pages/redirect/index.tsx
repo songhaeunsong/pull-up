@@ -8,7 +8,6 @@ const RedirectPage = () => {
   
   console.log('useAuthInfo response:', auth);
 
-  
   useEffect(() => {
     if (!isLoading && auth) {
       if (!auth.isSignedUp) {
