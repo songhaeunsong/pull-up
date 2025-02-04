@@ -74,7 +74,9 @@ const InterviewResultPage = () => {
   return (
     <div className="min-h-full bg-Main px-10 py-10">
       {/* 사이드바 넓이 만큼 왼쪽 마진 조절 */}
-      <div className={`relative flex pt-16 transition-all duration-500 ${isSideMenuOpen ? 'ml-[350px]' : 'ml-0'}`}>
+      <div
+        className={`relative flex pt-[94px] transition-all duration-500 sm:pt-16 ${isSideMenuOpen ? 'ml-[350px]' : 'ml-0'}`}
+      >
         <SideMenu
           isOpen={isSideMenuOpen}
           interviewList={interviewListData}
