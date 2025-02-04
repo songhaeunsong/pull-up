@@ -2,6 +2,7 @@ import ExamAnswer from './examAnswer';
 import Icon from '@/components/common/icon';
 import { useTogglProblemBookmark } from '@/hooks/useToggleBookmark';
 import { useExamStore } from '@/stores/examStore';
+import { convertSubject } from '@/utils/convertSubject';
 
 interface ExamProblemProps {
   index: number;
@@ -39,7 +40,7 @@ const ExamProblem = ({ index, problem }: ExamProblemProps) => {
             )}
           </div>
           <div className="rounded-lg border border-secondary-600 bg-secondary-50 px-3 py-1 text-secondary-600">
-            {problem.subject}
+            {convertSubject(problem.subject)}
           </div>
         </div>
         <span className="text-2xl font-semibold">{problem.question}</span>

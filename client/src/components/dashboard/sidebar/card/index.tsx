@@ -10,7 +10,7 @@ interface CardProps {
 
 const Card = ({ link, title, data }: CardProps) => {
   return (
-    <div className="flex flex-col w-full gap-2">
+    <div className="flex w-full flex-col gap-2">
       <nav>
         <div className="flex items-center justify-between">
           <span className="text-lg font-bold text-stone-900">{title}</span>
@@ -20,9 +20,9 @@ const Card = ({ link, title, data }: CardProps) => {
         </div>
       </nav>
 
-      <button className="flex flex-col w-full gap-2 px-3 py-4 shadow-sm rounded-2xl">
-        <div className="flex justify-between w-full">
-          <span className="text-base font-medium text-left text-stone-800">{data.content}</span>
+      <button className="flex w-full flex-col gap-2 rounded-2xl px-3 py-4 shadow-sm">
+        <div className="flex w-full justify-between">
+          <span className="text-left text-base font-medium text-stone-800">{data.content}</span>
           <span className="text-base text-stone-400">{data.date}</span>
         </div>
         <div className="flex gap-2">
