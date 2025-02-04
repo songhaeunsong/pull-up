@@ -13,7 +13,6 @@ const Card = ({ link, title, data }: CardProps) => {
   const { isTabletMd } = useResponsive();
   return (
     <div className="flex w-full flex-col gap-2">
-    <div className="flex w-full flex-col gap-2">
       <nav>
         <div className="flex items-center justify-between">
           <span className="text-md font-bold text-stone-900 lg:text-lg">{title}</span>
