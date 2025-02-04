@@ -1,4 +1,4 @@
-import GameModals from '@/components/game/gameModals';
+import GameModals from '@/components/game/GameModals';
 
 const MobileGameContainer = () => {
   return (
