@@ -1,5 +1,5 @@
 import useIsMobile from '@/hooks/useIsMobile';
-import GameContainer from './gameContainer/gameContainer';
+import GameContainer from './gameContainer/GameContainer';
 import MobileGameContainer from './gameContainer/MobileGameContainer';
 
 const GamePage = () => {
