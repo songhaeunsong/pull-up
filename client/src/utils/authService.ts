@@ -28,7 +28,7 @@ export const setAuthorizationHeader: BeforeRequestHook = (request) => {
     return;
   }
 
-  request.headers.set('Authorization', `Bearer ${accessToken}`);
+  request.headers.set('Authorization', `Bearer ${import.meta.env.VITE_TEMP_ID_1}`);
 };
 
 // export const handleToken = async (request: Request, response: Response) => {
