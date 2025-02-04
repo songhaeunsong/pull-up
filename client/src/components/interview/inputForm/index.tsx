@@ -12,7 +12,7 @@ interface InputFormProps {
 
 const InputForm = ({ id, placeholder, value, limit, onChange, onSubmit, onKeyDown }: InputFormProps) => {
   return (
-    <div className="flex h-[144px] w-full gap-4 rounded-xl border border-stone-400 bg-white pb-2 pl-4 pr-2 pt-4">
+    <div className="flex h-[100px] w-full gap-4 rounded-xl border border-stone-400 bg-white pb-2 pl-4 pr-2 pt-4 md:h-[144px]">
       <textarea
         id={id}
         placeholder={placeholder}

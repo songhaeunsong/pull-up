@@ -6,7 +6,7 @@ interface KeywordProps {
 const Keyword = ({ title, color }: KeywordProps) => {
   return (
     <div
-      className={`rounded-lg px-4 py-1 text-center ${color === 'purple' ? 'bg-primary-500 text-white' : 'bg-stone-100 text-stone-700'}`}
+      className={`rounded-lg px-4 py-1 text-center text-sm md:text-base ${color === 'purple' ? 'bg-primary-500 text-white' : 'bg-stone-100 text-stone-700'}`}
     >
       {title}
     </div>

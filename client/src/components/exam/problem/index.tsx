@@ -1,6 +1,8 @@
 import ExamAnswer from './examAnswer';
 import Icon from '@/components/common/icon';
+import { useTogglProblemBookmark } from '@/hooks/useToggleBookmark';
 import { useExamStore } from '@/stores/examStore';
+import { convertSubject } from '@/utils/convertSubject';
 
 interface ExamProblemProps {
   index: number;
@@ -16,7 +18,13 @@ interface ExamProblemProps {
 }
 
 const ExamProblem = ({ index, problem }: ExamProblemProps) => {
-  const { isSolutionPage, bookmark, toggleBookmark } = useExamStore();
+  const { isSolutionPage, bookmark } = useExamStore();
+  const toggleBookmarkMutation = useTogglProblemBookmark(problem.problemId);
+
+  const handleBookmark = () => {
+    toggleBookmarkMutation.mutate();
+    console.log(useExamStore.getState().bookmark);
+  };
 
   return (
     <div className="flex flex-col gap-7 rounded-xl border border-primary-200 bg-white px-7 py-7">
@@ -26,16 +34,13 @@ const ExamProblem = ({ index, problem }: ExamProblemProps) => {
           <div className="flex cursor-pointer items-center gap-2">
             <span className="text-2xl font-bold text-stone-900">문제 {index}</span>
             {isSolutionPage && (
-              <button
-                onClick={() => toggleBookmark(problem.problemId)}
-                aria-label={bookmark[problem.problemId] ? '북마크 해제' : '북마크 추가'}
-              >
+              <button onClick={handleBookmark} aria-label={bookmark[problem.problemId] ? '북마크 해제' : '북마크 추가'}>
                 <Icon id={bookmark[problem.problemId] ? 'bookmark' : 'bookmark-empty'} size={24} />
               </button>
             )}
           </div>
           <div className="rounded-lg border border-secondary-600 bg-secondary-50 px-3 py-1 text-secondary-600">
-            {problem.subject}
+            {convertSubject(problem.subject)}
           </div>
         </div>
         <span className="text-2xl font-semibold">{problem.question}</span>

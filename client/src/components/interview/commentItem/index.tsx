@@ -24,8 +24,8 @@ const CommentItem = ({
   updated,
 }: CommentItemProps) => {
   return (
-    <div className="flex w-full flex-col gap-4 py-2">
-      <div className="flex flex-col gap-4 px-2">
+    <div className="flex w-full flex-col gap-2 py-2 md:gap-4">
+      <div className="flex flex-col gap-2 px-2 md:gap-4">
         <div className="flex justify-between">
           <div className="text-lg font-medium text-primary-500 md:text-xl">{comment.otherMemberName}</div>
           {userEmail === comment.email &&
@@ -41,6 +41,7 @@ const CommentItem = ({
               </div>
             ))}
         </div>
+
         <textarea
           id="comment"
           disabled={!updated}

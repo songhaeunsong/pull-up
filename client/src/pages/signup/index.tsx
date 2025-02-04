@@ -9,7 +9,7 @@ const SignUpPage = () => {
 
   return (
     <div
-      className="relative flex h-full w-full items-center pt-16"
+      className="relative flex h-full w-full items-center pt-[94px] sm:pt-16"
       style={{
         background: `
         radial-gradient(circle at 50% 50%, rgb(255, 255, 255) 0%, transparent 100%),

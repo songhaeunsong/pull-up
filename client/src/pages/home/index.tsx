@@ -14,7 +14,7 @@ const HomePage = () => {
 
   return (
     <div
-      className="relative flex min-h-full min-w-full items-center pt-16"
+      className="relative flex min-h-full min-w-full items-center pt-[94px] sm:pt-16"
       style={{
         background: `
         radial-gradient(circle at 50% 50%, rgb(255, 255, 255) 0%, transparent 100%),

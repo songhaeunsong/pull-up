@@ -60,7 +60,7 @@ const InterviewAnswerList = () => {
 
   return (
     <div className="min-h-full bg-Main px-6 py-10 md:px-10 xl:px-20">
-      <div className="mt-28 flex flex-col gap-6 rounded-2xl md:mt-16 md:gap-9 md:border md:border-primary-200 md:bg-white md:p-6">
+      <div className="mt-[94px] flex flex-col gap-6 rounded-2xl sm:mt-16 md:gap-9 md:border md:border-primary-200 md:bg-white md:p-6">
         <RouteHeader prev="오늘의 질문" title="다른 사람의 답변" onBackClick={onBackClick} />
         <div className="flex flex-col gap-6">
           {interviewAnswerListData.length > 0 ? (
