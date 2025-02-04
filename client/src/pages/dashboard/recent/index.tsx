@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import RouteHeader from '@/components/common/routeheader';
 import ReviewList from '@/components/dashboard/reviewList';
 import { useGetExamAll } from '@/api/exam';
+import convertDate from '@/utils/convertDate';
 
 const Recent = () => {
   const navigate = useNavigate();
@@ -13,7 +14,7 @@ const Recent = () => {
     examAll?.content.map((exam) => ({
       id: exam.examId,
       title: exam.examName,
-      date: exam.date.split('T')[0],
+      date: convertDate(exam.date),
       tags: exam.subjects,
     })) || [];
 
