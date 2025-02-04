@@ -1,5 +1,6 @@
 import SubjectTag from '@/components/common/subjectTag';
 import Icon from '@/components/common/icon';
+import useResponsive from '@/hooks/useResponsive';
 
 interface ProfileProps {
   image: string;
@@ -9,21 +10,22 @@ interface ProfileProps {
 }
 
 const Profile = ({ image, name, email, subjects }: ProfileProps) => {
+  const { isDesktop } = useResponsive();
   return (
-    <div>
-      <div className="flex w-full justify-end">
+    <div className="flex flex-row-reverse lg:block">
+      <div className="mt-1 flex justify-end lg:mt-0 lg:w-full">
         <Icon id="about" />
       </div>
-      <div className="flex flex-col gap-3">
-        <div className="flex items-center gap-4">
-          <img src={image} width={80} height={80} className="rounded-full object-cover" />
+      <div className="flex w-[150px] flex-col justify-evenly gap-3 lg:w-auto lg:justify-start">
+        <div className="flex flex-col gap-4 lg:flex-row lg:items-center">
+          {isDesktop && <img src={image} width={80} height={80} className="rounded-full object-cover" />}
           <div className="flex flex-col">
-            <span className="text-2xl font-bold">{name}</span>
-            <span className="text-base font-semibold text-stone-700">{email}</span>
+            <span className="text-xl font-bold lg:text-2xl">{name}</span>
+            <span className="text-sm font-semibold text-stone-700 lg:text-base">{email}</span>
           </div>
         </div>
-        <div className="flex items-center gap-2">
-          <span className="w-20 text-center text-base font-semibold text-stone-700">관심 과목</span>
+        <div className="flex flex-col gap-2 lg:flex-row lg:items-center">
+          <span className="w-20 text-sm font-semibold text-stone-700 lg:text-center lg:text-base">관심 과목</span>
           <div className="flex flex-1 flex-wrap gap-1">
             {subjects.map((subject, id) => (
               <SubjectTag key={id} title={subject} />

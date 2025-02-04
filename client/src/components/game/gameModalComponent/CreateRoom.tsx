@@ -30,7 +30,7 @@ const CreateRoom = ({ handleGameState }: CreateRoomProps) => {
         ))}
       </div>
       <div className="flex w-full flex-col gap-2">
-        <span className="text-center">링크를 생성하고 친구에게 전달해주세요!</span>
+        <span className="text-center">링크 생성 후, 친구에게 전달해주세요!</span>
         <Button disabled={isDisabled} onClick={handleGameState}>
           코드 생성
         </Button>

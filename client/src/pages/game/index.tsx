@@ -1,10 +1,12 @@
-import useIsMobile from '@/hooks/useIsMobile';
-import GameContainer from './gameContainer/GameContainer';
+import useResponsive from '@/hooks/useResponsive';
 import MobileGameContainer from './gameContainer/MobileGameContainer';
+import GameContainer from './gameContainer/GameContainer';
 
 const GamePage = () => {
-  const isMobile = useIsMobile();
-  return <div className="h-full w-full bg-white">{isMobile ? <MobileGameContainer /> : <GameContainer />}</div>;
+  const { isTabletMd, isMobile } = useResponsive();
+  return (
+    <div className="h-full w-full bg-white">{isTabletMd || isMobile ? <MobileGameContainer /> : <GameContainer />}</div>
+  );
 };
 
 export default GamePage;

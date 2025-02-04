@@ -1,4 +1,6 @@
 import SideBar from '@/components/dashboard/sidebar';
+import MobileProfile from '@/components/dashboard/sidebar/profile/MobileProfile';
+import useResponsive from '@/hooks/useResponsive';
 import { Outlet } from 'react-router-dom';
 
 const DashBoardLayout = () => {
@@ -7,17 +9,26 @@ const DashBoardLayout = () => {
     image: 'https://avatars.githubusercontent.com/u/55848610?v=4',
     name: '강지은',
     email: 'kkang@gmail.com',
-    subjects: ['운영체제', '네트워크', 'OS'],
+    subjects: ['운영체제', '네트워크', '데이터베이스', '컴퓨터구조', '알고리즘', '자료구조'],
   };
 
+  const { isMobile, isTabletMd } = useResponsive();
+
   return (
-    <div className="flex pt-16">
-      <div className="box-border flex flex-1 gap-4 bg-Main p-8">
-        <main className="flex h-full flex-1 overflow-y-auto">
+    <div className="flex min-h-screen bg-Main pt-[94px] sm:pt-16">
+      {isMobile || isTabletMd ? (
+        <div className="flex flex-col gap-5 p-6">
+          <MobileProfile image={image} name={name} email={email} subjects={subjects} />
           <Outlet />
-        </main>
-        <SideBar image={image} name={name} email={email} subjects={subjects} />
-      </div>
+        </div>
+      ) : (
+        <div className="box-border flex flex-1 flex-col gap-4 p-8 md:flex-col-reverse lg:flex-row">
+          <main className="flex h-full flex-1 overflow-y-auto">
+            <Outlet />
+          </main>
+          <SideBar image={image} name={name} email={email} subjects={subjects} />
+        </div>
+      )}
     </div>
   );
 };

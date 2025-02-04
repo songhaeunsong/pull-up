@@ -10,7 +10,7 @@ const ProblemDetail = () => {
   const navigate = useNavigate();
   const { problemId } = useParams();
   const { data } = useGetProblemDetail(Number(problemId));
-  console.log(data);
+  //console.log(data);
   const { setSolutionPage, setAnswer, initializeAndSetOptions } = useExamStore();
 
   useEffect(() => {
@@ -18,7 +18,7 @@ const ProblemDetail = () => {
     if (data) {
       initializeAndSetOptions(Number(problemId), data.options);
       setAnswer(Number(problemId), data.answer);
-      console.log('options:', useExamStore.getState().options);
+      // console.log('options:', useExamStore.getState().options);
     }
   }, [data, problemId, setSolutionPage, setAnswer, initializeAndSetOptions]);
 
