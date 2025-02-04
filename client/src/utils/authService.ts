@@ -24,7 +24,7 @@ export const setAuthorizationHeader: BeforeRequestHook = (request) => {
   console.log('accessToken: ', accessToken);
 
   if (!accessToken) {
-    console.log('accessToken 추출에 실패했습니다.');
+    console.log('accessToken 추출 실패');
     return;
   }
 
