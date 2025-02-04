@@ -1,5 +1,7 @@
 import { http, HttpResponse } from 'msw';
 
+const bookmarkStatusMap = new Map<string, boolean>();
+
 export const problemHandler = [
   http.get('http://localhost:8080/api/v1/problem/me/all', async () => {
     return HttpResponse.json(
@@ -89,5 +91,24 @@ export const problemHandler = [
     }
 
     return HttpResponse.json({ status: 404 });
+  }),
+
+  http.post('http://localhost:8080/api/v1/problem/:problemId', async ({ params }) => {
+    const { problemId } = params;
+
+    const currentStatus = bookmarkStatusMap.get(String(problemId)) || false;
+    const updatedStatus = !currentStatus;
+    bookmarkStatusMap.set(String(problemId), updatedStatus);
+
+    if (problemId) {
+      return HttpResponse.json(
+        {
+          isBookmarked: updatedStatus,
+        },
+        { status: 200 },
+      );
+    }
+
+    return HttpResponse.json({ message: 'Problem not found' }, { status: 404 });
   }),
 ];

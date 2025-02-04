@@ -27,7 +27,7 @@ export const examHandler = [
               problemId: 1,
               problem: 'TEST 무엇일까요?',
               options: ['데이터 압축 지원', 'https에서 s 뺀 것', '안녕', '하세요'],
-              subject: '네트워크',
+              subject: 'NETWORK',
               problemType: 'MULTIPLE_CHOICE',
             },
             {

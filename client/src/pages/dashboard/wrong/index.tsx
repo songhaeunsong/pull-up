@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import RouteHeader from '@/components/common/routeheader';
 import ReviewList from '@/components/dashboard/reviewList';
 import { useGetWrongProblemAll } from '@/api/problem';
+import convertDate from '@/utils/convertDate';
 
 const Wrong = () => {
   const navigate = useNavigate();
@@ -13,7 +14,7 @@ const Wrong = () => {
     wrongProblems?.wrongProblemDtos.map((item) => ({
       id: item.problemId,
       title: item.question,
-      date: item.date.split('T')[0],
+      date: convertDate(item.date),
       tags: item.subject,
     })) || [];
 
