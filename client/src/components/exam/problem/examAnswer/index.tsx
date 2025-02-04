@@ -28,7 +28,7 @@ const ExamAnswer = ({ problemId, questionType }: ExamAnswerProps) => {
         // 주관식 문제
         <textarea
           placeholder="정답을 입력하세요."
-          className="w-full resize-none rounded-lg border bg-stone-50 px-4 py-2 text-xl text-stone-950 placeholder-stone-500 focus:outline-none"
+          className="w-full resize-none rounded-lg border bg-stone-50 px-4 py-2 text-stone-950 placeholder-stone-500 focus:outline-none md:text-lg lg:text-xl"
           value={chosenAnswer}
           disabled={isSolutionPage}
           onChange={handleTextChange}

@@ -47,9 +47,9 @@ const ExamResultPage = () => {
   const { round, score, examResultDetailDtos } = examResult;
 
   return (
-    <div className="mt-16 flex w-full gap-20 bg-Main px-16 py-10">
+    <div className="mt-16 flex w-full justify-between gap-12 bg-Main px-8 py-10 md:px-12 lg:px-16">
       {/* Problem & Solution Section */}
-      <div className="flex w-[920px] flex-1 flex-col gap-10">
+      <section className="flex-2 flex w-full min-w-[360px] flex-col gap-10 md:w-[920px]">
         {examResultDetailDtos.map((problem, index) => (
           <div key={problem.problemId} id={`problem-${problem.problemId}`} className="flex flex-col gap-2">
             <ExamProblem
@@ -66,16 +66,16 @@ const ExamResultPage = () => {
             <ExamSolution answer={problem.answer} correctRate={problem.correctRate} explanation={problem.explanation} />
           </div>
         ))}
-      </div>
+      </section>
 
       {/* Info Section */}
-      <div className="relative w-[380px] min-w-[380px] flex-shrink-0">
+      <aside className="relative hidden min-w-[280px] flex-1 flex-shrink-0 md:block lg:min-w-[340px] xl:min-w-[380px]">
         <div className="sticky top-10 flex flex-col gap-10">
           <InfoSection>
-            <span className="text-3xl">{round}</span>
+            <span className="text-xl md:text-2xl lg:text-3xl">{round}</span>
           </InfoSection>
           <InfoSection title="점수" icon="score">
-            <div>
+            <div className="text-xl md:text-2xl lg:text-3xl">
               <span className="text-primary-500">{score}</span> / 100
             </div>
           </InfoSection>
@@ -102,7 +102,7 @@ const ExamResultPage = () => {
             }}
           />
         </div>
-      </div>
+      </aside>
     </div>
   );
 };

@@ -27,7 +27,7 @@ const ExamDetailPage = () => {
       setAnswer(problem.problemId, '');
     });
 
-    setIsInitialized(true); // 초기화 완료 표시
+    setIsInitialized(true);
   }, [examProblems, isInitialized, resetExamState, initializeAndSetOptions, setSolutionPage, setAnswer]);
 
   if (!examProblems) {
@@ -47,9 +47,9 @@ const ExamDetailPage = () => {
           chosenAnswer: answers[Number(problemId)] ?? '',
         })),
       };
-      // API 호출
+
       await postExamAnswer(Number(examId), requestBody);
-      // 결과 페이지로 이동
+
       navigate(`/exam/${examId}/result`);
     } catch (error) {
       console.error('답안 제출 실패:', error);
@@ -57,9 +57,9 @@ const ExamDetailPage = () => {
   };
 
   return (
-    <div className="flex w-full gap-20 bg-Main px-16 pb-10 pt-28">
+    <div className="flex w-full gap-12 bg-Main px-16 pb-10 pt-28 md:flex-row md:gap-16 lg:gap-20">
       {/* 문제 리스트 */}
-      <div className="flex w-[920px] flex-1 flex-col gap-10">
+      <section className="flex-2 flex w-full flex-col gap-10 md:w-[920px]">
         {examProblems.map((problem, index) => (
           <div key={problem.problemId} id={`problem-${problem.problemId}`}>
             <ExamProblem
@@ -74,10 +74,10 @@ const ExamDetailPage = () => {
             />
           </div>
         ))}
-      </div>
+      </section>
 
       {/* Info Section */}
-      <div className="relative w-[380px] min-w-[380px] flex-shrink-0">
+      <aside className="relative hidden min-w-[280px] flex-1 flex-shrink-0 md:block lg:min-w-[340px] xl:min-w-[380px]">
         <div className="sticky top-10 flex flex-col gap-10">
           <InfoSection title="남은 시간" icon="time">
             <span>
@@ -85,7 +85,7 @@ const ExamDetailPage = () => {
             </span>
           </InfoSection>
           <InfoSection title="풀이 현황" icon="problem">
-            <div className="grid grid-cols-5 gap-3">
+            <div className="grid grid-cols-5 gap-2">
               {examProblems.map((problem, index) => (
                 <ProblemStatusButton
                   key={problem.problemId}
@@ -107,7 +107,7 @@ const ExamDetailPage = () => {
             color={!isAllSolved ? 'gray' : 'primary'}
           />
         </div>
-      </div>
+      </aside>
     </div>
   );
 };

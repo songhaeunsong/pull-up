@@ -13,7 +13,10 @@ const ProblemStatusButton = ({ index, onClick, status = 'default' }: ProblemStat
   };
 
   return (
-    <button onClick={onClick} className={`${COLOR_CLASSES[status]} h-12 w-12 rounded-lg text-lg font-semibold`}>
+    <button
+      onClick={onClick}
+      className={`${COLOR_CLASSES[status]} h-10 w-10 rounded-lg text-base font-semibold lg:h-12 lg:w-12 lg:text-lg`}
+    >
       {index}
     </button>
   );
