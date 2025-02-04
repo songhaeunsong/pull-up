@@ -39,21 +39,21 @@ export const examHandler = [
                 '프로세스는 동일한 자원을 공유한다.',
                 '스레드는 각기 다른 메모리 공간을 가진다.',
               ],
-              subject: 'OPERATING_SYSTEM',
+              subject: '운영체제',
               problemType: 'MULTIPLE_CHOICE',
             },
             {
               problemId: 3,
               problem: 'TCP와 UDP의 차이점에 대해 설명하시오.',
               options: [],
-              subject: 'NETWORK',
+              subject: '네트워크크',
               problemType: 'SHORT_ANSWER',
             },
             {
               problemId: 4,
               problem: '데이터베이스에서 정규화의 주요 목적은 무엇입니까?',
               options: ['데이터 중복 제거', '빠른 검색 속도', '메모리 사용 최소화', '클러스터링'],
-              subject: 'DATABASE',
+              subject: '데이터베이스',
               problemType: 'MULTIPLE_CHOICE',
             },
             {
@@ -65,7 +65,7 @@ export const examHandler = [
                 '정렬된 배열에 사용된다.',
                 '탐색 범위를 무작위로 선택한다.',
               ],
-              subject: 'ALGORITHM',
+              subject: '알고리즘',
               problemType: 'MULTIPLE_CHOICE',
             },
             {
@@ -91,7 +91,7 @@ export const examHandler = [
                 '외부 단편화가 발생한다.',
                 '프로세스 간 메모리를 직접 공유한다.',
               ],
-              subject: 'OPERATING_SYSTEM',
+              subject: '운영체제',
               problemType: 'MULTIPLE_CHOICE',
             },
             {
@@ -103,14 +103,14 @@ export const examHandler = [
                 '다른 트랜잭션이 영향을 주지 않는다.',
                 '작업이 영구적으로 유지된다.',
               ],
-              subject: 'DATABASE',
+              subject: '데이터베이스',
               problemType: 'MULTIPLE_CHOICE',
             },
             {
               problemId: 10,
-              problem: '다익스트라 알고리즘(Dijkstra Algorithm)의 주요 용도는 무엇입니까?',
+              problem: '다익스트라 알고리즘(Dijkstra 알고리즘)의 주요 용도는 무엇입니까?',
               options: ['최소 신장 트리 구성', '최단 경로 탐색', '그래프 순회', '이진 탐색'],
-              subject: 'ALGORITHM',
+              subject: '알고리즘',
               problemType: 'MULTIPLE_CHOICE',
             },
           ],
@@ -177,7 +177,7 @@ export const examHandler = [
               explanation:
                 '프로세스는 각기 다른 메모리 공간을 사용하지만, 스레드는 동일한 프로세스 내에서 자원을 공유합니다.',
               correctRate: 82,
-              subject: 'OPERATING_SYSTEM',
+              subject: '운영체제',
               problemType: 'MULTIPLE_CHOICE',
             },
             {
@@ -191,7 +191,7 @@ export const examHandler = [
               explanation:
                 'TCP는 데이터의 신뢰성을 보장하기 위해 연결을 설정하는 반면, UDP는 빠른 전송을 위해 비연결 기반으로 동작합니다.',
               correctRate: 90,
-              subject: 'NETWORK',
+              subject: '네트워크크',
               problemType: 'SHORT_ANSWER',
             },
             {
@@ -205,7 +205,7 @@ export const examHandler = [
               explanation:
                 '정규화는 데이터베이스에서 중복 데이터를 제거하고 데이터 무결성을 유지하기 위한 설계 기법입니다.',
               correctRate: 85,
-              subject: 'DATABASE',
+              subject: '데이터베이스',
               problemType: 'MULTIPLE_CHOICE',
             },
             {
@@ -224,7 +224,7 @@ export const examHandler = [
               explanation:
                 '이진 탐색은 정렬된 배열에 대해 탐색 범위를 절반으로 줄여가며 빠르게 값을 찾는 알고리즘입니다.',
               correctRate: 88,
-              subject: 'ALGORITHM',
+              subject: '알고리즘',
               problemType: 'MULTIPLE_CHOICE',
             },
             {
@@ -270,7 +270,7 @@ export const examHandler = [
               explanation:
                 '페이징은 메모리를 고정 크기의 페이지로 나누어 외부 단편화를 방지하는 메모리 관리 기법입니다.',
               correctRate: 84,
-              subject: 'OPERATING_SYSTEM',
+              subject: '운영체제',
               problemType: 'MULTIPLE_CHOICE',
             },
             {
@@ -289,12 +289,12 @@ export const examHandler = [
               explanation:
                 '원자성(Atomicity)은 트랜잭션 내의 모든 작업이 완전히 성공하거나, 전혀 수행되지 않은 상태로 돌아가야 함을 의미합니다.',
               correctRate: 91,
-              subject: 'DATABASE',
+              subject: '데이터베이스',
               problemType: 'MULTIPLE_CHOICE',
             },
             {
               problemId: 10,
-              problem: '다익스트라 알고리즘(Dijkstra Algorithm)의 주요 용도는 무엇입니까?',
+              problem: '다익스트라 알고리즘(Dijkstra 알고리즘)의 주요 용도는 무엇입니까?',
               options: ['최소 신장 트리 구성', '최단 경로 탐색', '그래프 순회', '이진 탐색'],
               chosenAnswer: '최단 경로 탐색',
               answer: '최단 경로 탐색',
@@ -303,7 +303,7 @@ export const examHandler = [
               explanation:
                 '다익스트라 알고리즘은 그래프에서 출발 노드로부터 다른 노드들까지의 최단 경로를 탐색하는 알고리즘입니다.',
               correctRate: 89,
-              subject: 'ALGORITHM',
+              subject: '알고리즘',
               problemType: 'MULTIPLE_CHOICE',
             },
           ],
@@ -326,25 +326,25 @@ export const examHandler = [
           examId: 7,
           examName: '제 1회 모의고사',
           date: '2025-01-01T19:00:00',
-          subjects: ['ALGORITHM', 'NETWORK', 'OPERATING_SYSTEM', 'DATABASE'],
+          subjects: ['알고리즘', '네트워크', '운영체제', '데이터베이스'],
         },
         {
           examId: 9,
           examName: '제 2회 모의고사',
           date: '2025-01-03T19:00:00',
-          subjects: ['OPERATING_SYSTEM', 'DATABASE', 'ALGORITHM', 'NETWORK'],
+          subjects: ['운영체제', '데이터베이스', '알고리즘', '네트워크크'],
         },
         {
           examId: 13,
           examName: '제 4회 모의고사',
           date: '2025-01-22T20:20:22.022201',
-          subjects: ['OPERATING_SYSTEM', 'DATABASE'],
+          subjects: ['운영체제', '데이터베이스'],
         },
         {
           examId: 12,
           examName: '제 5회 모의고사',
           date: '2025-01-24T20:20:22.022201',
-          subjects: ['OPERATING_SYSTEM', 'DATABASE'],
+          subjects: ['운영체제', '데이터베이스'],
         },
       ],
       pageable: {

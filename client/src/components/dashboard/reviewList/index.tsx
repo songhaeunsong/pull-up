@@ -1,5 +1,6 @@
 import SearchBar from '@/components/common/searchbar';
 import ReviewCard from '@/components/dashboard/reviewCard';
+import convertDate from '@/utils/convertDate';
 
 interface ReviewListProps {
   data: {
@@ -24,7 +25,7 @@ const ReviewList = ({ data, searchValue, isProblem = true, onSearchChange }: Rev
             key={data.id}
             id={data.id}
             title={data.title}
-            subtitle={data.date}
+            subtitle={convertDate(data.date)}
             tags={data.tags}
           />
         ))}
