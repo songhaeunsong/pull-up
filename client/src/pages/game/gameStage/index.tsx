@@ -8,8 +8,6 @@ const GameStage = () => {
 
   const { data: idData, isLoading } = useGetId(roomInfo.roomId);
 
-  console.log('gameStage roomInfo: ', roomInfo);
-
   if (isLoading || !idData) return <>불러오는 중...</>;
   return (
     <div className="grid h-full w-full grid-cols-[2.5fr_1fr] gap-7 bg-Main p-8">
