@@ -1,4 +1,5 @@
 import SideBar from '@/components/dashboard/sidebar';
+import useResponsive from '@/hooks/useResponsive';
 import { Outlet } from 'react-router-dom';
 
 const DashBoardLayout = () => {
@@ -10,14 +11,20 @@ const DashBoardLayout = () => {
     subjects: ['운영체제', '네트워크', 'OS'],
   };
 
+  const { isMobile, isTabletMd } = useResponsive();
+
   return (
     <div className="flex pt-16">
-      <div className="box-border flex flex-1 flex-col-reverse gap-4 bg-Main p-8 lg:flex-row">
-        <main className="flex h-full flex-1 overflow-y-auto">
-          <Outlet />
-        </main>
-        <SideBar image={image} name={name} email={email} subjects={subjects} />
-      </div>
+      {isMobile || isTabletMd ? (
+        <>모바일</>
+      ) : (
+        <div className="box-border flex flex-1 flex-col gap-4 bg-Main p-8 md:flex-col-reverse lg:flex-row">
+          <main className="flex h-full flex-1 overflow-y-auto">
+            <Outlet />
+          </main>
+          <SideBar image={image} name={name} email={email} subjects={subjects} />
+        </div>
+      )}
     </div>
   );
 };
