@@ -2,7 +2,7 @@ import { AuthResponseType } from '@/types/auth';
 import api from './instance';
 import { Subject } from '@/types/member';
 import { useQuery } from '@tanstack/react-query';
-import { AuthStore } from '@/stores/authStore';
+import { AuthStore } from '@/utils/authService';
 
 // 로그인
 const login = async () => {

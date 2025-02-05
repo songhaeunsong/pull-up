@@ -1,8 +1,8 @@
 import { reissue } from '@/api/auth';
 import api from '@/api/instance';
-import { AuthStore } from '@/stores/authStore';
 import { AfterResponseHook } from 'ky';
 
+// OAuth 로그인
 export const OAuthLogin = (domain: string): void => {
   if (import.meta.env.VITE_MOCK_SERVICE === 'develop') {
     window.location.href = `/redirect`; // msw
@@ -11,10 +11,29 @@ export const OAuthLogin = (domain: string): void => {
   }
 };
 
+// accessToken 관리
+export const AuthStore = (() => {
+  let accessToken: string | null;
+
+  return {
+    getAccessToken: () => accessToken,
+    setAccessToken: (token: string) => {
+      if (token?.startsWith('Bearer ')) {
+        accessToken = token.slice(7);
+      } else {
+        accessToken = token;
+      }
+    },
+    clearAccessToken: () => {
+      accessToken = null;
+    },
+  };
+})();
+
+// 토큰 재발급
 export const handleToken: AfterResponseHook = async (request: Request, _, response: Response) => {
   if (response.status == 401) {
     try {
-      // 토큰 재발급
       await reissue();
 
       // 기존 api 재요청
