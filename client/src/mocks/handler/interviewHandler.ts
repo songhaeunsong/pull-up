@@ -18,7 +18,7 @@ export const interviewHandler = [
         {
           interviewId: 1,
           question: 'Checked Exception과 Unchecked Exception의 차이는 ?',
-          keywords: ['Java', 'Exception'],
+          keywords: ['컴파일 시점', '런타임 시점', '예외 처리 강제'],
         },
         {
           status: 200,
@@ -61,7 +61,7 @@ export const interviewHandler = [
           interviewId: 1,
           question: 'Checked Exception과 Unchecked Exception의 차이는 ?',
           memberAnswer:
-            'Checked Exception은은 컴파일 시점에 체크되며 반드시 예외 처리를 해야 하고, Unchecked Exception은 런타임 시점에 발생하는 예외로 명시적인 예외 처리를 강제하지 않는다.',
+            'Checked Exception은 컴파일 시점에 체크되며 반드시 예외 처리를 해야 하고, Unchecked Exception은 런타임 시점에 발생하는 예외로 명시적인 예외 처리를 강제하지 않는다.',
           keywords: ['컴파일 시점', '런타임 시점', '예외 처리 강제'],
           grade: 'A',
           date: '2025-01-24',

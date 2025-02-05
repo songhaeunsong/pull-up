@@ -44,7 +44,7 @@ export const examHandler = [
             },
             {
               problemId: 3,
-              problem: 'TCP와 UDP의 차이점에 대해 설명하시오.',
+              problem: 'TCP와 UDP의 차이점 중 TCP가 제공하는 주요 기능은 무엇입니까?',
               options: [],
               subject: 'NETWORK',
               problemType: 'SHORT_ANSWER',
@@ -77,7 +77,7 @@ export const examHandler = [
             },
             {
               problemId: 7,
-              problem: 'CPU가 명령어를 실행하는 단계를 올바르게 설명한 것은 무엇입니까?',
+              problem: 'CPU가 명령어를 실행할 때 첫 번째 단계는 무엇입니까?',
               options: [],
               subject: 'COMPUTER_ARCHITECTURE',
               problemType: 'SHORT_ANSWER',
@@ -170,8 +170,8 @@ export const examHandler = [
                 '프로세스는 동일한 자원을 공유한다.',
                 '스레드는 각기 다른 메모리 공간을 가진다.',
               ],
-              chosenAnswer: '프로세스는 메모리를 공유하지 않는다.',
-              answer: '스레드는 각기 다른 메모리 공간을 가진다.',
+              chosenAnswer: '스레드는 각기 다른 메모리 공간을 가진다.',
+              answer: '프로세스는 메모리를 공유하지 않는다.',
               answerStatus: false,
               bookmarkStatus: false,
               explanation:
@@ -182,10 +182,10 @@ export const examHandler = [
             },
             {
               problemId: 3,
-              problem: 'TCP와 UDP의 차이점에 대해 설명하시오.',
+              problem: 'TCP와 UDP의 차이점 중 TCP가 제공하는 주요 기능은 무엇입니까?',
               options: [],
-              chosenAnswer: 'TCP는 연결 기반이고 UDP는 비연결 기반이다.',
-              answer: 'TCP는 연결 기반이고 UDP는 비연결 기반이다.',
+              chosenAnswer: '신뢰성',
+              answer: '신뢰성',
               answerStatus: true,
               bookmarkStatus: true,
               explanation:
@@ -217,8 +217,8 @@ export const examHandler = [
                 '정렬된 배열에 사용된다.',
                 '탐색 범위를 무작위로 선택한다.',
               ],
-              chosenAnswer: '정렬된 배열에 사용된다.',
-              answer: '시간 복잡도는 O(n)이다.',
+              chosenAnswer: '시간 복잡도는 O(n)이다.',
+              answer: '정렬된 배열에 사용된다.',
               answerStatus: false,
               bookmarkStatus: false,
               explanation:
@@ -231,8 +231,8 @@ export const examHandler = [
               problemId: 6,
               problem: '스택의 주요 특징은 무엇입니까?',
               options: ['FIFO', 'LIFO', '랜덤 접근', '순차 접근'],
-              chosenAnswer: 'LIFO',
-              answer: '순차 접근',
+              chosenAnswer: 'FIFO',
+              answer: 'LIFO',
               answerStatus: false,
               bookmarkStatus: false,
               explanation:
@@ -243,10 +243,10 @@ export const examHandler = [
             },
             {
               problemId: 7,
-              problem: 'CPU가 명령어를 실행하는 단계를 올바르게 설명한 것은 무엇입니까?',
+              problem: 'CPU가 명령어를 실행할 때 첫 번째 단계는 무엇입니까?',
               options: [],
-              chosenAnswer: '명령어 인출 - 해석 - 실행',
-              answer: '명령어 인출 - 해석 - 실행',
+              chosenAnswer: '인출',
+              answer: '인출',
               answerStatus: true,
               bookmarkStatus: false,
               explanation: 'CPU는 명령어를 인출(Fetch), 해석(Decode), 실행(Execute)하는 단계를 거쳐 동작합니다.',
@@ -324,14 +324,14 @@ export const examHandler = [
       getExamResponses: [
         {
           examId: 7,
-          examName: '제 1회 모의고사',
-          date: '2025-01-01T19:00:00',
+          examName: '제 3회 모의고사',
+          date: '2025-02-04T19:00:00',
           subjects: ['알고리즘', '네트워크', '운영체제', '데이터베이스'],
         },
         {
           examId: 9,
           examName: '제 2회 모의고사',
-          date: '2025-01-03T19:00:00',
+          date: '2025-01-28T19:00:00',
           subjects: ['운영체제', '데이터베이스', '알고리즘', '네트워크크'],
         },
         {

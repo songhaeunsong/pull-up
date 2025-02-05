@@ -11,19 +11,19 @@ interface SideBarProps {
 const SideBar = ({ image, name, email, subjects }: SideBarProps) => {
   // 더미데이터
   const dummyRecent = {
-    content: '제11회 모의고사',
+    content: '제3회 모의고사',
     date: '2025.01.12',
-    subjects: ['운영체제', '네트워크', 'OS'],
+    subjects: ['운영체제', '네트워크', '운영체제'],
   };
 
   const dummyWrong = {
-    content: 'TCP와 UDP의 차이점에 대해 설명하시오.',
-    subjects: ['네트워크'],
+    content: '스택의 주요 특징은 무엇입니까?',
+    subjects: ['자료구조'],
   };
 
   const dummyArchive = {
-    content: '다음 중 이진 탐색(Binary Search)에 대한 설명으로 올바른 것은 무엇입니까?',
-    subjects: ['알고리즘'],
+    content: '스택의 주요 특징은 무엇입니까?',
+    subjects: ['자료구조'],
   };
 
   return (
