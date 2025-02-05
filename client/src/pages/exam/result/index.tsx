@@ -5,8 +5,7 @@ import ExamSolution from '@/components/exam/solution';
 import ExamProblem from '@/components/exam/problem';
 import { useNavigate, useParams } from 'react-router-dom';
 import { useGetExamResult } from '@/api/exam';
-import { ExamResultResponse } from '@/types/exam';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useExamStore } from '@/stores/examStore';
 
 const ExamResultPage = () => {
@@ -14,7 +13,7 @@ const ExamResultPage = () => {
   const { examId } = useParams();
   const { setSolutionPage, initializeAndSetOptions, setAnswer, toggleBookmark } = useExamStore();
   const { data: examResult } = useGetExamResult(Number(examId));
-  const [data, setData] = useState<ExamResultResponse>();
+  // const [data, setData] = useState<ExamResultResponse>();
 
   useEffect(() => {
     setSolutionPage(true); // 결과 페이지로 설정
