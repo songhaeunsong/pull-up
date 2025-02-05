@@ -1,3 +1,5 @@
+import { cn } from '@/lib/utils';
+import { useEffect, useState } from 'react';
 import ActivityCalendar, { Activity, DayIndex } from 'react-activity-calendar';
 
 const Streak = () => {
@@ -58,21 +60,37 @@ const Streak = () => {
 
   const weekStart = tomorrow.getDay() as DayIndex;
 
+  const [visible, setVisible] = useState(false);
+
+  useEffect(() => {
+    setTimeout(() => setVisible(true), 100);
+  }, []);
+
   return (
-    <ActivityCalendar
-      data={data}
-      weekStart={weekStart}
-      blockSize={23}
-      blockMargin={4}
-      hideColorLegend={true}
-      hideMonthLabels={true}
-      hideTotalCount={true}
-      colorScheme="light"
-      maxLevel={4}
-      theme={{
-        light: ['#eeeff1', '#6356f8'],
-      }}
-    />
+    <div
+      className={cn(
+        {
+          'translate-y-0 opacity-100': visible,
+          'translate-y-[10px] opacity-0': !visible,
+        },
+        'transition-all duration-1000 ease-out',
+      )}
+    >
+      <ActivityCalendar
+        data={data}
+        weekStart={weekStart}
+        blockSize={23}
+        blockMargin={4}
+        hideColorLegend={true}
+        hideMonthLabels={true}
+        hideTotalCount={true}
+        colorScheme="light"
+        maxLevel={4}
+        theme={{
+          light: ['#eeeff1', '#6356f8'],
+        }}
+      />
+    </div>
   );
 };
 
