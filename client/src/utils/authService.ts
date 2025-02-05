@@ -1,3 +1,5 @@
+import { reissue } from '@/api/auth';
+import api from '@/api/instance';
 import { BeforeRequestHook } from 'ky';
 
 export const OAuthLogin = (domain: string): void => {
@@ -9,18 +11,9 @@ export const OAuthLogin = (domain: string): void => {
 };
 
 // Header에 accessToken 담기
-export const setAuthorizationHeader: BeforeRequestHook = (request) => {
-  // 쿠키에서 accessToken 추출
-  const getAccessTokenFromCookie = () => {
-    const cookies = document.cookie.split(';');
-    const tokenCookie = cookies.find((cookie) => cookie.trim().startsWith('accessToken='));
-    console.log('cookies: ', document.cookie);
-    console.log('token: ', tokenCookie);
-    if (!tokenCookie) return null;
-    return tokenCookie.split('=')[1].trim();
-  };
-
-  const accessToken = getAccessTokenFromCookie();
+export const setAuthorizationHeader: BeforeRequestHook = (response) => {
+  // accessToken 추출
+  const accessToken = response.headers.get('Authorization');
   console.log('accessToken: ', accessToken);
 
   if (!accessToken) {
@@ -28,17 +21,26 @@ export const setAuthorizationHeader: BeforeRequestHook = (request) => {
     return;
   }
 
-  request.headers.set('Authorization', `Bearer ${accessToken}`);
+  response.headers.set('Authorization', `Bearer ${accessToken}`);
 };
 
-// export const handleToken = async (request: Request, response: Response) => {
-//   if (response.status == 401) {
-//     try {
-//       await reissue();
-//       return api(request);
-//     } catch (error) {
-//       console.error('토큰 재발급에 실패했습니다.:', error);
-//       window.location.href = '/signin';
-//     }
-//   }
-// };
+export const handleToken = async (request: Request, response: Response) => {
+  const url = new URL(request.url);
+  const retryCount = Number(url.searchParams.get('-retry') || 0);
+
+  if (response.status == 401) {
+    if (retryCount > 2) {
+      console.error('토근 재발급 횟수가 2회 초과되었습니다.');
+      window.location.href = '/signin';
+      return;
+    }
+    try {
+      await reissue();
+      url.searchParams.set('_retry', String(retryCount + 1));
+      return api(new Request(url.toString(), request));
+    } catch (error) {
+      console.error('토큰 재발급에 실패했습니다.:', error);
+      window.location.href = '/signin';
+    }
+  }
+};

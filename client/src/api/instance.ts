@@ -1,5 +1,5 @@
 import ky from 'ky';
-import { setAuthorizationHeader } from '@/utils/authService';
+import { handleToken, setAuthorizationHeader } from '@/utils/authService';
 
 const instance = ky.create({
   prefixUrl: import.meta.env.VITE_BASE_URL,
@@ -12,11 +12,11 @@ const instance = ky.create({
 
 const api = instance.extend({
   hooks: {
-    beforeRequest: [setAuthorizationHeader], // setAuthorizationHeader
+    beforeRequest: [setAuthorizationHeader],
     afterResponse: [
-      // async (_request, _options, response) => {
-      //   await handleToken(_request, response);
-      // },
+      async (_request, _options, response) => {
+        await handleToken(_request, response);
+      },
       (_request, _options, response) => {
         if (response.ok) return response;
         throw new Error('Response is not OK');
