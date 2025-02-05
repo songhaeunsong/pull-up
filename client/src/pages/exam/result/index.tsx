@@ -47,62 +47,70 @@ const ExamResultPage = () => {
   const { round, score, examResultDetailDtos } = examResult;
 
   return (
-    <div className="mt-16 flex w-full justify-between gap-12 bg-Main px-8 py-10 md:px-12 lg:px-16">
-      {/* Problem & Solution Section */}
-      <section className="flex-2 flex w-full min-w-[360px] flex-col gap-10 md:w-[920px]">
-        {examResultDetailDtos.map((problem, index) => (
-          <div key={problem.problemId} id={`problem-${problem.problemId}`} className="flex flex-col gap-2">
-            <ExamProblem
-              index={index + 1}
-              problem={{
-                problemId: problem.problemId,
-                question: problem.problem,
-                subject: problem.subject,
-                questionType: problem.problemType,
-                options: problem.options,
-                chosenAnswer: problem.chosenAnswer,
+    <div className="flex gap-12 bg-Main px-16 py-10">
+      <div className="mt-[94px] flex w-full flex-col sm:mt-16 sm:gap-16 md:flex-row lg:gap-20">
+        {/* Problem & Solution Section */}
+        <section className="flex-2 flex w-full min-w-[360px] flex-col gap-10 md:w-[920px]">
+          {examResultDetailDtos.map((problem, index) => (
+            <div key={problem.problemId} id={`problem-${problem.problemId}`} className="flex flex-col gap-2">
+              <ExamProblem
+                index={index + 1}
+                problem={{
+                  problemId: problem.problemId,
+                  question: problem.problem,
+                  subject: problem.subject,
+                  questionType: problem.problemType,
+                  options: problem.options,
+                  chosenAnswer: problem.chosenAnswer,
+                }}
+              />
+              <ExamSolution
+                answer={problem.answer}
+                correctRate={problem.correctRate}
+                explanation={problem.explanation}
+              />
+            </div>
+          ))}
+        </section>
+        {/* Info Section - Mobile View (공통 컴포넌트 사용 예정) */}
+        {/* Info Section - Web View */}
+        <aside className="relative min-w-[280px] flex-1 flex-shrink-0 lg:min-w-[340px] xl:max-w-[380px]">
+          <div className="sticky top-10 flex flex-col gap-10">
+            <div className="hidden flex-col gap-10 md:flex">
+              <InfoSection>
+                <span className="text-xl md:text-2xl lg:text-3xl">{round}</span>
+              </InfoSection>
+              <InfoSection title="점수" icon="score">
+                <div className="text-xl md:text-2xl lg:text-3xl">
+                  <span className="text-primary-500">{score}</span> / 100
+                </div>
+              </InfoSection>
+              <InfoSection title="풀이 현황" icon="problem">
+                <div className="grid grid-cols-5 gap-3">
+                  {examResultDetailDtos.map((problem, index) => (
+                    <ProblemStatusButton
+                      index={index + 1}
+                      key={problem.problemId}
+                      status={problem.answerStatus ? 'correct' : 'wrong'} // 문제의 정답 여부를 기반으로 상태 설정
+                      onClick={() => {
+                        document
+                          .getElementById(`problem-${problem.problemId}`)
+                          ?.scrollIntoView({ behavior: 'smooth', block: 'center' }); // 문제로 이동
+                      }}
+                    />
+                  ))}
+                </div>
+              </InfoSection>
+            </div>
+            <SubmitButton
+              text="확인 완료"
+              onClick={() => {
+                navigate(`/dashboard`);
               }}
             />
-            <ExamSolution answer={problem.answer} correctRate={problem.correctRate} explanation={problem.explanation} />
           </div>
-        ))}
-      </section>
-
-      {/* Info Section */}
-      <aside className="relative hidden min-w-[280px] flex-1 flex-shrink-0 md:block lg:min-w-[340px] xl:min-w-[380px]">
-        <div className="sticky top-10 flex flex-col gap-10">
-          <InfoSection>
-            <span className="text-xl md:text-2xl lg:text-3xl">{round}</span>
-          </InfoSection>
-          <InfoSection title="점수" icon="score">
-            <div className="text-xl md:text-2xl lg:text-3xl">
-              <span className="text-primary-500">{score}</span> / 100
-            </div>
-          </InfoSection>
-          <InfoSection title="풀이 현황" icon="problem">
-            <div className="grid grid-cols-5 gap-3">
-              {examResultDetailDtos.map((problem, index) => (
-                <ProblemStatusButton
-                  index={index + 1}
-                  key={problem.problemId}
-                  status={problem.answerStatus ? 'correct' : 'wrong'} // 문제의 정답 여부를 기반으로 상태 설정
-                  onClick={() => {
-                    document
-                      .getElementById(`problem-${problem.problemId}`)
-                      ?.scrollIntoView({ behavior: 'smooth', block: 'center' }); // 문제로 이동
-                  }}
-                />
-              ))}
-            </div>
-          </InfoSection>
-          <SubmitButton
-            text="확인 완료"
-            onClick={() => {
-              navigate(`/dashboard`);
-            }}
-          />
-        </div>
-      </aside>
+        </aside>
+      </div>
     </div>
   );
 };

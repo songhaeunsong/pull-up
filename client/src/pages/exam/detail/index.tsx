@@ -57,57 +57,61 @@ const ExamDetailPage = () => {
   };
 
   return (
-    <div className="flex w-full gap-12 bg-Main px-16 pb-10 pt-28 md:flex-row md:gap-16 lg:gap-20">
-      {/* 문제 리스트 */}
-      <section className="flex-2 flex w-full flex-col gap-10 md:w-[920px]">
-        {examProblems.map((problem, index) => (
-          <div key={problem.problemId} id={`problem-${problem.problemId}`}>
-            <ExamProblem
-              index={index + 1}
-              problem={{
-                problemId: problem.problemId,
-                question: problem.problem,
-                subject: problem.subject,
-                questionType: problem.problemType,
-                options: problem.options,
-              }}
+    <div className="flex gap-12 bg-Main p-10 px-16">
+      <div className="mt-[94px] flex w-full flex-col gap-16 sm:mt-16 md:flex-row lg:gap-20">
+        {/* 문제 리스트 */}
+        <section className="flex-2 flex w-full flex-col gap-10 md:w-[920px]">
+          {examProblems.map((problem, index) => (
+            <div key={problem.problemId} id={`problem-${problem.problemId}`}>
+              <ExamProblem
+                index={index + 1}
+                problem={{
+                  problemId: problem.problemId,
+                  question: problem.problem,
+                  subject: problem.subject,
+                  questionType: problem.problemType,
+                  options: problem.options,
+                }}
+              />
+            </div>
+          ))}
+        </section>
+        {/* Info Section - Mobile View (공통 컴포넌트 사용 예정) */}
+        {/* Info Section  - Web View */}
+        <aside className="relative min-w-[280px] flex-1 flex-shrink-0 lg:min-w-[340px] xl:max-w-[380px]">
+          <div className="sticky top-10 flex flex-col gap-10">
+            <div className="hidden flex-col gap-10 md:flex">
+              <InfoSection title="남은 시간" icon="time">
+                <span>
+                  <Timer initialTime={1500} onTimeOver={onSubmit} />
+                </span>
+              </InfoSection>
+              <InfoSection title="풀이 현황" icon="problem">
+                <div className="grid grid-cols-5 gap-2">
+                  {examProblems.map((problem, index) => (
+                    <ProblemStatusButton
+                      key={problem.problemId}
+                      index={index + 1}
+                      status={answers[problem.problemId] ? 'solved' : 'default'}
+                      onClick={() => {
+                        document
+                          .getElementById(`problem-${problem.problemId}`)
+                          ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                      }}
+                    />
+                  ))}
+                </div>
+              </InfoSection>
+            </div>
+            <SubmitButton
+              text="제출하기"
+              onClick={onSubmit}
+              disabled={!isAllSolved}
+              color={!isAllSolved ? 'gray' : 'primary'}
             />
           </div>
-        ))}
-      </section>
-
-      {/* Info Section */}
-      <aside className="relative hidden min-w-[280px] flex-1 flex-shrink-0 md:block lg:min-w-[340px] xl:min-w-[380px]">
-        <div className="sticky top-10 flex flex-col gap-10">
-          <InfoSection title="남은 시간" icon="time">
-            <span>
-              <Timer initialTime={1500} onTimeOver={onSubmit} />
-            </span>
-          </InfoSection>
-          <InfoSection title="풀이 현황" icon="problem">
-            <div className="grid grid-cols-5 gap-2">
-              {examProblems.map((problem, index) => (
-                <ProblemStatusButton
-                  key={problem.problemId}
-                  index={index + 1}
-                  status={answers[problem.problemId] ? 'solved' : 'default'}
-                  onClick={() => {
-                    document
-                      .getElementById(`problem-${problem.problemId}`)
-                      ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                  }}
-                />
-              ))}
-            </div>
-          </InfoSection>
-          <SubmitButton
-            text="제출하기"
-            onClick={onSubmit}
-            disabled={!isAllSolved}
-            color={!isAllSolved ? 'gray' : 'primary'}
-          />
-        </div>
-      </aside>
+        </aside>
+      </div>
     </div>
   );
 };

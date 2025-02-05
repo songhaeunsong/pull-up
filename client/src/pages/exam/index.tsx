@@ -24,9 +24,11 @@ const ExamPage = () => {
 
   return (
     <>
-      <div className="mt-16 flex h-full w-full items-center justify-around bg-Main py-10">
-        <CsConditionSelector title="시험 분야 선택" text={'모의고사 만들기'} onClick={onSubmit} isExam={true} />
-        <img src={exam1} alt="exam1" className="h-auto w-[600px]" />
+      <div className="flex h-full w-full items-center justify-around bg-Main px-16 py-10">
+        <div className="mt-[94px] flex w-full items-center justify-around sm:mt-16">
+          <CsConditionSelector title="시험 분야 선택" text={'모의고사 만들기'} onClick={onSubmit} isExam={true} />
+          <img src={exam1} alt="exam1" className="hidden h-auto w-[400px] lg:block xl:w-[600px]" />
+        </div>
       </div>
     </>
   );

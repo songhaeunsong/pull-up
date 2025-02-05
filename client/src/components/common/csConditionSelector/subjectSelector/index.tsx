@@ -12,8 +12,8 @@ export interface SubjectSelectorProps {
 const SubjectSelector = ({ id, name, icon, isSelected, onClick }: SubjectSelectorProps) => {
   return (
     <div onClick={() => onClick(id)} className="flex cursor-pointer items-center justify-between gap-1">
-      <div className="flex items-center gap-6 font-semibold md:text-lg">
-        <Icon id={icon} size={40} className="h-auto md:w-[50px]" />
+      <div className="flex items-center gap-6 text-sm font-semibold md:text-base">
+        <Icon id={icon} size={36} className="h-auto md:w-[40px]" />
         <span>{name}</span>
       </div>
       <Icon
