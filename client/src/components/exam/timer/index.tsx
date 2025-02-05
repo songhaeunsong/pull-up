@@ -1,26 +1,46 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback, useRef } from 'react';
 
 interface TimerProps {
-  initialTime: number; // 초 단위로 전달 (25분 = 1500)
+  initialTime: number;
   onTimeOver: () => void;
 }
 
 const Timer = ({ initialTime, onTimeOver }: TimerProps) => {
   const [timeLeft, setTimeLeft] = useState(initialTime);
+  const timerRef = useRef<NodeJS.Timeout | null>(null);
+  const onTimeOverRef = useRef(onTimeOver);
 
   useEffect(() => {
-    const timerInterval = setInterval(() => {
+    onTimeOverRef.current = onTimeOver;
+  }, [onTimeOver]);
+
+  const startTimer = useCallback(() => {
+    if (timerRef.current) {
+      clearInterval(timerRef.current);
+    }
+
+    timerRef.current = setInterval(() => {
       setTimeLeft((prevTime) => {
         if (prevTime <= 0) {
-          clearInterval(timerInterval);
-          onTimeOver();
+          if (timerRef.current) {
+            clearInterval(timerRef.current);
+          }
+          onTimeOverRef.current();
           return 0;
         }
         return prevTime - 1;
       });
     }, 1000);
-    return () => clearInterval(timerInterval);
-  }, [onTimeOver]);
+  }, []);
+
+  useEffect(() => {
+    startTimer();
+    return () => {
+      if (timerRef.current) {
+        clearInterval(timerRef.current);
+      }
+    };
+  }, [startTimer]);
 
   const formatTime = (seconds: number) => {
     const hours = String(Math.floor(seconds / 3600)).padStart(2, '0');
