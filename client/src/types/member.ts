@@ -11,5 +11,3 @@ export interface Member {
   email: string;
   interestSubjects: Subject[];
 }
-
-export type MemberResponse = Member & { accessToken: string };
