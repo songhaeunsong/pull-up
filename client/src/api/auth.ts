@@ -2,10 +2,19 @@ import { AuthResponseType } from '@/types/auth';
 import api from './instance';
 import { Subject } from '@/types/member';
 import { useQuery } from '@tanstack/react-query';
+import { AuthStore } from '@/stores/authStore';
 
 // 로그인
 const login = async () => {
-  const data = await api.post('auth/signin').json<AuthResponseType>();
+  const response = await api.post('auth/signin');
+  const data = await response.json<AuthResponseType>();
+
+  // accessToken 추출
+  const accessToken = response.headers.get('Authorization');
+  if (accessToken) {
+    AuthStore.setAccessToken(accessToken);
+  }
+
   return data;
 };
 
@@ -18,7 +27,12 @@ export const useAuthInfo = () => {
 
 // 토큰 재발급
 export const reissue = async () => {
-  return await api.post('auth/reissue');
+  try {
+    const { accessToken } = await api.post('auth/reissue').json<{ accessToken: string }>();
+    AuthStore.setAccessToken(accessToken);
+  } catch (error) {
+    console.error('토큰 재발급 실패: ', error);
+  }
 };
 
 // 로그아웃
