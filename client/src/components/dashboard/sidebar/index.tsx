@@ -25,12 +25,11 @@ const SideBar = ({ image, name, email, subjects }: SideBarProps) => {
     content: 'React 컴포넌트에서 Props와 State의 차이는 무엇인가요?',
     subjects: ['운영체제', '네트워크', 'OS'],
   };
-
   return (
-    <div className="flex w-full flex-row gap-6 rounded-2xl bg-white p-5 shadow-sm lg:w-[351px] lg:flex-col">
+    <div className="flex flex-row gap-3 rounded-2xl bg-white p-5 shadow-sm sm:w-full sm:gap-6 lg:w-[351px] lg:flex-col">
       <Profile image={image} name={name} email={email} subjects={subjects} />
       <hr className="hidden border-2 border-stone-200 lg:block" />
-      <div className="flex flex-row gap-5 lg:flex-col">
+      <div className="flex flex-row gap-4 lg:flex-col">
         <Card link="/dashboard/recent" title="최근에 푼 모의고사" data={dummyRecent} />
         <Card link="/dashboard/wrong" title="내가 틀린 문제" data={dummyWrong} />
         <Card link="/dashboard/archive" title="아카이브" data={dummyArchive} />

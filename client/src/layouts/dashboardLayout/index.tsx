@@ -1,5 +1,5 @@
 import SideBar from '@/components/dashboard/sidebar';
-import MobileProfile from '@/components/dashboard/sidebar/profile/MobileProfile';
+import MobileTopBar from '@/components/dashboard/sidebar/MobileTopBar';
 import useResponsive from '@/hooks/useResponsive';
 import { Outlet } from 'react-router-dom';
 
@@ -18,7 +18,7 @@ const DashBoardLayout = () => {
     <div className="flex min-h-screen bg-Main pt-[94px] sm:pt-16">
       {isMobile || isTabletMd ? (
         <div className="flex flex-col gap-5 p-6">
-          <MobileProfile image={image} name={name} email={email} subjects={subjects} />
+          <MobileTopBar image={image} name={name} email={email} subjects={subjects} />
           <Outlet />
         </div>
       ) : (
