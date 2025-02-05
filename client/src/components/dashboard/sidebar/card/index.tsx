@@ -27,14 +27,14 @@ const Card = ({ link, title, data }: CardProps) => {
       </nav>
 
       <div className="flex w-full flex-col items-center">
-        <button className="flex w-[99%] flex-col gap-2 rounded-2xl bg-white p-5 shadow-sm md:px-3 md:py-4">
+        <button className="flex w-[99%] flex-col gap-6 rounded-2xl bg-white p-5 shadow-sm md:px-3 md:py-4">
           <div className="flex h-[30px] w-full justify-between md:h-[45px] lg:h-auto">
             <span className="text:base text-left font-medium text-stone-800 md:text-xs lg:text-base">
               {data.content}
             </span>
             <span className="text-xs text-stone-400 lg:text-base">{data.date}</span>
           </div>
-          <div className="flex gap-2">
+          <div className="flex flex-wrap gap-2">
             {data.subjects.map((subject, id) => (
               <ExamTag key={id} title={subject} />
             ))}
