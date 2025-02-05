@@ -9,16 +9,15 @@ interface HeaderItem {
 
 const MobileHeader = () => {
   const location = useLocation();
+  const userInfo = '';
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
+
   const headerItems: HeaderItem[] = [
     { label: '시험모드', path: '/exam' },
     { label: '게임모드', path: '/game' },
-    { label: '돌아보기', path: '/dashboard' },
+    { label: '대시보드', path: '/dashboard' },
   ];
-
-  const loginItem: HeaderItem = { label: '로그인', path: '/signin' };
-
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
-  const userInfo = '';
+  const loginItem: HeaderItem = { label: userInfo ? '로그아웃' : '로그인', path: '/signin' };
 
   const handleAuthClick = () => {
     if (isLoggedIn) {

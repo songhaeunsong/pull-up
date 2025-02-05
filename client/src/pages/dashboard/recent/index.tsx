@@ -27,7 +27,7 @@ const Recent = () => {
   };
   return (
     <section className="flex w-full flex-col gap-3">
-      <RouteHeader prev="마이페이지" title="아카이브" onBackClick={onHandleBack} />
+      <RouteHeader prev="마이페이지" title="최근에 푼 모의고사" onBackClick={onHandleBack} />
       <ReviewList searchValue={searchValue} onSearchChange={handleSearchChange} data={examData} isProblem={false} />
     </section>
   );

@@ -8,45 +8,33 @@ export const problemHandler = [
       {
         wrongProblemDtos: [
           {
-            problemId: 2,
-            question: 'What is the most abundant element in air?',
-            subject: 'NETWORK',
-            date: '2025-01-21T19:05:00',
-          },
-          {
-            problemId: 5,
-            question: 'What is 2 to the power of 1?',
-            subject: 'ALGORITHM',
-            date: '2025-01-21T19:20:00',
-          },
-          {
             problemId: 21,
-            question: 'Explain the concept of virtual memory.',
-            subject: 'OPERATING_SYSTEM',
+            question: '가상 메모리의 개념을 설명하세요.',
+            subject: '운영체제',
             date: '2025-01-21T21:00:00',
           },
           {
             problemId: 20,
-            question: 'What is the purpose of normalization in databases?',
-            subject: 'DATABASE',
+            question: '데이터베이스에서 정규화의 목적은 무엇인가요?',
+            subject: '데이터베이스',
             date: '2025-01-21T21:25:00',
           },
           {
             problemId: 7,
-            question: 'Which operating system is open-source?',
-            subject: 'OPERATING_SYSTEM',
+            question: '어떤 운영체제가 오픈소스인가요?',
+            subject: '운영체제',
             date: '2025-01-22T20:20:22.062311',
           },
           {
             problemId: 15,
-            question: 'Explain the concept of virtual memory.',
-            subject: 'OPERATING_SYSTEM',
+            question: '가상 메모리의 개념을 설명하세요.',
+            subject: '운영체제',
             date: '2025-01-22T20:20:22.06482',
           },
           {
             problemId: 12,
-            question: 'What uniquely identifies a record in a table?',
-            subject: 'DATABASE',
+            question: '테이블에서 레코드를 고유하게 식별하는 것은 무엇인가요?',
+            subject: '데이터베이스',
             date: '2025-01-22T20:20:22.067247',
           },
         ],
@@ -60,14 +48,14 @@ export const problemHandler = [
       bookmarkedProblemDtos: [
         {
           problemId: 19,
-          question: 'What is the core component of an operating system?',
-          subject: 'OPERATING_SYSTEM',
+          question: '운영체제의 핵심 구성요소는 무엇인가요?',
+          subject: '운영체제',
           date: '2025-01-23T10:54:51.615038',
         },
         {
           problemId: 12,
-          question: 'What uniquely identifies a record in a table?',
-          subject: 'DATABASE',
+          question: '테이블에서 레코드를 고유하게 식별하는 것은 무엇인가요?',
+          subject: '데이터베이스',
           date: '2025-01-22T20:20:22.067247',
         },
       ],
@@ -79,12 +67,12 @@ export const problemHandler = [
     if (problemId) {
       return HttpResponse.json(
         {
-          question: 'What is the main data structure used in databases for indexing?',
-          options: ['B-Tree', 'Hash Table', 'Linked List', 'Array'],
-          answer: 'B-Tree',
-          explanation: 'explain...어쩌구',
+          question: '데이터베이스 인덱싱에 사용되는 주요 자료구조는 무엇인가요?',
+          options: ['B-트리', '해시 테이블', '연결 리스트', '배열'],
+          answer: 'B-트리',
+          explanation: '설명...어쩌구',
           correctRate: 70,
-          subject: 'DATABASE',
+          subject: '데이터베이스',
         },
         { status: 200 },
       );
@@ -109,6 +97,6 @@ export const problemHandler = [
       );
     }
 
-    return HttpResponse.json({ message: 'Problem not found' }, { status: 404 });
+    return HttpResponse.json({ message: '문제를 찾을 수 없습니다' }, { status: 404 });
   }),
 ];

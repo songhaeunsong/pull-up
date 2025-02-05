@@ -17,13 +17,13 @@ const SideBar = ({ image, name, email, subjects }: SideBarProps) => {
   };
 
   const dummyWrong = {
-    content: 'React 컴포넌트에서 Props와 State의 차이는 무엇인가요?',
-    subjects: ['운영체제', '네트워크', 'OS'],
+    content: 'TCP와 UDP의 차이점에 대해 설명하시오.',
+    subjects: ['네트워크'],
   };
 
   const dummyArchive = {
-    content: 'React 컴포넌트에서 Props와 State의 차이는 무엇인가요?',
-    subjects: ['운영체제', '네트워크', 'OS'],
+    content: '다음 중 이진 탐색(Binary Search)에 대한 설명으로 올바른 것은 무엇입니까?',
+    subjects: ['알고리즘'],
   };
   return (
     <div className="flex flex-row gap-3 rounded-2xl bg-white p-5 shadow-sm sm:w-full sm:gap-6 lg:w-[351px] lg:flex-col">
