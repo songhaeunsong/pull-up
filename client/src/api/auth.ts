@@ -41,6 +41,6 @@ export const logout = async () => {
 };
 
 // 회원가입
-export const signup = async (interestSubjects: Subject[]) => {
-  return await api.post('auth/signup', { json: { interestSubjects } });
+export const signup = async (subjectNames: Subject[]) => {
+  return await api.post('auth/signup', { json: { subjectNames } });
 };

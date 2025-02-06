@@ -69,4 +69,17 @@ export const authHandler = [
       },
     });
   }),
+
+  // 회원가입
+  http.post('http://localhost:8080/api/v1/auth/signup', async ({ request }) => {
+    const { subjectNames } = (await request.json()) as { subjectNames: string[] };
+
+    if (subjectNames) {
+      return HttpResponse.json({
+        status: 200,
+      });
+    }
+
+    return HttpResponse.json({ status: 400 });
+  }),
 ];
