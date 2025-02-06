@@ -27,7 +27,7 @@ const ExamProblem = ({ index, problem }: ExamProblemProps) => {
   };
 
   return (
-    <div className="flex flex-col gap-7 rounded-xl border border-primary-200 bg-white px-7 py-7">
+    <div className="flex flex-col gap-7 rounded-xl border border-primary-200 bg-white p-7">
       {/* 질문 섹션 */}
       <div className="flex flex-col gap-2">
         <div className="flex items-center justify-between">
