@@ -19,10 +19,8 @@ const ExamDetailPage = () => {
 
   useEffect(() => {
     if (!examProblems || isInitialized) return;
-
     resetExamState();
     setSolutionPage(false);
-
     examProblems.forEach((problem) => {
       initializeAndSetOptions(problem.problemId, problem.options);
       setAnswer(problem.problemId, '');
