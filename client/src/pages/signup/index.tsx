@@ -1,9 +1,12 @@
 import CsConditionSelector from '@/components/common/csConditionSelector';
+import { registerServiceWorker, requestPermission } from '@/serviceWorker';
 import { useNavigate } from 'react-router-dom';
 
 const SignUpPage = () => {
   const navigate = useNavigate();
-  const onConfirmSignUp = () => {
+  const onConfirmSignUp = async () => {
+    requestPermission();
+    registerServiceWorker();
     navigate('/interview');
   };
 

@@ -6,8 +6,6 @@ const RedirectPage = () => {
   const navigate = useNavigate();
   const { data: auth, isLoading } = useAuthInfo();
 
-  console.log('useAuthInfo response:', auth);
-
   useEffect(() => {
     if (!isLoading && auth) {
       if (!auth.isSignedUp) {
