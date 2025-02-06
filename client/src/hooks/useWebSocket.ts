@@ -1,7 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 import { useLocation } from 'react-router-dom';
 import { Client } from '@stomp/stompjs';
-import SockJS from 'sockjs-client';
 import { RoomStatus, StompRoomInfo } from '@/types/game';
 
 const useWebSocket = () => {
@@ -13,14 +12,14 @@ const useWebSocket = () => {
     roomId: '',
     player1P: { memberId: 0, name: '', score: 0 },
     player2P: { memberId: 0, name: '', score: 0 },
+    problems: [],
   });
 
   useEffect(() => {
     if (!client.current) {
       console.log('Websocket: 새로운 인스턴스 생성');
       client.current = new Client({
-        webSocketFactory: () => new SockJS(`${import.meta.env.VITE_WEBSOCKET_URL}/game-websocket`),
-        debug: (str) => console.log(str),
+        webSocketFactory: () => new WebSocket(`${import.meta.env.VITE_WEBSOCKET_URL}`),
         reconnectDelay: 5000,
         heartbeatIncoming: 4000,
         heartbeatOutgoing: 4000,
@@ -31,27 +30,14 @@ const useWebSocket = () => {
       console.log('WebSocket: 연결 성공');
 
       // 방 상태 구독
-      client.current!.subscribe('/topic/room-status', (message) => {
+      client.current!.subscribe(`/topic/game/${roomInfo.roomId}/status`, (message) => {
         const updatedStatus = JSON.parse(message.body);
         console.log('Websocket: 수신한 방 상태:', updatedStatus);
         setRoomStatus(updatedStatus.body.status);
-        setRoomInfo({
-          roomId: updatedStatus.body.roomId,
-          player1P: {
-            memberId: updatedStatus.body.player1P.memberId,
-            name: updatedStatus.body.player1P.name,
-            score: 0,
-          },
-          player2P: {
-            memberId: updatedStatus.body.player2P.memberId,
-            name: updatedStatus.body.player2P.name,
-            score: 0,
-          },
-        });
       });
 
-      client.current!.subscribe('/topic/answer-correct', (message) => {
-        const { score1P, score2P } = JSON.parse(message.body);
+      client.current!.subscribe(`/topic/game/${roomInfo.roomId}`, (message) => {
+        const { score1P, score2P, problems } = JSON.parse(message.body);
 
         setRoomInfo((prevRoomInfo) => ({
           ...prevRoomInfo,
@@ -64,6 +50,7 @@ const useWebSocket = () => {
             ...prevRoomInfo.player2P,
             score: score2P,
           },
+          problems,
         }));
       });
     };

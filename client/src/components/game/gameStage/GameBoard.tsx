@@ -3,10 +3,13 @@ import GameCard from './GameCard';
 import { Card } from '@/types/game';
 import useWebSocket from '@/hooks/useWebSocket';
 
-const GameBoard = ({ problems }: { problems: Card[] }) => {
+interface GameBoardProps {
+  playerNumber: 1 | 2;
+  problems: Card[];
+}
+const GameBoard = ({ playerNumber, problems }: GameBoardProps) => {
   const { sendMessage, roomInfo } = useWebSocket();
 
-  const myId = 1; // 서버에 요청 보내서 가져오기
   const [selectedCards, setSelectedCards] = useState<number[]>([]);
 
   const checkCardPair = (cardIndex1: number, cardIndex2: number) => {
@@ -16,7 +19,7 @@ const GameBoard = ({ problems }: { problems: Card[] }) => {
 
       sendMessage('/app/card/submit', {
         roomId: roomInfo.roomId,
-        playerId: myId,
+        playerId: playerNumber,
         problemNumber: problems[cardIndex1].cardId,
       });
     }

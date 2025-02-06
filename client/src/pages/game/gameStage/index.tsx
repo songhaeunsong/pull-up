@@ -1,23 +1,19 @@
-import { useGetProblem } from '@/api/game';
+import { useGetId } from '@/api/game';
 import GameBoard from '@/components/game/gameStage/GameBoard';
 import GameScoreBoard from '@/components/game/gameStage/GameScoreBoard';
 import useWebSocket from '@/hooks/useWebSocket';
-import { useState } from 'react';
 
 const GameStage = () => {
-  const { roomStatus } = useWebSocket();
-  const { data: problems, isLoading } = useGetProblem(roomStatus);
+  const { roomInfo } = useWebSocket();
 
-  const [myId, setMyId] = useState(1); // 임시, 서버에서 받아오기 (아이디, 이름)
+  const { data: idData, isLoading } = useGetId(roomInfo.roomId);
 
-  if (isLoading || !problems) return <>카드를 불러오는 중 ...</>;
-
-  console.log(problems);
+  if (isLoading || !idData) return <>불러오는 중...</>;
   return (
     <div className="grid h-full w-full grid-cols-[2.5fr_1fr] gap-7 bg-Main p-8">
-      <GameBoard problems={problems} />
+      <GameBoard playerNumber={idData.playerNumber} problems={roomInfo.problems} />
       <div className="grid grid-rows-2 gap-7">
-        {myId === 1 ? (
+        {idData.playerNumber === 1 ? (
           <>
             <GameScoreBoard player="player2P" />
             <GameScoreBoard player="player1P" />
