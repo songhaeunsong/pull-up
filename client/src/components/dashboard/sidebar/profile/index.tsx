@@ -1,21 +1,23 @@
 import SubjectTag from '@/components/common/subjectTag';
 import Icon from '@/components/common/icon';
 import useResponsive from '@/hooks/useResponsive';
+import React from 'react';
 
 interface ProfileProps {
   image: string;
   name: string;
   email: string;
   subjects: string[];
+  onClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
-const Profile = ({ image, name, email, subjects }: ProfileProps) => {
+const Profile = ({ image, name, email, subjects, onClick }: ProfileProps) => {
   const { isDesktop } = useResponsive();
   return (
     <div className="flex flex-row-reverse lg:block">
-      <div className="mt-1 flex justify-end lg:mt-0 lg:w-full">
+      <button onClick={onClick} className="mt-1 flex justify-end lg:mt-0 lg:w-full">
         <Icon id="about" />
-      </div>
+      </button>
       <div className="flex w-[150px] flex-col justify-evenly gap-3 lg:w-auto lg:justify-start">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-center">
           {isDesktop && <img src={image} width={80} height={80} className="rounded-full object-cover" />}

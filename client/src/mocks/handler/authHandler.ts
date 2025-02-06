@@ -1,3 +1,4 @@
+import { Subject } from '@/types/member';
 import { http, HttpResponse } from 'msw';
 
 const tokens = {
@@ -72,7 +73,7 @@ export const authHandler = [
 
   // 회원가입
   http.post('http://localhost:8080/api/v1/auth/signup', async ({ request }) => {
-    const { subjectNames } = (await request.json()) as { subjectNames: string[] };
+    const { subjectNames } = (await request.json()) as { subjectNames: Subject[] };
 
     if (subjectNames) {
       return HttpResponse.json({

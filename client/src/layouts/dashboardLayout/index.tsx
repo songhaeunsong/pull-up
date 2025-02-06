@@ -1,24 +1,27 @@
 import SideBar from '@/components/dashboard/sidebar';
 import MobileTopBar from '@/components/dashboard/sidebar/MobileTopBar';
 import useResponsive from '@/hooks/useResponsive';
+import { memberStore } from '@/stores/memberStore';
 import { Outlet } from 'react-router-dom';
 
 const DashBoardLayout = () => {
-  // 더미데이터
-  const { image, name, email, subjects } = {
-    image: 'https://avatars.githubusercontent.com/u/55848610?v=4',
-    name: '강지은',
-    email: 'kkang@gmail.com',
-    subjects: ['운영체제', '네트워크', '데이터베이스', '컴퓨터구조', '알고리즘', '자료구조'],
-  };
-
   const { isMobile, isTabletMd } = useResponsive();
+  const { member } = memberStore();
+  const onClick = () => {
+    console.log('about');
+  };
 
   return (
     <div className="flex min-h-screen bg-Main pt-[94px] sm:pt-16">
       {isMobile || isTabletMd ? (
         <div className="flex flex-col gap-5 p-6">
-          <MobileTopBar image={image} name={name} email={email} subjects={subjects} />
+          <MobileTopBar
+            image={member.profileImageUrl}
+            name={member.name}
+            email={member.email}
+            subjects={member.interestSubjects}
+            onClick={onClick}
+          />
           <Outlet />
         </div>
       ) : (
@@ -26,7 +29,13 @@ const DashBoardLayout = () => {
           <main className="flex h-full flex-1 overflow-y-auto">
             <Outlet />
           </main>
-          <SideBar image={image} name={name} email={email} subjects={subjects} />
+          <SideBar
+            image={member.profileImageUrl}
+            name={member.name}
+            email={member.email}
+            subjects={member.interestSubjects}
+            onClick={onClick}
+          />
         </div>
       )}
     </div>

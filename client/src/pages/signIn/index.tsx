@@ -1,5 +1,4 @@
 import OAuthButton from '@/components/signin/oauthbutton';
-import { OAuthLogin } from '@/utils/authService';
 
 const SignInPage = () => {
   return (
@@ -28,9 +27,9 @@ const SignInPage = () => {
         </div>
 
         <div className="flex flex-col items-center gap-4">
-          <OAuthButton image="google" title="Google" onClick={() => OAuthLogin('google')} />
-          <OAuthButton image="naver" title="Naver" onClick={() => OAuthLogin('naver')} />
-          <OAuthButton image="kakao" title="Kakao" onClick={() => OAuthLogin('kakao')} />
+          <OAuthButton image="google" title="Google" />
+          <OAuthButton image="naver" title="Naver" />
+          <OAuthButton image="kakao" title="Kakao" />
         </div>
       </div>
     </div>
