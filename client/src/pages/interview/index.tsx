@@ -1,11 +1,14 @@
 import { createMemberAnswer, useGetInterview } from '@/api/interview';
 import InputForm from '@/components/interview/inputForm';
 import InterviewCard from '@/components/interview/interviewCard';
+import { memberStore } from '@/stores/memberStore';
 import { InterviewResponse } from '@/types/interview';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const InterviewPage = () => {
+  const { setIsSolvedToday } = memberStore();
+
   const navigate = useNavigate();
   const [hint, setHint] = useState(false);
   const [interviewAnswer, setInterviewAnswer] = useState(''); // 답변
@@ -42,6 +45,7 @@ const InterviewPage = () => {
     }
 
     const interviewAnswerId = await createMemberAnswer(interviewData.interviewId, interviewAnswer);
+    setIsSolvedToday(true);
     navigate(`/interview/result/${interviewAnswerId}`);
 
     console.log('제출 답안: ', interviewAnswer);

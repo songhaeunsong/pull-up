@@ -9,5 +9,6 @@ export type Subject =
 export interface Member {
   name: string;
   email: string;
+  profileImageUrl: string;
   interestSubjects: Subject[];
 }

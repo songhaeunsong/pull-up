@@ -1,4 +1,6 @@
 import { useAuthInfo } from '@/api/auth';
+import { useGetMemberInfo } from '@/api/member';
+import { memberStore } from '@/stores/memberStore';
 import { registerServiceWorker, requestPermission } from '@/utils/serviceWorker';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
@@ -6,6 +8,8 @@ import { useNavigate } from 'react-router-dom';
 const RedirectPage = () => {
   const navigate = useNavigate();
   const { data: auth, isLoading } = useAuthInfo();
+  const { data: member } = useGetMemberInfo();
+  const { setMember, setIsSolvedToday } = memberStore();
 
   useEffect(() => {
     const setupNotification = async () => {
@@ -23,6 +27,14 @@ const RedirectPage = () => {
           await setupNotification();
           navigate('/signup');
         } else {
+          if (!member?.interestSubjects) {
+            navigate('/signup');
+            return;
+          }
+          // 유저 정보 저장
+          setMember(member);
+          setIsSolvedToday(auth.isSolvedToday);
+
           navigate(auth.isSolvedToday ? '/interview/result' : '/interview');
         }
       }
