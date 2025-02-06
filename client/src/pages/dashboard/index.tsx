@@ -1,10 +1,10 @@
 import Streak from '@/components/dashboard/charts/Streak';
-import ChartContainer from './ChartContainer';
 import Score from '@/components/dashboard/charts/Score';
 import Analysis from '@/components/dashboard/charts/Analysis';
 import WinningRate from '@/components/dashboard/charts/WinningRate';
 import useResponsive from '@/hooks/useResponsive';
 import MobileDashboardContainer from './MobileDashboardContainer';
+import ChartContainer from './ChartContainer';
 
 const DashBoardPage = () => {
   const { isMobile, isTabletMd } = useResponsive();

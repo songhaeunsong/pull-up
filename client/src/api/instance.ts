@@ -1,5 +1,5 @@
 import ky from 'ky';
-import { setAuthorizationHeader } from '@/utils/authService';
+import { AuthStore, handleToken } from '@/utils/authService';
 
 const instance = ky.create({
   prefixUrl: import.meta.env.VITE_BASE_URL,
@@ -12,16 +12,18 @@ const instance = ky.create({
 
 const api = instance.extend({
   hooks: {
-    beforeRequest: [setAuthorizationHeader], // setAuthorizationHeader
-    afterResponse: [
-      // async (_request, _options, response) => {
-      //   await handleToken(_request, response);
-      // },
-      (_request, _options, response) => {
-        if (response.ok) return response;
-        throw new Error('Response is not OK');
+    beforeRequest: [
+      (request) => {
+        const token = AuthStore.getAccessToken();
+        const isAuthRequest = request.url.includes('/auth/signin'); // 로그인 요청인지 확인
+
+        // 헤더에 accessToken 담기
+        if (token && !isAuthRequest) {
+          request.headers.set('Authorization', `Bearer ${token}`);
+        }
       },
     ],
+    afterResponse: [handleToken],
   },
 });
 
