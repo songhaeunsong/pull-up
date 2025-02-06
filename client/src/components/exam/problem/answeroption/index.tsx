@@ -18,7 +18,7 @@ const AnswerOption = ({ id, content, onClick, state, disabled = false }: AnswerO
     <button
       onClick={!disabled ? onClick : undefined}
       disabled={disabled}
-      className={`w-full rounded-xl border px-8 py-3 text-start text-xl ${COLOR_CLASSES[state]} `}
+      className={`w-full rounded-xl border px-4 py-3 text-start text-base md:px-6 md:text-lg lg:px-8 lg:text-xl ${COLOR_CLASSES[state]} `}
     >
       {id}. {content}
     </button>

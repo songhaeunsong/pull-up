@@ -31,8 +31,8 @@ const ProblemDetail = () => {
   };
 
   return (
-    <div className="flex flex-col items-center bg-Main py-24">
-      <div className="flex w-[900px] flex-col gap-6">
+    <div className="flex flex-col items-center bg-Main py-10">
+      <div className="mt-24 flex w-[60%] min-w-[360px] flex-col gap-6 sm:mt-14 md:max-w-[900px]">
         <div className="flex w-full justify-start">
           <RouteHeader prev="목록으로" title="문제 상세보기" onBackClick={onHandleBack} />
         </div>

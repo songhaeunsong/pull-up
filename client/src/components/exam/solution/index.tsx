@@ -16,8 +16,11 @@ const ExamSolution = ({ answer, correctRate, explanation }: ExamSolutionProps) =
   return (
     <div className="flex flex-col gap-5 rounded-xl border border-primary-200 bg-white px-7 py-7">
       <div className="flex items-center justify-between">
-        <div className="text-2xl font-bold text-stone-900">해설</div>
-        <button className="w-[90px] rounded-lg bg-stone-950 px-4 py-2 font-semibold text-white" onClick={toggleFold}>
+        <div className="text-lg font-bold text-stone-900 md:text-xl lg:text-2xl">해설</div>
+        <button
+          className="rounded-lg bg-stone-950 px-4 py-2 text-sm font-semibold text-white lg:text-base"
+          onClick={toggleFold}
+        >
           {isFolded ? '접어두기' : '펼치기'}
         </button>
       </div>

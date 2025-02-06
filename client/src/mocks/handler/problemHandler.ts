@@ -8,9 +8,9 @@ export const problemHandler = [
       {
         wrongProblemDtos: [
           {
-            problemId: 21,
-            question: '가상 메모리의 개념을 설명하세요.',
-            subject: '운영체제',
+            problemId: 6,
+            question: '스택의 주요 특징은 무엇입니까?',
+            subject: '자료구조',
             date: '2025-01-21T21:00:00',
           },
           {
@@ -47,14 +47,14 @@ export const problemHandler = [
     return HttpResponse.json({
       bookmarkedProblemDtos: [
         {
-          problemId: 19,
-          question: '운영체제의 핵심 구성요소는 무엇인가요?',
-          subject: '운영체제',
+          problemId: 6,
+          question: '스택의 주요 특징은 무엇입니까?',
+          subject: '자료구조',
           date: '2025-01-23T10:54:51.615038',
         },
         {
           problemId: 12,
-          question: '테이블에서 레코드를 고유하게 식별하는 것은 무엇인가요?',
+          question: '데이터베이스에서 정규화의 주요 목적은 무엇입니까?',
           subject: '데이터베이스',
           date: '2025-01-22T20:20:22.067247',
         },
@@ -67,12 +67,13 @@ export const problemHandler = [
     if (problemId) {
       return HttpResponse.json(
         {
-          question: '데이터베이스 인덱싱에 사용되는 주요 자료구조는 무엇인가요?',
-          options: ['B-트리', '해시 테이블', '연결 리스트', '배열'],
-          answer: 'B-트리',
-          explanation: '설명...어쩌구',
+          question: '스택의 주요 특징은 무엇입니까?',
+          options: ['FIFO', 'LIFO', '랜덤 접근', '순차 접근'],
+          answer: 'LIFO',
+          explanation:
+            '스택(Stack)은 마지막에 삽입된 데이터가 가장 먼저 제거되는 LIFO(Last In First Out) 방식의 자료구조입니다.',
           correctRate: 70,
-          subject: '데이터베이스',
+          subject: '자료구조',
         },
         { status: 200 },
       );
