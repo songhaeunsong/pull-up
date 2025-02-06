@@ -30,6 +30,16 @@ export const AuthStore = (() => {
   };
 })();
 
+// 헤더에 토큰 주입
+export const addAuthHeader = (request: Request) => {
+  const token = AuthStore.getAccessToken();
+  const isAuthRequest = request.url.includes('/auth/signin');
+
+  if (token && !isAuthRequest) {
+    request.headers.set('Authorization', `Bearer ${token}`);
+  }
+};
+
 // 토큰 재발급
 export const handleToken: AfterResponseHook = async (request: Request, _, response: Response) => {
   if (response.status == 401) {
