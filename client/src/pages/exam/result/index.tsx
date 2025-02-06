@@ -15,7 +15,6 @@ const ExamResultPage = () => {
   const { examId } = useParams();
   const { setSolutionPage, initializeAndSetOptions, setAnswer, toggleBookmark } = useExamStore();
   const { data: examResult } = useGetExamResult(Number(examId));
-  // const [data, setData] = useState<ExamResultResponse>();
 
   useEffect(() => {
     setSolutionPage(true); // 결과 페이지로 설정
@@ -42,10 +41,41 @@ const ExamResultPage = () => {
   if (!examResult) {
     return <div>시험 결과를 불러오는 데 실패했습니다.</div>;
   }
-
-  console.log(examResult.examResultDetailDtos);
-
+  // console.log(examResult.examResultDetailDtos);
   const { round, score, examResultDetailDtos } = examResult;
+  const infoSections = [
+    {
+      id: 'score',
+      title: '점수',
+      icon: 'score',
+      content: (
+        <div className="text-xl md:text-2xl lg:text-3xl">
+          <span className="text-primary-500">{score}</span> / 100
+        </div>
+      ),
+    },
+    {
+      id: 'problemStatus',
+      title: '문제 풀이 현황',
+      icon: 'problem',
+      content: (
+        <div className="grid grid-cols-5 gap-3">
+          {examResultDetailDtos.map((problem, index) => (
+            <ProblemStatusButton
+              index={index + 1}
+              key={problem.problemId}
+              status={problem.answerStatus ? 'correct' : 'wrong'} // 문제의 정답 여부를 기반으로 상태 설정
+              onClick={() => {
+                document
+                  .getElementById(`problem-${problem.problemId}`)
+                  ?.scrollIntoView({ behavior: 'smooth', block: 'center' }); // 문제로 이동
+              }}
+            />
+          ))}
+        </div>
+      ),
+    },
+  ];
 
   return (
     <div className="flex gap-12 bg-Main md:px-16 md:py-10">
@@ -53,48 +83,20 @@ const ExamResultPage = () => {
         {/* Info Section*/}
         <div className="sticky top-2 border border-b-2 bg-white px-10 pb-2 pt-[82px] md:hidden">
           <section className="rounded-xl px-7 py-4">
-            <Accordion type="single" defaultValue="score" collapsible className="">
-              <AccordionItem value="score">
-                <AccordionTrigger>
-                  <div className="flex items-center gap-2">
-                    <Icon id={'score'} size={20} className="h-auto md:w-6 lg:w-7" />
-                    <span className="text-lg font-semibold text-stone-900 md:text-xl lg:text-2xl">점수</span>
-                  </div>
-                </AccordionTrigger>
-                <AccordionContent>
-                  <InfoSection>
-                    <div className="text-xl md:text-2xl lg:text-3xl">
-                      <span className="text-primary-500">{score}</span> / 100
+            <Accordion type="single" defaultValue="timeLeft" collapsible>
+              {infoSections.map(({ id, title, icon, content }) => (
+                <AccordionItem key={id} value={id}>
+                  <AccordionTrigger>
+                    <div className="flex items-center gap-2">
+                      <Icon id={icon} size={20} className="h-auto md:w-6 lg:w-7" />
+                      <span className="text-lg font-semibold text-stone-900 md:text-xl lg:text-2xl">{title}</span>
                     </div>
-                  </InfoSection>
-                </AccordionContent>
-              </AccordionItem>
-              <AccordionItem value="problemStatus">
-                <AccordionTrigger>
-                  <div className="flex items-center gap-2">
-                    <Icon id={'problem'} size={20} className="h-auto md:w-6 lg:w-7" />
-                    <span className="text-lg font-semibold text-stone-900 md:text-xl lg:text-2xl">문제 풀이 현황</span>
-                  </div>
-                </AccordionTrigger>
-                <AccordionContent>
-                  <InfoSection>
-                    <div className="grid grid-cols-5 gap-3">
-                      {examResultDetailDtos.map((problem, index) => (
-                        <ProblemStatusButton
-                          index={index + 1}
-                          key={problem.problemId}
-                          status={problem.answerStatus ? 'correct' : 'wrong'} // 문제의 정답 여부를 기반으로 상태 설정
-                          onClick={() => {
-                            document
-                              .getElementById(`problem-${problem.problemId}`)
-                              ?.scrollIntoView({ behavior: 'smooth', block: 'center' }); // 문제로 이동
-                          }}
-                        />
-                      ))}
-                    </div>
-                  </InfoSection>
-                </AccordionContent>
-              </AccordionItem>
+                  </AccordionTrigger>
+                  <AccordionContent>
+                    <InfoSection>{content}</InfoSection>
+                  </AccordionContent>
+                </AccordionItem>
+              ))}
             </Accordion>
           </section>
         </div>
@@ -128,27 +130,11 @@ const ExamResultPage = () => {
               <InfoSection>
                 <span className="text-xl md:text-2xl lg:text-3xl">{round}</span>
               </InfoSection>
-              <InfoSection title="점수" icon="score">
-                <div className="text-xl md:text-2xl lg:text-3xl">
-                  <span className="text-primary-500">{score}</span> / 100
-                </div>
-              </InfoSection>
-              <InfoSection title="풀이 현황" icon="problem">
-                <div className="grid grid-cols-5 gap-3">
-                  {examResultDetailDtos.map((problem, index) => (
-                    <ProblemStatusButton
-                      index={index + 1}
-                      key={problem.problemId}
-                      status={problem.answerStatus ? 'correct' : 'wrong'} // 문제의 정답 여부를 기반으로 상태 설정
-                      onClick={() => {
-                        document
-                          .getElementById(`problem-${problem.problemId}`)
-                          ?.scrollIntoView({ behavior: 'smooth', block: 'center' }); // 문제로 이동
-                      }}
-                    />
-                  ))}
-                </div>
-              </InfoSection>
+              {infoSections.map(({ id, title, icon, content }) => (
+                <InfoSection key={id} title={title} icon={icon}>
+                  {content}
+                </InfoSection>
+              ))}
             </div>
             <SubmitButton
               text="확인 완료"

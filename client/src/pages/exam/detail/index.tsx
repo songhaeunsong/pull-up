@@ -42,14 +42,12 @@ const ExamDetailPage = () => {
 
   const onSubmit = async () => {
     try {
-      // ExamResultRequest 형식으로 변환
       const requestBody = {
         problemAndChosenAnswers: Object.keys(answers).map((problemId) => ({
           problemId: Number(problemId),
           chosenAnswer: answers[Number(problemId)] ?? '',
         })),
       };
-
       await postExamAnswer(Number(examId), requestBody);
 
       navigate(`/exam/${examId}/result`);
@@ -58,52 +56,56 @@ const ExamDetailPage = () => {
     }
   };
 
+  const infoSections = [
+    {
+      id: 'timeLeft',
+      title: '남은 시간',
+      icon: 'time',
+      content: <Timer initialTime={1500} onTimeOver={onSubmit} />,
+    },
+    {
+      id: 'problemStatus',
+      title: '문제 풀이 현황',
+      icon: 'problem',
+      content: (
+        <div className="grid grid-cols-5 gap-2">
+          {examProblems.map((problem, index) => (
+            <ProblemStatusButton
+              key={problem.problemId}
+              index={index + 1}
+              status={answers[problem.problemId] ? 'solved' : 'default'}
+              onClick={() => {
+                document
+                  .getElementById(`problem-${problem.problemId}`)
+                  ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+              }}
+            />
+          ))}
+        </div>
+      ),
+    },
+  ];
+
   return (
     <div className="flex gap-12 bg-Main md:px-16 md:py-10">
       <div className="relative flex w-full flex-col gap-4 sm:mt-16 md:flex-row">
         {/* Info Section - Mobile View */}
         <div className="sticky top-2 border border-b-2 bg-white px-10 pb-2 pt-[82px] md:hidden">
           <section className="rounded-xl px-7 py-4">
-            <Accordion type="single" defaultValue="timeleft" collapsible className="">
-              <AccordionItem value="timeleft">
-                <AccordionTrigger>
-                  <div className="flex items-center gap-2">
-                    <Icon id={'time'} size={20} className="h-auto md:w-6 lg:w-7" />
-                    <span className="text-lg font-semibold text-stone-900 md:text-xl lg:text-2xl">남은 시간</span>
-                  </div>
-                </AccordionTrigger>
-                <AccordionContent>
-                  <InfoSection>
-                    <Timer initialTime={1500} onTimeOver={onSubmit} />
-                  </InfoSection>
-                </AccordionContent>
-              </AccordionItem>
-              <AccordionItem value="problemStatus">
-                <AccordionTrigger>
-                  <div className="flex items-center gap-2">
-                    <Icon id={'problem'} size={20} className="h-auto md:w-6 lg:w-7" />
-                    <span className="text-lg font-semibold text-stone-900 md:text-xl lg:text-2xl">문제 풀이 현황</span>
-                  </div>
-                </AccordionTrigger>
-                <AccordionContent>
-                  <InfoSection>
-                    <div className="grid grid-cols-5 gap-2">
-                      {examProblems.map((problem, index) => (
-                        <ProblemStatusButton
-                          key={problem.problemId}
-                          index={index + 1}
-                          status={answers[problem.problemId] ? 'solved' : 'default'}
-                          onClick={() => {
-                            document
-                              .getElementById(`problem-${problem.problemId}`)
-                              ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                          }}
-                        />
-                      ))}
+            <Accordion type="single" defaultValue="timeLeft" collapsible>
+              {infoSections.map(({ id, title, icon, content }) => (
+                <AccordionItem key={id} value={id}>
+                  <AccordionTrigger>
+                    <div className="flex items-center gap-2">
+                      <Icon id={icon} size={20} className="h-auto md:w-6 lg:w-7" />
+                      <span className="text-lg font-semibold text-stone-900 md:text-xl lg:text-2xl">{title}</span>
                     </div>
-                  </InfoSection>
-                </AccordionContent>
-              </AccordionItem>
+                  </AccordionTrigger>
+                  <AccordionContent>
+                    <InfoSection>{content}</InfoSection>
+                  </AccordionContent>
+                </AccordionItem>
+              ))}
             </Accordion>
           </section>
         </div>
@@ -125,31 +127,16 @@ const ExamDetailPage = () => {
             </div>
           ))}
         </section>
-        {/* Info Section  - Web View */}
+
+        {/* Info Section - Web View */}
         <aside className="relative min-w-[280px] flex-1 flex-shrink-0 px-10 py-4 md:p-0 lg:min-w-[340px] xl:max-w-[380px]">
           <div className="sticky top-10 flex flex-col gap-10">
             <div className="hidden flex-col gap-10 md:flex">
-              <InfoSection title="남은 시간" icon="time">
-                <span>
-                  <Timer initialTime={1500} onTimeOver={onSubmit} />
-                </span>
-              </InfoSection>
-              <InfoSection title="풀이 현황" icon="problem">
-                <div className="grid grid-cols-5 gap-2">
-                  {examProblems.map((problem, index) => (
-                    <ProblemStatusButton
-                      key={problem.problemId}
-                      index={index + 1}
-                      status={answers[problem.problemId] ? 'solved' : 'default'}
-                      onClick={() => {
-                        document
-                          .getElementById(`problem-${problem.problemId}`)
-                          ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
-                      }}
-                    />
-                  ))}
-                </div>
-              </InfoSection>
+              {infoSections.map(({ id, title, icon, content }) => (
+                <InfoSection key={id} title={title} icon={icon}>
+                  {content}
+                </InfoSection>
+              ))}
             </div>
             <SubmitButton
               text="제출하기"
