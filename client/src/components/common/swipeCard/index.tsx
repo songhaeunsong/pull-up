@@ -27,8 +27,8 @@ const SwipeCard = ({ components, dots }: SwipeCardProps) => {
   }, [api]);
 
   return (
-    <div className="flex w-full flex-col gap-2">
-      <Carousel setApi={setApi} className="flex w-full flex-col justify-center">
+    <div className="flex flex-col gap-2">
+      <Carousel setApi={setApi} className="flex flex-col justify-center">
         <CarouselContent>
           {components.map(({ id, component }) => (
             <CarouselItem key={id}>{component}</CarouselItem>

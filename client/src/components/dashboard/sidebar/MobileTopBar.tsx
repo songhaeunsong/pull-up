@@ -33,10 +33,10 @@ const MobileTopBar = ({ image, name, email, subjects }: MobileTopBarProps) => {
   ];
 
   return (
-    <>
+    <div className="flex flex-col gap-4">
       <MobileProfile image={image} name={name} email={email} subjects={subjects} />
       <SwipeCard components={examComponents} dots={true} />
-    </>
+    </div>
   );
 };
 
