@@ -8,7 +8,11 @@ interface OAuthButtonProps {
 const OAuthButton = ({ image, title }: OAuthButtonProps) => {
   return (
     <Link
-      to={`${import.meta.env.VITE_OAUTH_URL}/oauth2/authorization/${title.toLocaleLowerCase()}`}
+      to={
+        import.meta.env.VITE_MOCK_SERVICE === 'develop'
+          ? '/redirect'
+          : `${import.meta.env.VITE_OAUTH_URL}/oauth2/authorization/${title.toLocaleLowerCase()}`
+      }
       className="flex w-fit items-center justify-center gap-4 rounded-full border border-stone-400 bg-white px-10 py-3 md:w-full md:py-4 lg:py-5"
     >
       <img

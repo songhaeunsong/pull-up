@@ -27,6 +27,7 @@ const SideBar = ({ image, name, email, subjects, onClick }: SideBarProps) => {
     content: '다음 중 이진 탐색(Binary Search)에 대한 설명으로 올바른 것은 무엇입니까?',
     subjects: ['알고리즘'],
   };
+
   return (
     <div className="flex flex-row gap-3 rounded-2xl bg-white p-5 shadow-sm sm:w-full sm:gap-6 lg:w-[351px] lg:flex-col">
       <Profile image={image} name={name} email={email} subjects={subjects} onClick={onClick} />
