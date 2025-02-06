@@ -1,6 +1,6 @@
 import { initializeApp } from 'firebase/app';
 import { getMessaging, getToken } from 'firebase/messaging';
-import { registerDeviceToken } from './api/deviceTokent';
+import { registerDeviceToken } from '../api/deviceTokent';
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_API_KEY,

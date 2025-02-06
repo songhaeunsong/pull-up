@@ -3,7 +3,6 @@ import api from './instance';
 import { Subject } from '@/types/member';
 import { useQuery } from '@tanstack/react-query';
 import { AuthStore } from '@/utils/authService';
-import { registerServiceWorker, requestPermission } from '@/serviceWorker';
 
 // 로그인
 const login = async () => {
@@ -42,22 +41,6 @@ export const logout = async () => {
 };
 
 // 회원가입
-export const signup = async (interestSubjects: Subject[]) => {
-  try {
-    const response = await api.post('auth/signup', {
-      json: { interestSubjects },
-    });
-
-    // 회원가입 성공 시 알림 설정
-    try {
-      await registerServiceWorker();
-      await requestPermission();
-    } catch (error) {
-      console.error('푸시 알림 설정 실패:', error);
-    }
-
-    return response;
-  } catch (error) {
-    console.error('회원가입 실패:', error);
-  }
+export const signup = async (subjectNames: Subject[]) => {
+  return await api.post('auth/signup', { json: { subjectNames } });
 };

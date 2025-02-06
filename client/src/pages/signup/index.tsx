@@ -1,13 +1,21 @@
+import { signup } from '@/api/auth';
 import CsConditionSelector from '@/components/common/csConditionSelector';
-import { registerServiceWorker, requestPermission } from '@/serviceWorker';
+import { Subject } from '@/types/member';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 const SignUpPage = () => {
   const navigate = useNavigate();
-  const onConfirmSignUp = async () => {
-    requestPermission();
-    registerServiceWorker();
-    navigate('/interview');
+  const onConfirmSignUp = async (selectedSubjects: Subject[]) => {
+    try {
+      await signup(selectedSubjects);
+      navigate('/interview');
+    } catch (error) {
+      console.error('회원가입 실패: ', error);
+      toast.error('회원가입을 실패했습니다', {
+        position: 'bottom-center',
+      });
+    }
   };
 
   return (
@@ -25,7 +33,11 @@ const SignUpPage = () => {
       <div className="relative flex h-full w-full items-center justify-around lg:p-10 xl:p-20">
         {/* 좌측 컨테이너 */}
         <div className="flex flex-col gap-12">
-          <CsConditionSelector title="관심 과목 선택" text="회원가입" onClick={onConfirmSignUp} />
+          <CsConditionSelector
+            title="관심 과목 선택"
+            text="회원가입"
+            onClick={(level, subjects) => onConfirmSignUp(subjects)}
+          />
         </div>
         {/* 우측 컨테이너 */}
         <img
