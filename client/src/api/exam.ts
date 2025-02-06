@@ -13,7 +13,20 @@ interface GetExamAllResponse {
   };
 }
 
-const getScore = () => api.get<Score[]>('exam/me/score');
+interface GetScoreResponse {
+  examScoreDtos: Score[];
+}
+
+interface GetCorrectRateResponse {
+  examStrengthDtos: CorrectRate[];
+}
+
+const getScore = async () => {
+  const response = await api.get<GetScoreResponse>('exam/me/score');
+  const data = await response.json();
+
+  return data;
+};
 
 export const useGetScore = () =>
   useQuery({
@@ -21,7 +34,12 @@ export const useGetScore = () =>
     queryFn: () => getScore(),
   });
 
-const getCorrectRate = () => api.get<CorrectRate[]>('exam/me/correct-rate');
+const getCorrectRate = async () => {
+  const response = await api.get<GetCorrectRateResponse>('exam/me/correct-rate');
+  const data = await response.json();
+
+  return data;
+};
 
 export const useGetCorrectRate = () =>
   useQuery({
