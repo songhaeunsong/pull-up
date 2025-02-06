@@ -1,14 +1,7 @@
 import { Bar, BarChart, CartesianGrid, XAxis } from 'recharts';
 
 import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
-
-const chartData = [
-  { time: '4회', score: 186 },
-  { time: '5회', score: 305 },
-  { time: '6회', score: 237 },
-  { time: '7회', score: 73 },
-  { time: '8회', score: 214 },
-];
+import { useGetScore } from '@/api/exam';
 
 const chartConfig = {
   score: {
@@ -18,9 +11,14 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 const Score = () => {
+  const { data: scoreData, isLoading, isError } = useGetScore();
+
+  if (isLoading) return <>불러오는 중...</>;
+  if (isError || !scoreData) return <>차트 불러오기에 실패했어요</>;
+  if (!scoreData.examScoreDtos.length) return <>모의고사를 풀고 점수를 확인하세요!</>;
   return (
     <ChartContainer config={chartConfig} className="w-full">
-      <BarChart accessibilityLayer data={chartData}>
+      <BarChart accessibilityLayer data={scoreData.examScoreDtos}>
         <CartesianGrid vertical={false} />
         <XAxis
           dataKey="time"

@@ -14,7 +14,12 @@ import { queryClient } from '@/main';
 
 type GetStreakResponse = Streak[];
 
-const getStreak = () => api.get<GetStreakResponse>('interview/me/streak');
+const getStreak = async () => {
+  const response = await api.get<GetStreakResponse>('interview/me/streak');
+  const data = await response.json();
+
+  return data;
+};
 
 export const useGetStreak = () =>
   useQuery({
