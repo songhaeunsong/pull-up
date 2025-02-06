@@ -1,7 +1,7 @@
 import { Label, PolarRadiusAxis, RadialBar, RadialBarChart } from 'recharts';
 
 import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
-const chartData = [{ win: 7, lose: 3 }];
+import { useGetWinningRate } from '@/api/game';
 
 const chartConfig = {
   win: {
@@ -15,11 +15,20 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 const WinningRate = () => {
-  const rate = Math.round((100 * chartData[0].win) / (chartData[0].lose + chartData[0].win));
+  const { data: winningRateData, isLoading, isError } = useGetWinningRate();
+
+  if (isLoading) return <>불러오는 중...</>;
+  if (isError || !winningRateData) return <>차트 불러오기에 실패했어요</>;
 
   return (
     <ChartContainer config={chartConfig} className="mx-auto h-[190px] w-full max-w-[250px] overflow-hidden">
-      <RadialBarChart className="translate-y-10" data={chartData} endAngle={180} innerRadius={80} outerRadius={130}>
+      <RadialBarChart
+        className="translate-y-10"
+        data={[winningRateData.winningRate]}
+        endAngle={180}
+        innerRadius={80}
+        outerRadius={130}
+      >
         <ChartTooltip cursor={false} content={<ChartTooltipContent hideLabel />} />
         <PolarRadiusAxis tick={false} tickLine={false} axisLine={false}>
           <Label
@@ -28,7 +37,7 @@ const WinningRate = () => {
                 return (
                   <text x={viewBox.cx} y={viewBox.cy} textAnchor="middle">
                     <tspan x={viewBox.cx} y={(viewBox.cy || 0) - 16} className="fill-foreground text-2xl font-bold">
-                      {rate}%
+                      {winningRateData.winningRate}%
                     </tspan>
                   </text>
                 );
