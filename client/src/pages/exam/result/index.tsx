@@ -81,25 +81,23 @@ const ExamResultPage = () => {
     <div className="flex gap-12 bg-Main md:px-16 md:py-10">
       <div className="relative flex w-full flex-col gap-4 sm:mt-16 md:flex-row">
         {/* Info Section*/}
-        <div className="sticky top-2 border border-b-2 bg-white px-10 pb-2 pt-[82px] md:hidden">
-          <section className="rounded-xl px-7 py-4">
-            <Accordion type="single" defaultValue="timeLeft" collapsible>
-              {infoSections.map(({ id, title, icon, content }) => (
-                <AccordionItem key={id} value={id}>
-                  <AccordionTrigger>
-                    <div className="flex items-center gap-2">
-                      <Icon id={icon} size={20} className="h-auto md:w-6 lg:w-7" />
-                      <span className="text-lg font-semibold text-stone-900 md:text-xl lg:text-2xl">{title}</span>
-                    </div>
-                  </AccordionTrigger>
-                  <AccordionContent>
-                    <InfoSection>{content}</InfoSection>
-                  </AccordionContent>
-                </AccordionItem>
-              ))}
-            </Accordion>
-          </section>
-        </div>
+        <section className="sticky top-2 border border-b-2 bg-white px-10 pb-2 pt-[86px] sm:pt-[8px] md:hidden">
+          <Accordion type="single" defaultValue="timeLeft" collapsible>
+            {infoSections.map(({ id, title, icon, content }) => (
+              <AccordionItem key={id} value={id}>
+                <AccordionTrigger>
+                  <div className="flex items-center gap-2">
+                    <Icon id={icon} size={20} className="h-auto md:w-6 lg:w-7" />
+                    <span className="text-lg font-semibold text-stone-900 md:text-xl lg:text-2xl">{title}</span>
+                  </div>
+                </AccordionTrigger>
+                <AccordionContent>
+                  <InfoSection>{content}</InfoSection>
+                </AccordionContent>
+              </AccordionItem>
+            ))}
+          </Accordion>
+        </section>
         {/* Problem & Solution Section */}
         <section className="flex-2 flex w-full flex-col gap-6 px-10 md:w-[920px] md:gap-10">
           {examResultDetailDtos.map((problem, index) => (
