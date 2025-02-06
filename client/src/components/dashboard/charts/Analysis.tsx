@@ -1,16 +1,7 @@
-'use client';
-
 import { PolarAngleAxis, PolarGrid, Radar, RadarChart } from 'recharts';
 
 import { ChartConfig, ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
-const chartData = [
-  { category: '컴퓨터구조', rate: 86 },
-  { category: '알고리즘', rate: 5 },
-  { category: '운영체제', rate: 37 },
-  { category: '데이터베이스', rate: 73 },
-  { category: '네트워크', rate: 29 },
-  { category: '자료구조', rate: 14 },
-];
+import { useGetCorrectRate } from '@/api/exam';
 
 const chartConfig = {
   rate: {
@@ -20,9 +11,14 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 const Analysis = () => {
+  const { data: analysisData, isLoading, isError } = useGetCorrectRate();
+
+  if (isLoading) return <>불러오는 중...</>;
+  if (isError || !analysisData) return <>차트 불러오기에 실패했어요</>;
+
   return (
     <ChartContainer config={chartConfig} className="mx-auto flex h-full w-full">
-      <RadarChart data={chartData}>
+      <RadarChart data={analysisData.examStrengthDtos}>
         <ChartTooltip cursor={false} content={<ChartTooltipContent />} />
         <PolarAngleAxis dataKey="category" />
         <PolarGrid />
