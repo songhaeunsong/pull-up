@@ -1,25 +1,7 @@
 import { useQuery } from '@tanstack/react-query';
 import api from './instance';
 import { Exam, ExamCreateRequest, ExamDetailsResponse, ExamResultRequest, ExamResultResponse } from '@/types/exam';
-import { CorrectRate, Score } from '@/types/chart';
-
-interface GetExamAllResponse {
-  content: Exam[];
-  pageable: {
-    page: number;
-    size: number;
-    totalPages: number;
-    totalElements: number;
-  };
-}
-
-interface GetScoreResponse {
-  examScoreDtos: Score[];
-}
-
-interface GetCorrectRateResponse {
-  examStrengthDtos: CorrectRate[];
-}
+import { GetCorrectRateResponse, GetExamAllResponse, GetScoreResponse } from '@/types/response/exam';
 
 const getScore = async () => {
   const response = await api.get<GetScoreResponse>('exam/me/score');

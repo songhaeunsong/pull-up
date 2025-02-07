@@ -1,17 +1,9 @@
-import { Problem, ProblemBrief, ProblemDetail } from '@/types/problem';
+import { ProblemBrief, ProblemDetail } from '@/types/problem';
 import api from './instance';
 import { useQuery } from '@tanstack/react-query';
+import { GetArchivedProblemAllResponse, GetWrongProblemAllResponse } from '@/types/response/problems';
 
-// 틀린 문제 전체 조회
-interface GetWrongProblemAllResponse {
-  wrongProblemDtos: Problem[];
-}
-
-// 아카이브 문제 전체 조회
-interface GetArchivedProblemAllResponse {
-  bookmarkedProblemDtos: Problem[];
-}
-
+// 내가 틀린 문제 최근 전체 조회
 const getWrongProblemAll = () => api.get<GetWrongProblemAllResponse>('problem/me/all').json();
 
 export const useGetWrongProblemAll = () =>
