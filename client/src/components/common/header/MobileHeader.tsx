@@ -10,7 +10,7 @@ interface HeaderItem {
 
 const MobileHeader = () => {
   const location = useLocation();
-  const { isLoggedIn, logoutMember } = memberStore();
+  const { member, isLoggedIn, logoutMember, isSolvedToday, interviewId } = memberStore();
 
   const headerItems: HeaderItem[] = [
     { label: '시험모드', path: '/exam' },
@@ -23,8 +23,8 @@ const MobileHeader = () => {
     if (isLoggedIn) {
       await logout();
       logoutMember();
+      console.log(isLoggedIn);
     }
-    console.log('isLoggedIn', isLoggedIn);
   };
 
   return (
@@ -35,7 +35,9 @@ const MobileHeader = () => {
     >
       <div className="flex w-full items-center justify-between">
         <div className="text-2xl font-bold">
-          <Link to={!isLoggedIn ? '/' : '/interview'}>Pull Up!</Link>
+          <Link to={!isLoggedIn || !member ? '/' : !isSolvedToday ? '/interview' : `/interview/result/${interviewId}`}>
+            Pull Up!
+          </Link>
         </div>
         <Link
           key={loginItem.path}
@@ -45,7 +47,7 @@ const MobileHeader = () => {
               'border-b-[3px] border-primary-500 text-primary-500':
                 location.pathname.split('/')[1] === loginItem.path.split('/')[1],
               'border-b-[3px] border-transparent text-stone-800 hover:text-stone-950':
-                location.pathname.split('/')[1] !== loginItem.path.split('/')[1],
+                location.pathname.split('/')[1] !== loginItem.path.split('/')[1] && loginItem.path == '/',
             },
             'text-sm font-semibold transition-colors duration-200',
           )}

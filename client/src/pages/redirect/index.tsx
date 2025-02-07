@@ -4,13 +4,12 @@ import { memberStore } from '@/stores/memberStore';
 import { registerServiceWorker, requestPermission } from '@/utils/serviceWorker';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import { toast } from 'react-toastify';
 
 const RedirectPage = () => {
   const navigate = useNavigate();
-  const { data: auth, isLoading } = useAuthInfo();
   const { data: member } = useGetMemberInfo();
-  const { setMember, setIsSolvedToday, setIsLoggedIn } = memberStore();
+  const { data: auth, isLoading } = useAuthInfo();
+  const { setMember, setIsSolvedToday, setIsLoggedIn, setInterviewId } = memberStore();
 
   useEffect(() => {
     const setupNotification = async () => {
@@ -23,23 +22,14 @@ const RedirectPage = () => {
     };
 
     const handleRedirect = async () => {
+      await setupNotification();
       if (!isLoading && auth) {
         if (!auth.isSignedUp) {
-          await setupNotification();
           setIsLoggedIn(true);
-
           navigate('/signup');
           return;
         } else {
-          if (!member) {
-            toast.error('회원 정보가 없습니다.', {
-              position: 'bottom-center',
-            });
-            navigate('/signin');
-            return;
-          }
-
-          if (!member.interestSubjects) {
+          if (!member?.interestSubjects) {
             setIsLoggedIn(true);
             navigate('/signup');
             return;
@@ -49,7 +39,9 @@ const RedirectPage = () => {
           setMember(member);
           setIsLoggedIn(true);
           setIsSolvedToday(auth.isSolvedToday);
-          navigate(auth.isSolvedToday ? '/interview/result' : '/interview');
+          setInterviewId(auth.interviewId);
+          console.log('auth.isSolvedToday', auth.isSolvedToday);
+          navigate(auth.isSolvedToday ? `/interview/result/${auth.interviewId}` : '/interview');
         }
       }
 

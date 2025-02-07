@@ -25,6 +25,7 @@ export const AuthStore = (() => {
 export const addAuthHeader = (request: Request) => {
   const token = AuthStore.getAccessToken();
   const isLogin = request.url.includes('/auth/signin'); // 로그인은 헤더에 토큰 주입 안함
+  console.log('헤더에 토큰 주입:', token, isLogin);
 
   if (token && !isLogin) {
     request.headers.set('Authorization', `Bearer ${token}`);

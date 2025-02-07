@@ -6,9 +6,11 @@ interface MemberState {
   member: Member | null;
   isLoggedIn: boolean;
   isSolvedToday: boolean;
+  interviewId: number;
   setMember: (member: Member) => void;
   setIsSolvedToday: (isSolvedToday: boolean) => void;
   setIsLoggedIn: (isLoggedIn: boolean) => void;
+  setInterviewId: (interviewId: number) => void;
   logoutMember: () => void;
 }
 
@@ -16,6 +18,7 @@ const initialState = {
   member: null,
   isLoggedIn: false,
   isSolvedToday: false,
+  interviewId: 0,
 };
 
 export const memberStore = create<MemberState>()(
@@ -25,6 +28,7 @@ export const memberStore = create<MemberState>()(
       setMember: (member) => set({ member }),
       setIsSolvedToday: (isSolvedToday) => set({ isSolvedToday }),
       setIsLoggedIn: (isLoggedIn) => set({ isLoggedIn }),
+      setInterviewId: (interviewId) => set({ interviewId }),
       logoutMember: () => {
         set(initialState);
         sessionStorage.removeItem('member-storage');
@@ -37,6 +41,7 @@ export const memberStore = create<MemberState>()(
         email: state.member?.email ?? null,
         isLoggedIn: state.isLoggedIn,
         isSolvedToday: state.isSolvedToday,
+        interviewId: state.interviewId,
       }),
     },
   ),

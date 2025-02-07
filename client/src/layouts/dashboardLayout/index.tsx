@@ -1,12 +1,19 @@
+import { useGetMemberInfo } from '@/api/member';
 import SideBar from '@/components/dashboard/sidebar';
 import MobileTopBar from '@/components/dashboard/sidebar/MobileTopBar';
 import useResponsive from '@/hooks/useResponsive';
-import { memberStore } from '@/stores/memberStore';
-import { Outlet } from 'react-router-dom';
+import { Outlet, useNavigate } from 'react-router-dom';
 
 const DashBoardLayout = () => {
   const { isMobile, isTabletMd } = useResponsive();
-  const { member } = memberStore();
+  const navigate = useNavigate();
+  const { data: member } = useGetMemberInfo();
+
+  if (!member?.email) {
+    navigate('/');
+    return;
+  }
+
   const onClick = () => {
     console.log('about');
   };

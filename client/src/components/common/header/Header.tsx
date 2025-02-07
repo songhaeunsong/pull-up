@@ -10,7 +10,7 @@ interface HeaderItem {
 
 const Header = () => {
   const location = useLocation();
-  const { isLoggedIn, logoutMember } = memberStore();
+  const { member, isLoggedIn, logoutMember, isSolvedToday, interviewId } = memberStore();
 
   const headerItems: HeaderItem[] = [
     { label: '시험모드', path: '/exam' },
@@ -24,7 +24,6 @@ const Header = () => {
       await logout();
       logoutMember();
     }
-    console.log('isLoggedIn', isLoggedIn);
   };
 
   return (
@@ -35,7 +34,9 @@ const Header = () => {
     >
       <div className="text-3xl font-bold">
         {/* 로그인이면 로고->오늘의 문제, 비로그인이면 로고->메인인 */}
-        <Link to={!isLoggedIn ? '/' : '/interview'}>Pull Up!</Link>
+        <Link to={!isLoggedIn || !member ? '/' : !isSolvedToday ? '/interview' : `/interview/result/${interviewId}`}>
+          Pull Up!
+        </Link>
       </div>
 
       <nav className="flex space-x-6">
@@ -44,7 +45,7 @@ const Header = () => {
             key={item.path}
             to={item.path}
             className={`text-xl font-semibold transition-colors duration-200 ${
-              location.pathname.split('/')[1] === item.path.split('/')[1]
+              location.pathname.split('/')[1] === item.path.split('/')[1] && item.label !== '로그아웃'
                 ? 'border-b-[3px] border-primary-500 text-primary-500'
                 : 'border-b-[3px] border-transparent text-stone-800 hover:text-stone-950'
             }`}

@@ -1,6 +1,6 @@
+import { registerDeviceToken } from '@/api/member';
 import { initializeApp } from 'firebase/app';
 import { getMessaging, getToken } from 'firebase/messaging';
-import { registerDeviceToken } from '../api/deviceTokent';
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_API_KEY,
@@ -20,8 +20,8 @@ const messaging = getMessaging(app);
 export async function registerServiceWorker() {
   navigator.serviceWorker
     .register('firebase-messaging-sw.js')
-    .then(function (registration) {
-      console.log('Service Worker 등록 성공:', registration);
+    .then(function () {
+      console.log('Service Worker 등록 성공');
     })
     .catch(function (error) {
       console.log('Service Worker 등록 실패:', error);
@@ -48,7 +48,6 @@ export async function requestPermission() {
       return;
     }
 
-    console.log('디바이스 토큰: ', currentToken);
     await registerDeviceToken(currentToken);
   } catch (error) {
     console.error('토큰 가져오기 실패: ', error);
