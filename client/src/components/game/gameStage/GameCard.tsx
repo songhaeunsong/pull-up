@@ -5,14 +5,10 @@ interface GameCardProps {
   card: Card;
   isSelected: boolean;
   onClick: () => void;
+  shake: boolean;
 }
 
-const TEXT_SIZE = {
-  answer: 'text-xl bg-white',
-  question: 'text-base bg-white',
-};
-
-const GameCard = ({ card, isSelected, onClick }: GameCardProps) => {
+const GameCard = ({ card, isSelected, shake, onClick }: GameCardProps) => {
   return (
     <>
       {card.disabled ? (
@@ -20,13 +16,16 @@ const GameCard = ({ card, isSelected, onClick }: GameCardProps) => {
       ) : (
         <div
           className={cn(
-            { [`border-[#7aff51]`]: isSelected, [`border-white`]: !isSelected },
-            TEXT_SIZE[card.type],
-            'm-1 flex cursor-pointer items-center justify-center rounded-md border-4 p-2',
+            {
+              [`border-[#65efb6]`]: isSelected,
+              'border-white': !isSelected,
+              'animate-shake border-[#ff716c]': shake && isSelected,
+            },
+            'm-1 flex cursor-pointer select-none items-center justify-center rounded-md border-4 bg-white p-2 text-base',
           )}
           onClick={onClick}
         >
-          <p>{card.content}</p>
+          {card.content}
         </div>
       )}
     </>
