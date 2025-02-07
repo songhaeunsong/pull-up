@@ -49,5 +49,9 @@ export default defineConfig({
     host: '0.0.0.0',
     port: 5173,
     allowedHosts: ['www.pull-up.store'],
+    hmr: {
+      host: 'www.pull-up.store',
+      protocol: 'wss',
+    },
   },
 });
