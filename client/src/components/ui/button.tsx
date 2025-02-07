@@ -12,7 +12,7 @@ const buttonVariants = cva(
         default: 'bg-primary-500 text-white hover:bg-primary-500/90',
         primary: 'bg-primary-500 text-white hover:bg-primary-500/90',
         secondary: 'text-secondary-foreground bg-secondary-500 hover:bg-secondary-500/80',
-        gray: 'bg-gray-100 text-white hover:bg-gray-100/80',
+        gray: 'bg-stone-200 text-stone-900 hover:bg-gray-100/80',
       },
       size: {
         default: 'h-10 rounded-[12px] px-4 py-2',

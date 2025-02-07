@@ -3,6 +3,17 @@ import { useNavigate, useParams } from 'react-router-dom';
 import { postExamAnswer, useGetExamDetails } from '@/api/exam';
 import { useExamStore } from '@/stores/examStore';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog';
 import Timer from '@/components/exam/timer';
 import ExamProblem from '@/components/exam/problem';
 import InfoSection from '@/components/exam/infoSection';
@@ -133,12 +144,21 @@ const ExamDetailPage = () => {
                 </InfoSection>
               ))}
             </div>
-            <SubmitButton
-              text="제출하기"
-              onClick={onSubmit}
-              disabled={!isAllSolved}
-              color={!isAllSolved ? 'gray' : 'primary'}
-            />
+            <AlertDialog>
+              <AlertDialogTrigger>
+                <SubmitButton text="제출하기" disabled={!isAllSolved} color={!isAllSolved ? 'gray' : 'primary'} />
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>정말 시험을 제출하시겠습니까?</AlertDialogTitle>
+                  <AlertDialogDescription>제출 후에는 더 이상 답안을 수정할 수 없습니다.</AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>취소하기</AlertDialogCancel>
+                  <AlertDialogAction onClick={onSubmit}>제출하기</AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
           </div>
         </aside>
       </div>
