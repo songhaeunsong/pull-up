@@ -17,9 +17,9 @@ import {
 import Timer from '@/components/exam/timer';
 import ExamProblem from '@/components/exam/problem';
 import InfoSection from '@/components/exam/infoSection';
-import SubmitButton from '@/components/common/submitButton';
 import ProblemStatusButton from '@/components/exam/infoSection/problemStatusButton';
 import Icon from '@/components/common/icon';
+import { cn } from '@/lib/utils';
 
 const ExamDetailPage = () => {
   const navigate = useNavigate();
@@ -134,8 +134,8 @@ const ExamDetailPage = () => {
           ))}
         </section>
 
-        {/* Info Section - Web View */}
         <aside className="relative min-w-[280px] flex-1 flex-shrink-0 px-10 py-4 md:p-0 lg:min-w-[340px] xl:max-w-[380px]">
+          {/* Info Section - Web View */}
           <div className="sticky top-10 flex flex-col gap-10">
             <div className="hidden flex-col gap-10 md:flex">
               {infoSections.map(({ id, title, icon, content }) => (
@@ -144,9 +144,16 @@ const ExamDetailPage = () => {
                 </InfoSection>
               ))}
             </div>
+            {/* 제출 버튼 */}
             <AlertDialog>
-              <AlertDialogTrigger>
-                <SubmitButton text="제출하기" disabled={!isAllSolved} color={!isAllSolved ? 'gray' : 'primary'} />
+              <AlertDialogTrigger
+                className={cn(
+                  isAllSolved ? 'bg-primary-600 text-white hover:bg-primary-700' : 'bg-gray-200 text-gray-500',
+                  'mb-4 w-full rounded-xl py-4 text-lg font-semibold xl:py-5 xl:text-xl',
+                )}
+                disabled={!isAllSolved}
+              >
+                제출하기
               </AlertDialogTrigger>
               <AlertDialogContent>
                 <AlertDialogHeader>
