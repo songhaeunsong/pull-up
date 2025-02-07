@@ -52,17 +52,7 @@ export default defineConfig(({ mode }) => {
       host: '0.0.0.0',
       port: 5173,
       allowedHosts: ['www.pull-up.store'],
-      hmr: isProduction
-        ? {
-            host: 'www.pull-up.store',
-            clientPort: 443,
-            protocol: 'wss',
-          }
-        : {
-            host: 'localhost',
-            clientPort: 5173,
-            protocol: 'ws',
-          },
+      hmr: isProduction ? false : { host: 'localhost', protocol: 'ws' },
     },
   };
 });
