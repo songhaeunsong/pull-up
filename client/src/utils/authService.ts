@@ -2,21 +2,26 @@ import { reissue } from '@/api/auth';
 import api from '@/api/instance';
 import { AfterResponseHook } from 'ky';
 
-// accessToken 관리
-export const AuthStore = (() => {
-  let accessToken: string | null;
+const AUTH_TOKEN_KEY = 'auth_access_token';
 
+export const AuthStore = (() => {
   return {
-    getAccessToken: () => accessToken,
-    setAccessToken: (token: string) => {
-      if (token?.startsWith('Bearer ')) {
-        accessToken = token.slice(7);
-      } else {
-        accessToken = token;
-      }
+    getAccessToken: (): string | null => {
+      return localStorage.getItem(AUTH_TOKEN_KEY);
     },
+
+    setAccessToken: (token: string) => {
+      if (!token) {
+        localStorage.removeItem(AUTH_TOKEN_KEY);
+        return;
+      }
+
+      const accessToken = token.startsWith('Bearer ') ? token.slice(7) : token;
+      localStorage.setItem(AUTH_TOKEN_KEY, accessToken);
+    },
+
     clearAccessToken: () => {
-      accessToken = null;
+      localStorage.removeItem(AUTH_TOKEN_KEY);
     },
   };
 })();
