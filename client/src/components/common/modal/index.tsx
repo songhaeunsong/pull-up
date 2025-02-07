@@ -6,7 +6,7 @@ import { DialogDescription, DialogTitle } from '@radix-ui/react-dialog';
 
 interface Modalprops {
   triggerName: string;
-  triggerColor: 'primary' | 'secondary' | 'gray';
+  triggerColor: 'primary' | 'secondary' | 'gray' | 'transparent';
   children: ReactNode;
   onOpenChange?: (isOpen: boolean) => void;
 }
