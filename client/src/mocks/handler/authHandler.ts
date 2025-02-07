@@ -14,13 +14,14 @@ export const authHandler = [
     if (tokens.accessToken && tokens.refreshToken) {
       return HttpResponse.json(
         {
-          isSignedUp: false,
-          isSolvedToday: false,
-          accessToken: tokens.accessToken,
+          isSignedUp: true,
+          isSolvedToday: true,
+          interviewId: 1,
         },
         {
           status: 200,
           headers: {
+            Authorization: `Bearer ${tokens.accessToken}`,
             'Set-Cookie': `refreshToken=${tokens.refreshToken}; HttpOnly`,
           },
         },
@@ -31,27 +32,28 @@ export const authHandler = [
       {
         isSignedUp: false,
         isSolvedToday: false,
-        message: '로그인에 실패했습니다.',
       },
-      { status: 400 },
+      { status: 400, statusText: '[ACCESS_TOKEN] 토큰이 만료되었습니다.' },
     );
   }),
 
   // 토큰 재발급
   http.post('http://localhost:8080/api/v1/auth/reissue', ({ cookies }) => {
     if (!cookies.refreshToken || cookies.refreshToken !== tokens.refreshToken) {
-      return HttpResponse.json(
-        {
-          code: 'ERR_MISSING_ACCESS_TOKEN',
-          message: '토큰이 유효하지 않습니다.',
-        },
-        { status: 401 },
-      );
+      return HttpResponse.json({ status: 401, statusText: '[REFRESH_TOKEN] 토큰이 만료되었습니다.' });
     }
 
     tokens.accessToken = 'new-abcd';
 
-    return HttpResponse.json({ accessToken: tokens.accessToken }, { status: 200 });
+    return HttpResponse.json(
+      { accessToken: tokens.accessToken },
+      {
+        status: 200,
+        headers: {
+          Authorization: `Bearer ${tokens.accessToken}`,
+        },
+      },
+    );
   }),
 
   // 로그아웃
