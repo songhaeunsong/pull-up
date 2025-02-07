@@ -1,21 +1,13 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
 import api from './instance';
 import { WinningRate } from '@/types/chart';
-import { Player, RoomStatus, SubjectSelect } from '@/types/game';
-
-interface PostCreateGameResponse extends Player {
-  roomId: string;
-  roomStatus: RoomStatus;
-  player1P: Player;
-}
-
-interface PostJoinGameResponse {
-  isReady: boolean;
-}
-
-interface GetIdResponse {
-  playerNumber: 1 | 2;
-}
+import { SubjectSelect } from '@/types/game';
+import {
+  GetIdResponse,
+  GetRandomTypeResponse,
+  PostCreateGameResponse,
+  PostJoinGameResponse,
+} from '@/types/response/game';
 
 const getWinningRate = async () => {
   const response = await api.get<WinningRate>('game/me/winning-rate');
@@ -75,3 +67,30 @@ export const useGetId = (roomId: string) =>
     queryKey: ['myId'],
     queryFn: () => getId(roomId),
   });
+
+const getRandomType = async () => {
+  const response = await api.get<GetRandomTypeResponse>('game/random/type');
+  const data = await response.json();
+
+  return data;
+};
+
+export const useGetRandomType = () =>
+  useQuery({
+    queryKey: ['randomType'],
+    queryFn: () => getRandomType(),
+  });
+
+const postCreateRoomRandom = async () => {
+  const response = await api.post<PostCreateGameResponse>('game/room/random');
+  const data = await response.json();
+
+  return data;
+};
+
+export const usePostCreateRoomRandom = () => {
+  const { mutateAsync } = useMutation({
+    mutationFn: () => postCreateRoomRandom(),
+  });
+  return mutateAsync;
+};

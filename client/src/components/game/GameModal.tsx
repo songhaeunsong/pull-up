@@ -1,4 +1,4 @@
-import { usePostCreateGame, usePostJoinGame } from '@/api/game';
+import { usePostCreateGame, usePostCreateRoomRandom, usePostJoinGame } from '@/api/game';
 import Modal from '../common/modal';
 import CreateRoom from './gameModalComponent/CreateRoom';
 import JoinGame from './gameModalComponent/JoinGame';
@@ -9,6 +9,8 @@ import useWebSocket from '@/hooks/useWebSocket';
 import WaitingAfterCreating from './gameModalComponent/waiting/WaitingAfterCreating';
 import { toast } from 'react-toastify';
 import { useRoomStore } from '@/stores/roomStore';
+import { GetRandomTypeResponse } from '@/types/response/game';
+import WaitingRamdom from './gameModalComponent/waiting/WaitingRandom';
 
 const GameModals = () => {
   const navigate = useNavigate();
@@ -19,6 +21,8 @@ const GameModals = () => {
 
   const postCreateGame = usePostCreateGame();
   const postJoinGame = usePostJoinGame();
+
+  const postCreateGameRandom = usePostCreateRoomRandom();
 
   const [isPlayerReady, setIsPlayerReady] = useState(false);
 
@@ -88,11 +92,33 @@ const GameModals = () => {
     setCodeForJoinning('');
   };
 
+  const handleRandomRoom = async ({ randomMatchType, roomId: randomRoomId }: GetRandomTypeResponse) => {
+    setIsPlayerReady(true);
+
+    if (randomMatchType === 'CREATE') {
+      const { roomId: createdRondomId } = await postCreateGameRandom();
+      setRoomId(createdRondomId);
+      return;
+    }
+
+    if (randomMatchType === 'JOIN') {
+      setRoomId(randomRoomId);
+      const { isReady } = await postJoinGame(randomRoomId);
+      if (!isReady) {
+        toast.error('다시 시도해주세요.', {
+          position: 'bottom-center',
+        });
+
+        setIsPlayerReady(false);
+      }
+    }
+  };
+
   useEffect(() => {
     if (!roomId) return;
 
     setTimeout(() => {
-      sendMessage(`/app/game/${roomId}/status`);
+      sendMessage(`/app/game/${roomId}/status`, {});
     }, 3000);
   }, [roomId]);
 
@@ -119,7 +145,7 @@ const GameModals = () => {
         triggerColor="primary"
         onOpenChange={(isOpen: boolean) => handleCloseModal(isOpen)}
       >
-        <Waiting text="2P를 찾고 있어요!" />
+        <WaitingRamdom handleGameState={handleRandomRoom} />
       </Modal>
       <Modal triggerName="방 생성" triggerColor="primary" onOpenChange={(isOpen: boolean) => handleCloseModal(isOpen)}>
         {isPlayerReady ? (
