@@ -1,7 +1,9 @@
-import { useEffect, useState } from 'react';
+import { cn } from '@/lib/utils';
+import { useEffect, useState, useMemo } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { postExamAnswer, useGetExamDetails } from '@/api/exam';
 import { useExamStore } from '@/stores/examStore';
+import { useShallow } from 'zustand/react/shallow';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import {
   AlertDialog,
@@ -19,14 +21,19 @@ import ExamProblem from '@/components/exam/problem';
 import InfoSection from '@/components/exam/infoSection';
 import ProblemStatusButton from '@/components/exam/infoSection/problemStatusButton';
 import Icon from '@/components/common/icon';
-import { cn } from '@/lib/utils';
 
 const ExamDetailPage = () => {
   const navigate = useNavigate();
   const { examId } = useParams();
   const { data: examProblems } = useGetExamDetails(Number(examId));
-  const { answers, resetExamState, setAnswer, setSolutionPage, initializeAndSetOptions } = useExamStore();
+  const answers = useExamStore(useShallow((state) => state.answers));
+  const { resetExamState, setAnswer, setSolutionPage, initializeAndSetOptions } = useExamStore();
   const [isInitialized, setIsInitialized] = useState(false);
+  const isAllSolved = useMemo(() => {
+    return (examProblems || []).every(
+      (problem) => answers[problem.problemId] && answers[problem.problemId].trim() !== '',
+    );
+  }, [examProblems, answers]);
 
   useEffect(() => {
     if (!examProblems || isInitialized) return;
@@ -43,10 +50,6 @@ const ExamDetailPage = () => {
   if (!examProblems) {
     return <div>시험 데이터를 불러오는 데 실패했습니다.</div>;
   }
-
-  const isAllSolved = examProblems.every(
-    (problem) => answers[problem.problemId] && answers[problem.problemId].trim() !== '',
-  );
 
   const onSubmit = async () => {
     try {
