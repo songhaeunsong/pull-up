@@ -1,3 +1,5 @@
+import { cn } from '@/lib/utils';
+
 interface ProblemStatusButtonProps {
   index: number;
   status?: 'default' | 'solved' | 'wrong' | 'correct';
@@ -15,7 +17,7 @@ const ProblemStatusButton = ({ index, onClick, status = 'default' }: ProblemStat
   return (
     <button
       onClick={onClick}
-      className={`${COLOR_CLASSES[status]} h-10 w-10 rounded-lg text-base font-semibold lg:h-12 lg:w-12 lg:text-lg`}
+      className={cn(COLOR_CLASSES[status], 'h-10 w-10 rounded-lg text-base font-semibold lg:h-12 lg:w-12 lg:text-lg')}
     >
       {index}
     </button>

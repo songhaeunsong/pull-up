@@ -1,3 +1,5 @@
+import { cn } from '@/lib/utils';
+
 interface AnswerOptionProps {
   id: number;
   content: string; // 옵션 내용
@@ -18,7 +20,10 @@ const AnswerOption = ({ id, content, onClick, state, disabled = false }: AnswerO
     <button
       onClick={!disabled ? onClick : undefined}
       disabled={disabled}
-      className={`w-full rounded-xl border px-4 py-3 text-start text-base md:px-6 md:text-lg lg:px-8 lg:text-xl ${COLOR_CLASSES[state]} `}
+      className={cn(
+        COLOR_CLASSES[state],
+        'w-full rounded-xl border px-4 py-3 text-start text-base md:px-6 md:text-lg lg:px-8 lg:text-xl',
+      )}
     >
       {id}. {content}
     </button>

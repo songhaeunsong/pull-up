@@ -1,7 +1,16 @@
 import { useExamStore } from '@/stores/examStore';
+import { useShallow } from 'zustand/react/shallow';
 
 export const useExamAnswer = (problemId: number) => {
-  const { answers, options, isSolutionPage, setAnswer, updateOptionState } = useExamStore();
+  const { answers, options, isSolutionPage } = useExamStore(
+    useShallow((state) => ({
+      answers: state.answers,
+      options: state.options,
+      isSolutionPage: state.isSolutionPage,
+    })),
+  );
+  const setAnswer = useExamStore((state) => state.setAnswer);
+  const updateOptionState = useExamStore((state) => state.updateOptionState);
 
   const handleTextChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     const value = e.target.value;
