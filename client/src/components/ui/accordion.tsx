@@ -38,15 +38,66 @@ const AccordionContent = React.forwardRef<
   React.ElementRef<typeof AccordionPrimitive.Content>,
   React.ComponentPropsWithoutRef<typeof AccordionPrimitive.Content>
 >(({ className, children, ...props }, ref) => (
-  <AccordionPrimitive.Content
-    ref={ref}
-    className="data-[state=closed]:animate-accordion-up data-[state=open]:animate-accordion-down overflow-hidden text-sm transition-all"
-    {...props}
-  >
-    <div className={cn('pb-4 pt-0', className)}>{children}</div>
-  </AccordionPrimitive.Content>
+  <>
+    <AccordionStyles />
+    <AccordionPrimitive.Content
+      ref={ref}
+      className={cn(
+        'overflow-hidden text-sm transition-all duration-300 ease-in-out',
+        'data-[state=closed]:h-0 data-[state=open]:h-auto data-[state=closed]:opacity-0 data-[state=open]:opacity-100',
+        className,
+      )}
+      style={
+        {
+          '--accordion-height': 'var(--radix-accordion-content-height)',
+        } as React.CSSProperties
+      }
+      forceMount
+      {...props}
+    >
+      <div className={cn('pb-4 pt-0', className)}>{children}</div>
+    </AccordionPrimitive.Content>
+  </>
 ));
 
 AccordionContent.displayName = AccordionPrimitive.Content.displayName;
 
 export { Accordion, AccordionItem, AccordionTrigger, AccordionContent };
+
+const AccordionStyles = () => (
+  <style>
+    {`
+        @keyframes accordion-down {
+          from {
+            height: 0;
+          }
+          to {
+            height: var(--radix-accordion-content-height);
+          }
+        }
+
+        @keyframes accordion-up {
+          from {
+            height: var(--radix-accordion-content-height);
+          }
+          to {
+            height: 0;
+          }
+        }
+
+        [data-state='open'] .accordion-content {
+          height: var(--radix-accordion-content-height);
+          opacity: 1;
+          visibility: visible;
+          transition: height 0.2s ease-out, opacity 0.2s ease-out;
+        }
+
+        [data-state='closed'] .accordion-content {
+          height: 0;
+          opacity: 0;
+          visibility: hidden;
+          transition: height 0.2s ease-out, opacity 0.2s ease-out;
+        }
+      `}
+  </style>
+);

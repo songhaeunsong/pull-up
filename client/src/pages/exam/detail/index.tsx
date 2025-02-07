@@ -144,7 +144,7 @@ const ExamDetailPage = () => {
                 </InfoSection>
               ))}
             </div>
-            {/* 제출 버튼 */}
+            {/* 제출 */}
             <AlertDialog>
               <AlertDialogTrigger
                 className={cn(
