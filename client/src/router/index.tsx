@@ -5,11 +5,16 @@ import interviewRoutes from './routes/interviewRoutes';
 import examRoutes from './routes/examRoutes';
 import MainLayout from '@/layouts';
 import gameRoutes from './routes/gameRoutes';
+import { RefreshHandler } from '@/utils/refreshHandler';
 
 const routes = [
   {
     path: '/',
-    element: <MainLayout />,
+    element: (
+      <RefreshHandler>
+        <MainLayout />,
+      </RefreshHandler>
+    ),
     children: [...dashBoardRoutes, ...interviewRoutes, ...examRoutes, ...etcRoutes, ...gameRoutes],
   },
 ];

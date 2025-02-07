@@ -22,7 +22,7 @@ export const AuthStore = (() => {
 })();
 
 // 헤더에 토큰 주입
-export const addAuthHeader = (request: Request) => {
+export const setTokenHeader = (request: Request) => {
   const token = AuthStore.getAccessToken();
   const isLogin = request.url.includes('/auth/signin'); // 로그인은 헤더에 토큰 주입 안함
 
@@ -32,7 +32,7 @@ export const addAuthHeader = (request: Request) => {
 };
 
 // 토큰 재발급
-export const handleToken: AfterResponseHook = async (request: Request, _, response: Response) => {
+export const handleRefreshToken: AfterResponseHook = async (request: Request, _, response: Response) => {
   if (response.status === 401 && response.statusText === '[ACCESS_TOKEN] 토큰이 만료되었습니다.') {
     try {
       await reissue();
