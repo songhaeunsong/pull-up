@@ -1,4 +1,5 @@
 import { createMemberAnswer, useGetInterview } from '@/api/interview';
+import { useGetMemberInfo } from '@/api/member';
 import InputForm from '@/components/interview/inputForm';
 import InterviewCard from '@/components/interview/interviewCard';
 import { memberStore } from '@/stores/memberStore';
@@ -7,6 +8,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const InterviewPage = () => {
+  const { data: member } = useGetMemberInfo();
   const { setIsSolvedToday } = memberStore();
 
   const navigate = useNavigate();
@@ -23,10 +25,15 @@ const InterviewPage = () => {
   const username = '김싸피';
 
   useEffect(() => {
+    if (!member?.interestSubjects) {
+      navigate('/signup');
+      return;
+    }
+
     if (interview) {
       setInterviewData(interview);
     }
-  }, [interview]);
+  }, [interview, member]);
 
   if (!interviewData) return null;
 

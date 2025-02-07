@@ -1,5 +1,6 @@
+import { logout } from '@/api/auth';
 import { cn } from '@/lib/utils';
-import { useState } from 'react';
+import { memberStore } from '@/stores/memberStore';
 import { Link, useLocation } from 'react-router-dom';
 
 interface HeaderItem {
@@ -9,20 +10,21 @@ interface HeaderItem {
 
 const MobileHeader = () => {
   const location = useLocation();
-  const userInfo = '';
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const { isLoggedIn, logoutMember } = memberStore();
 
   const headerItems: HeaderItem[] = [
     { label: '시험모드', path: '/exam' },
     { label: '게임모드', path: '/game' },
     { label: '대시보드', path: '/dashboard' },
   ];
-  const loginItem: HeaderItem = { label: userInfo ? '로그아웃' : '로그인', path: '/signin' };
+  const loginItem: HeaderItem = { label: isLoggedIn ? '로그아웃' : '로그인', path: isLoggedIn ? '/' : '/signin' };
 
-  const handleAuthClick = () => {
+  const handleAuthClick = async () => {
     if (isLoggedIn) {
-      setIsLoggedIn(false);
+      await logout();
+      logoutMember();
     }
+    console.log('isLoggedIn', isLoggedIn);
   };
 
   return (
@@ -33,20 +35,21 @@ const MobileHeader = () => {
     >
       <div className="flex w-full items-center justify-between">
         <div className="text-2xl font-bold">
-          <Link to={!userInfo ? '/' : '/today'}>Pull Up!</Link>
+          <Link to={!isLoggedIn ? '/' : '/interview'}>Pull Up!</Link>
         </div>
         <Link
           key={loginItem.path}
           to={loginItem.path}
           className={cn(
             {
-              'border-b-[3px] border-primary-500 text-primary-500': location.pathname === loginItem.path,
+              'border-b-[3px] border-primary-500 text-primary-500':
+                location.pathname.split('/')[1] === loginItem.path.split('/')[1],
               'border-b-[3px] border-transparent text-stone-800 hover:text-stone-950':
-                location.pathname !== loginItem.path,
+                location.pathname.split('/')[1] !== loginItem.path.split('/')[1],
             },
             'text-sm font-semibold transition-colors duration-200',
           )}
-          onClick={loginItem.label === '로그아웃' || loginItem.label === '로그인' ? handleAuthClick : undefined}
+          onClick={handleAuthClick}
         >
           {loginItem.label}
         </Link>

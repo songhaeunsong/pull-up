@@ -4,12 +4,13 @@ import { memberStore } from '@/stores/memberStore';
 import { registerServiceWorker, requestPermission } from '@/utils/serviceWorker';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 const RedirectPage = () => {
   const navigate = useNavigate();
   const { data: auth, isLoading } = useAuthInfo();
   const { data: member } = useGetMemberInfo();
-  const { setMember, setIsSolvedToday } = memberStore();
+  const { setMember, setIsSolvedToday, setIsLoggedIn } = memberStore();
 
   useEffect(() => {
     const setupNotification = async () => {
@@ -25,16 +26,29 @@ const RedirectPage = () => {
       if (!isLoading && auth) {
         if (!auth.isSignedUp) {
           await setupNotification();
+          setIsLoggedIn(true);
+
           navigate('/signup');
+          return;
         } else {
-          if (!member?.interestSubjects) {
+          if (!member) {
+            toast.error('회원 정보가 없습니다.', {
+              position: 'bottom-center',
+            });
+            navigate('/signin');
+            return;
+          }
+
+          if (!member.interestSubjects) {
+            setIsLoggedIn(true);
             navigate('/signup');
             return;
           }
+
           // 유저 정보 저장
           setMember(member);
+          setIsLoggedIn(true);
           setIsSolvedToday(auth.isSolvedToday);
-
           navigate(auth.isSolvedToday ? '/interview/result' : '/interview');
         }
       }
