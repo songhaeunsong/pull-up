@@ -5,6 +5,7 @@ import WinningRate from '@/components/dashboard/charts/WinningRate';
 import useResponsive from '@/hooks/useResponsive';
 import MobileDashboardContainer from './MobileDashboardContainer';
 import ChartContainer from './ChartContainer';
+import DashboardFeedback from '@/components/dashboard/dashboardFeedback';
 
 const DashBoardPage = () => {
   const { isMobile, isTabletMd } = useResponsive();
@@ -17,7 +18,7 @@ const DashBoardPage = () => {
           <div className="grid grid-rows-[1.5fr_1fr] gap-4">
             <div className="flex flex-col rounded-2xl bg-white p-5">
               <ChartContainer icon="feedback" title="오늘의 문제 및 피드백">
-                <div>오늘의 문제 및 피드백</div>
+                <DashboardFeedback />
               </ChartContainer>
             </div>
             <div className="grid grid-cols-[1fr_1fr] gap-4">
