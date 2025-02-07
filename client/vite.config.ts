@@ -6,6 +6,7 @@ import react from '@vitejs/plugin-react';
 
 export default defineConfig(({ mode }) => {
   const isProduction = mode === 'production';
+  console.log(isProduction);
 
   return {
     plugins: [
@@ -51,8 +52,10 @@ export default defineConfig(({ mode }) => {
     server: {
       host: '0.0.0.0',
       port: 5173,
-      allowedHosts: ['www.pull-up.store'],
-      hmr: isProduction ? false : { host: 'localhost', protocol: 'ws' },
+      hmr: {
+        host: 'www.pull-up.store',
+        protocol: 'wss',
+      },
     },
   };
 });
