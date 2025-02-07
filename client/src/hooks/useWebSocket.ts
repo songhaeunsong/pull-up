@@ -1,19 +1,27 @@
 import { useEffect, useRef, useState } from 'react';
-import { useLocation } from 'react-router-dom';
-import { Client } from '@stomp/stompjs';
+import { matchPath, useLocation } from 'react-router-dom';
+import { Client, StompSubscription } from '@stomp/stompjs';
 import { RoomStatus, StompRoomInfo } from '@/types/game';
+import { useRoomStore } from '@/stores/roomStore';
 
 const useWebSocket = () => {
   const client = useRef<Client | null>(null);
   const location = useLocation();
+  const { roomId, setRoomId } = useRoomStore();
 
   const [roomStatus, setRoomStatus] = useState<RoomStatus>('WAITING');
   const [roomInfo, setRoomInfo] = useState<StompRoomInfo>({
-    roomId: '',
     player1P: { memberId: 0, name: '', score: 0 },
     player2P: { memberId: 0, name: '', score: 0 },
     problems: [],
+    roomId: '',
   });
+
+  const statusSubscription = useRef<StompSubscription | null>(null);
+  const roomSubscription = useRef<StompSubscription | null>(null);
+
+  const isGameWaitingPage = matchPath('/game', location.pathname);
+  const isGameStagePage = matchPath('/game/:id', location.pathname);
 
   useEffect(() => {
     if (!client.current) {
@@ -24,52 +32,60 @@ const useWebSocket = () => {
         heartbeatIncoming: 4000,
         heartbeatOutgoing: 4000,
       });
+
+      client.current.onConnect = () => {
+        console.log('WebSocket: 연결 성공');
+        subscribeToRoom();
+      };
+
+      client.current.onStompError = (frame) => {
+        console.error('Websocket: STOMP 에러:', frame.headers['message']);
+      };
+
+      client.current.activate();
     }
 
-    client.current.onConnect = () => {
-      console.log('WebSocket: 연결 성공');
-
-      // 방 상태 구독
-      client.current!.subscribe(`/topic/game/${roomInfo.roomId}/status`, (message) => {
-        const updatedStatus = JSON.parse(message.body);
-        console.log('Websocket: 수신한 방 상태:', updatedStatus);
-        setRoomStatus(updatedStatus.body.status);
-      });
-
-      client.current!.subscribe(`/topic/game/${roomInfo.roomId}`, (message) => {
-        const { score1P, score2P, problems } = JSON.parse(message.body);
-
-        setRoomInfo((prevRoomInfo) => ({
-          ...prevRoomInfo,
-
-          player1P: {
-            ...prevRoomInfo.player1P,
-            score: score1P,
-          },
-          player2P: {
-            ...prevRoomInfo.player2P,
-            score: score2P,
-          },
-          problems,
-        }));
-      });
-    };
-
-    client.current.onStompError = (frame) => {
-      console.error('Websocket: STOMP 에러:', frame.headers['message']);
-    };
-
-    client.current.activate();
-
     return () => {
-      if (client.current && !location.pathname.startsWith('/game')) {
-        console.log('Websocket: 연결 해제');
-        client.current.deactivate();
+      if (client.current) {
+        if (!location.pathname.startsWith('/game')) {
+          console.log('Websocket: 연결 해제');
+          client.current.deactivate();
+
+          setRoomId('');
+        }
       }
     };
   }, [location.pathname]);
 
-  const sendMessage = (destination: string, payload: unknown) => {
+  useEffect(() => {
+    subscribeToRoom();
+  }, [roomId]);
+
+  const subscribeToRoom = () => {
+    if (!client.current || !client.current.connected || !roomId) {
+      return;
+    }
+
+    statusSubscription.current?.unsubscribe();
+    roomSubscription.current?.unsubscribe();
+
+    if (isGameWaitingPage) {
+      statusSubscription.current = client.current.subscribe(`/topic/game/${roomId}/status`, (message) => {
+        const { status } = JSON.parse(message.body);
+        setRoomStatus(status);
+      });
+    }
+
+    if (isGameStagePage) {
+      roomSubscription.current = client.current.subscribe(`/topic/game/${roomId}`, (message) => {
+        const { player1P, player2P, problems, roomId } = JSON.parse(message.body);
+
+        setRoomInfo({ player1P, player2P, problems, roomId });
+      });
+    }
+  };
+
+  const sendMessage = (destination: string, payload?: unknown) => {
     if (!client.current || !client.current.connected) {
       console.error('Websocket: WebSocket이 아직 연결되지 않았습니다.');
       return;

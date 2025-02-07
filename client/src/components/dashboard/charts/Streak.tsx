@@ -1,10 +1,9 @@
-import { useGetStreak } from '@/api/interview';
 import { cn } from '@/lib/utils';
 import { useEffect, useState } from 'react';
-import ActivityCalendar, { DayIndex } from 'react-activity-calendar';
+import { DayIndex } from 'react-activity-calendar';
 
 const Streak = () => {
-  const { data: streakData, isLoading, isError } = useGetStreak();
+  // const { data: streakData, isLoading, isError } = useGetStreak();
 
   const tomorrow = new Date();
   tomorrow.setDate(new Date().getDate() + 1);
@@ -18,8 +17,8 @@ const Streak = () => {
     setTimeout(() => setVisible(true), 100);
   }, []);
 
-  if (isLoading) return <>불러오는 중...</>;
-  if (isError || !streakData) return <>스트릭 불러오기에 실패했습니다.</>;
+  // if (isLoading) return <>불러오는 중...</>;
+  // if (isError || !streakData) return <>스트릭 불러오기에 실패했습니다.</>;
 
   return (
     <div
@@ -31,7 +30,7 @@ const Streak = () => {
         'transition-all duration-1000 ease-out',
       )}
     >
-      <ActivityCalendar
+      {/* <ActivityCalendar
         data={streakData}
         weekStart={weekStart}
         blockSize={23}
@@ -44,7 +43,7 @@ const Streak = () => {
         theme={{
           light: ['#eeeff1', '#6356f8'],
         }}
-      />
+      /> */}
     </div>
   );
 };
