@@ -1,6 +1,5 @@
 import { useExamAnswer } from '@/hooks/useExamAnswer';
 import AnswerOption from '../answeroption';
-
 interface ExamAnswerProps {
   problemId: number;
   questionType: 'SHORT_ANSWER' | 'MULTIPLE_CHOICE';
