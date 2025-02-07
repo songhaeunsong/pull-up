@@ -15,19 +15,14 @@ const GameBoard = ({ playerNumber, problems }: GameBoardProps) => {
   const [shake, setShake] = useState(false);
 
   const checkCardPair = (cardIndex1: number, cardIndex2: number) => {
-    if (problems[cardIndex1].cardId === problems[cardIndex2].cardId) {
-      problems[cardIndex1].disabled = true;
-      problems[cardIndex2].disabled = true;
+    sendMessage('/app/card/submit', {
+      roomId: roomInfo.roomId,
+      playerId: playerNumber,
+      contents: [problems[cardIndex1].content, problems[cardIndex2].content],
+    });
 
-      sendMessage('/app/card/submit', {
-        roomId: roomInfo.roomId,
-        playerId: playerNumber,
-        problemNumber: problems[cardIndex1].cardId,
-      });
-    } else {
-      setShake(true);
-      setTimeout(() => setShake(false), 500);
-    }
+    setShake(true);
+    setTimeout(() => setShake(false), 500);
   };
 
   const handleClickCard = (index: number) => {

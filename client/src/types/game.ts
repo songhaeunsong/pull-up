@@ -1,7 +1,6 @@
 export type RoomStatus = 'WAITING' | 'PLAYING' | 'FINISHED';
 
 export interface Card {
-  cardId: number;
   type: 'question' | 'answer';
   disabled: boolean;
   content: string;
@@ -17,7 +16,7 @@ export interface StompRoomInfo {
   roomId: string;
   player1P: Player;
   player2P: Player;
-  problems: Card[];
+  problemCardWithoutCardIds: Card[];
 }
 
 export interface SubjectSelect {
