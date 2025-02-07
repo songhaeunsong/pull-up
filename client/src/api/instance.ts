@@ -1,5 +1,5 @@
 import ky from 'ky';
-import { addAuthHeader, handleToken } from '@/utils/authService';
+import { setTokenHeader, handleRefreshToken } from '@/utils/authService';
 
 const instance = ky.create({
   prefixUrl: import.meta.env.VITE_BASE_URL,
@@ -12,8 +12,8 @@ const instance = ky.create({
 
 const api = instance.extend({
   hooks: {
-    beforeRequest: [addAuthHeader],
-    afterResponse: [handleToken],
+    beforeRequest: [setTokenHeader],
+    afterResponse: [handleRefreshToken],
   },
 });
 
