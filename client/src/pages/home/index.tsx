@@ -1,12 +1,19 @@
 import SmallChip from '@/components/common/smallchip';
 import SubmitButton from '@/components/common/submitButton';
 import { useChipAnimation } from '@/hooks/useChipAnimation';
+import { memberStore } from '@/stores/memberStore';
 import { useNavigate } from 'react-router-dom';
 
 const HomePage = () => {
+  const { isLoggedIn } = memberStore();
   const navigate = useNavigate();
   const onClick = () => {
-    navigate('/signin');
+    if (isLoggedIn) {
+      navigate('/signup');
+      return;
+    } else {
+      navigate('/signin');
+    }
   };
 
   const { styles, currentStyles } = useChipAnimation();

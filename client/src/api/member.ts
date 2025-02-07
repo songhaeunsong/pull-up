@@ -14,8 +14,13 @@ export const useGetMemberInfo = () => {
     ...useQuery({
       queryKey: ['member'],
       queryFn: () => getMember(),
-      enabled: false,
     }),
     refetch: () => queryClient.fetchQuery<Member>({ queryKey: ['member'] }),
   };
+};
+
+// 디바이스 토큰 등록
+export const registerDeviceToken = async (token: string) => {
+  const data = await api.post('member/device-token', { json: { token: token } }).json<number>;
+  return data;
 };

@@ -7,9 +7,9 @@ import { useNavigate } from 'react-router-dom';
 
 const RedirectPage = () => {
   const navigate = useNavigate();
-  const { data: auth, isLoading } = useAuthInfo();
   const { data: member } = useGetMemberInfo();
-  const { setMember, setIsSolvedToday } = memberStore();
+  const { data: auth, isLoading } = useAuthInfo();
+  const { setMember, setIsSolvedToday, setIsLoggedIn, setInterviewId } = memberStore();
 
   useEffect(() => {
     const setupNotification = async () => {
@@ -22,20 +22,26 @@ const RedirectPage = () => {
     };
 
     const handleRedirect = async () => {
+      await setupNotification();
       if (!isLoading && auth) {
         if (!auth.isSignedUp) {
-          await setupNotification();
+          setIsLoggedIn(true);
           navigate('/signup');
+          return;
         } else {
           if (!member?.interestSubjects) {
+            setIsLoggedIn(true);
             navigate('/signup');
             return;
           }
+
           // 유저 정보 저장
           setMember(member);
+          setIsLoggedIn(true);
           setIsSolvedToday(auth.isSolvedToday);
-
-          navigate(auth.isSolvedToday ? '/interview/result' : '/interview');
+          setInterviewId(auth.interviewId);
+          console.log('auth.isSolvedToday', auth.isSolvedToday);
+          navigate(auth.isSolvedToday ? `/interview/result/${auth.interviewId}` : '/interview');
         }
       }
 
