@@ -14,7 +14,7 @@ const GameStage = () => {
 
   return (
     <div className="grid h-full w-full grid-cols-[2.5fr_1fr] gap-7 bg-Main p-8 pt-24">
-      <GameBoard playerNumber={idData.playerNumber} problems={roomInfo.problems} />
+      <GameBoard playerNumber={idData.playerNumber} problems={roomInfo.problemCardWithoutCardIds} />
       <div className="grid grid-rows-2 gap-7">
         {idData.playerNumber === 1 ? (
           <>
