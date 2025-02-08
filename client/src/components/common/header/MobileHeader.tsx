@@ -1,6 +1,7 @@
 import { logout } from '@/api/auth';
 import { cn } from '@/lib/utils';
 import { memberStore } from '@/stores/memberStore';
+import { AuthStore } from '@/utils/authService';
 import { Link, useLocation } from 'react-router-dom';
 
 interface HeaderItem {
@@ -23,7 +24,7 @@ const MobileHeader = () => {
     if (isLoggedIn) {
       await logout();
       logoutMember();
-      console.log(isLoggedIn);
+      AuthStore.clearAccessToken();
     }
   };
 

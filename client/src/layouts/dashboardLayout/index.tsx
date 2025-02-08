@@ -9,10 +9,11 @@ import { toast } from 'react-toastify';
 const DashBoardLayout = () => {
   const { isMobile, isTabletMd } = useResponsive();
   const navigate = useNavigate();
-  const { data: member } = useGetMemberInfo();
+  const { data: member, isLoading } = useGetMemberInfo();
 
   useEffect(() => {
-    if (!member?.email) {
+    console.log('member: ', member);
+    if (!isLoading && !member) {
       toast.error('로그인이 필요합니다.', { position: 'bottom-center' });
       navigate('/signin');
       return;

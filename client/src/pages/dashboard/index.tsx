@@ -8,6 +8,7 @@ import ChartContainer from './ChartContainer';
 
 const DashBoardPage = () => {
   const { isMobile, isTabletMd } = useResponsive();
+
   return (
     <div className="w-full">
       {isMobile || isTabletMd ? (
