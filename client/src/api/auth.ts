@@ -39,7 +39,7 @@ export const reissue = async () => {
 // 로그아웃
 export const logout = async () => {
   await api.post('auth/logout');
-  await queryClient.invalidateQueries({ queryKey: ['member'] });
+  queryClient.setQueryData(['member'], null);
 };
 
 // 회원가입

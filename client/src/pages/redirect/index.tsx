@@ -12,14 +12,14 @@ const RedirectPage = () => {
 
   useEffect(() => {
     const handleRedirect = async () => {
-      console.log('auth: ', auth);
       if (!isLoading && auth) {
-        console.log('auth 가입: ', auth.isSignedUp);
+        // 미가입시
         if (!auth.isSignedUp) {
           setIsLoggedIn(true);
           navigate('/signup');
           return;
         } else {
+          // 관심과목 미선택시
           if (!member?.interestSubjects) {
             setIsLoggedIn(true);
             navigate('/signup');

@@ -13,7 +13,6 @@ const DashBoardLayout = () => {
 
   useEffect(() => {
     if (!isLoading && !member) {
-      console.log('member: ', member);
       toast.error('로그인이 필요합니다.', { position: 'bottom-center' });
       navigate('/signin');
       return;
