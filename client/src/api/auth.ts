@@ -3,6 +3,7 @@ import api from './instance';
 import { Subject } from '@/types/member';
 import { useQuery } from '@tanstack/react-query';
 import { AuthStore } from '@/utils/authService';
+import { queryClient } from '@/main';
 
 // 로그인
 const login = async () => {
@@ -37,7 +38,8 @@ export const reissue = async () => {
 
 // 로그아웃
 export const logout = async () => {
-  return await api.post('auth/logout');
+  await api.post('auth/logout');
+  await queryClient.invalidateQueries({ queryKey: ['member'] });
 };
 
 // 회원가입
