@@ -2,11 +2,27 @@ import SmallChip from '@/components/common/smallchip';
 import SubmitButton from '@/components/common/submitButton';
 import { useChipAnimation } from '@/hooks/useChipAnimation';
 import { memberStore } from '@/stores/memberStore';
+import { registerServiceWorker, requestPermission } from '@/utils/serviceWorker';
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const HomePage = () => {
   const { isLoggedIn } = memberStore();
   const navigate = useNavigate();
+
+  const setupNotification = async () => {
+    try {
+      await registerServiceWorker();
+      await requestPermission();
+    } catch (error) {
+      console.error('알림 설정 실패:', error);
+    }
+  };
+
+  useEffect(() => {
+    setupNotification();
+  }, []);
+
   const onClick = () => {
     if (isLoggedIn) {
       navigate('/signup');
