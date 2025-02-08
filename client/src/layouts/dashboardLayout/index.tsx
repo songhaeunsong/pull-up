@@ -12,13 +12,13 @@ const DashBoardLayout = () => {
   const { data: member, isLoading } = useGetMemberInfo();
 
   useEffect(() => {
-    console.log('member: ', member);
     if (!isLoading && !member) {
+      console.log('member: ', member);
       toast.error('로그인이 필요합니다.', { position: 'bottom-center' });
       navigate('/signin');
       return;
     }
-  }, []);
+  }, [member, isLoading]);
 
   const onClick = () => {
     console.log('about');
