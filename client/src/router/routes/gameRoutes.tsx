@@ -1,4 +1,5 @@
 import GamePage from '@/pages/game';
+import GameResultPage from '@/pages/game/gameResult';
 import GameStage from '@/pages/game/gameStage';
 
 const gameRoutes = [
@@ -12,6 +13,10 @@ const gameRoutes = [
       {
         path: ':gameId',
         element: <GameStage />,
+      },
+      {
+        path: 'result',
+        element: <GameResultPage />,
       },
     ],
   },

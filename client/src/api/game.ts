@@ -3,11 +3,13 @@ import api from './instance';
 import { WinningRate } from '@/types/chart';
 import { SubjectSelect } from '@/types/game';
 import {
+  GetGameResultResponse,
   GetIdResponse,
   GetRandomTypeResponse,
   PostCreateGameResponse,
   PostJoinGameResponse,
 } from '@/types/response/game';
+import { useRoomStore } from '@/stores/roomStore';
 
 const getWinningRate = async () => {
   const response = await api.get<WinningRate>('game/me/winning-rate');
@@ -103,4 +105,20 @@ export const usePostCreateRoomRandom = () => {
     mutationFn: () => postCreateRoomRandom(),
   });
   return mutateAsync;
+};
+
+const getGameResult = async (roomId: string) => {
+  const response = await api.get<GetGameResultResponse>(`game/room/${roomId}/result`);
+  const data = await response.json();
+
+  return data;
+};
+
+export const useGetGameResult = () => {
+  const { roomId } = useRoomStore();
+
+  return useQuery({
+    queryKey: ['gameResult'],
+    queryFn: () => getGameResult('4'),
+  });
 };

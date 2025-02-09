@@ -3,12 +3,22 @@ import GameBoard from '@/components/game/gameStage/GameBoard';
 import GameScoreBoard from '@/components/game/gameStage/GameScoreBoard';
 import useWebSocket from '@/hooks/useWebSocket';
 import { useRoomStore } from '@/stores/roomStore';
+import { useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const GameStage = () => {
+  const navigate = useNavigate();
+
   const { roomId } = useRoomStore();
-  const { roomInfo } = useWebSocket();
+  const { roomStatus, roomInfo } = useWebSocket();
 
   const { data: idData, isLoading } = useGetId(roomId);
+
+  useEffect(() => {
+    if (roomStatus === 'FINISHED') {
+      navigate('/game/result');
+    }
+  }, [roomStatus]);
 
   if (!idData || isLoading) return <>불러오는 중...</>;
 

@@ -14,3 +14,8 @@ export interface GetRandomTypeResponse {
   randomMatchType: 'CREATE' | 'JOIN';
   roomId: string;
 }
+
+export interface GetGameResultResponse {
+  gameRoomResultStatus: 'WIN' | 'DRAW';
+  winnerName: string | null;
+}
