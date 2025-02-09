@@ -1,4 +1,4 @@
-import { usePostCreateGame, usePostCreateRoomRandom, usePostJoinGame } from '@/api/game';
+import { useDeleteRoom, usePostCreateGame, usePostCreateRoomRandom, usePostJoinGame } from '@/api/game';
 import Modal from '../common/modal';
 import CreateRoom from './gameModalComponent/CreateRoom';
 import JoinGame from './gameModalComponent/JoinGame';
@@ -21,6 +21,7 @@ const GameModals = () => {
 
   const postCreateGame = usePostCreateGame();
   const postJoinGame = usePostJoinGame();
+  const deleteRoom = useDeleteRoom();
 
   const postCreateGameRandom = usePostCreateRoomRandom();
 
@@ -28,6 +29,7 @@ const GameModals = () => {
 
   const [codeForInviting, setCodeForInviting] = useState('');
   const [codeForJoinning, setCodeForJoinning] = useState('');
+  const [isCreateMode, setIsCreateMode] = useState(false);
 
   const createRoomTimeout = () => {
     createRoomTimeoutRef.current = setTimeout(() => {
@@ -35,6 +37,8 @@ const GameModals = () => {
         toast.error('방을 다시 만들어주세요!', {
           position: 'bottom-center',
         });
+
+        setIsCreateMode(false);
         setRoomId('');
         setIsPlayerReady(false);
       }
@@ -43,6 +47,12 @@ const GameModals = () => {
 
   const handleCloseModal = (isOpen: boolean) => {
     if (!isOpen) {
+      if (roomId && isCreateMode) {
+        deleteRoom(roomId);
+        setRoomId('');
+        setIsCreateMode(false);
+      }
+
       if (createRoomTimeoutRef.current) {
         clearTimeout(createRoomTimeoutRef.current);
       }
@@ -57,6 +67,8 @@ const GameModals = () => {
 
   const handleCreateRoom = async () => {
     setIsPlayerReady(true);
+    setIsCreateMode(true);
+
     const selects = {
       algorithm: true,
       computerArchitecture: true,
@@ -67,8 +79,8 @@ const GameModals = () => {
     }; // 더미
 
     const { roomId } = await postCreateGame(selects);
-    setCodeForInviting(roomId);
     setRoomId(roomId);
+    setCodeForInviting(roomId);
 
     createRoomTimeout();
   };
@@ -96,8 +108,10 @@ const GameModals = () => {
     setIsPlayerReady(true);
 
     if (randomMatchType === 'CREATE') {
+      setIsCreateMode(true);
       const { roomId: createdRondomId } = await postCreateGameRandom();
       setRoomId(createdRondomId);
+
       return;
     }
 

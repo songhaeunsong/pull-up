@@ -56,6 +56,16 @@ export const usePostJoinGame = () => {
   return mutateAsync;
 };
 
+const deleteRoom = (roomId: string) => api.delete(`game/room/${roomId}`);
+
+export const useDeleteRoom = () => {
+  const { mutate } = useMutation({
+    mutationFn: (roomId: string) => deleteRoom(roomId),
+  });
+
+  return mutate;
+};
+
 const getId = async (roomId: string) => {
   const response = await api.get<GetIdResponse>(`game/room/${roomId}/player`);
   const data = await response.json();
