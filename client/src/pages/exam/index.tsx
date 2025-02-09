@@ -1,3 +1,4 @@
+import { useCallback } from 'react';
 import CsConditionSelector from '@/components/common/csConditionSelector';
 import exam1 from '/assets/images/exam1.png';
 import { useNavigate } from 'react-router-dom';
@@ -8,19 +9,22 @@ import { Level } from '@/types/exam';
 const ExamPage = () => {
   const navigate = useNavigate();
 
-  const onSubmit = async (level: Level | null, subjects: Subject[]) => {
-    try {
-      const requestBody = {
-        difficultyLevel: level ?? 'EASY',
-        subjects: subjects,
-      };
-      const response = await postExam(requestBody);
+  const onSubmit = useCallback(
+    async (level: Level | null, subjects: Subject[]) => {
+      try {
+        const requestBody = {
+          difficultyLevel: level ?? 'EASY',
+          subjects: subjects,
+        };
+        const response = await postExam(requestBody);
 
-      navigate(`/exam/${response.examId}`);
-    } catch (error) {
-      console.error('모의고사 생성 실패: ', error);
-    }
-  };
+        navigate(`/exam/${response.examId}`);
+      } catch (error) {
+        console.error('모의고사 생성 실패: ', error);
+      }
+    },
+    [navigate],
+  );
 
   return (
     <>

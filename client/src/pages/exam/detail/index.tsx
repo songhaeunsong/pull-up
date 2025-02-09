@@ -1,12 +1,24 @@
-import { useEffect, useState } from 'react';
+import { cn } from '@/lib/utils';
+import { useEffect, useState, useMemo } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { postExamAnswer, useGetExamDetails } from '@/api/exam';
 import { useExamStore } from '@/stores/examStore';
+import { useShallow } from 'zustand/react/shallow';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from '@/components/ui/alert-dialog';
 import Timer from '@/components/exam/timer';
 import ExamProblem from '@/components/exam/problem';
 import InfoSection from '@/components/exam/infoSection';
-import SubmitButton from '@/components/common/submitButton';
 import ProblemStatusButton from '@/components/exam/infoSection/problemStatusButton';
 import Icon from '@/components/common/icon';
 
@@ -14,8 +26,14 @@ const ExamDetailPage = () => {
   const navigate = useNavigate();
   const { examId } = useParams();
   const { data: examProblems } = useGetExamDetails(Number(examId));
-  const { answers, resetExamState, setAnswer, setSolutionPage, initializeAndSetOptions } = useExamStore();
+  const answers = useExamStore(useShallow((state) => state.answers));
+  const { resetExamState, setAnswer, setSolutionPage, initializeAndSetOptions } = useExamStore();
   const [isInitialized, setIsInitialized] = useState(false);
+  const isAllSolved = useMemo(() => {
+    return (examProblems || []).every(
+      (problem) => answers[problem.problemId] && answers[problem.problemId].trim() !== '',
+    );
+  }, [examProblems, answers]);
 
   useEffect(() => {
     if (!examProblems || isInitialized) return;
@@ -32,10 +50,6 @@ const ExamDetailPage = () => {
   if (!examProblems) {
     return <div>시험 데이터를 불러오는 데 실패했습니다.</div>;
   }
-
-  const isAllSolved = examProblems.every(
-    (problem) => answers[problem.problemId] && answers[problem.problemId].trim() !== '',
-  );
 
   const onSubmit = async () => {
     try {
@@ -123,8 +137,8 @@ const ExamDetailPage = () => {
           ))}
         </section>
 
-        {/* Info Section - Web View */}
         <aside className="relative min-w-[280px] flex-1 flex-shrink-0 px-10 py-4 md:p-0 lg:min-w-[340px] xl:max-w-[380px]">
+          {/* Info Section - Web View */}
           <div className="sticky top-10 flex flex-col gap-10">
             <div className="hidden flex-col gap-10 md:flex">
               {infoSections.map(({ id, title, icon, content }) => (
@@ -133,12 +147,28 @@ const ExamDetailPage = () => {
                 </InfoSection>
               ))}
             </div>
-            <SubmitButton
-              text="제출하기"
-              onClick={onSubmit}
-              disabled={!isAllSolved}
-              color={!isAllSolved ? 'gray' : 'primary'}
-            />
+            {/* 제출 */}
+            <AlertDialog>
+              <AlertDialogTrigger
+                className={cn(
+                  isAllSolved ? 'bg-primary-600 text-white hover:bg-primary-700' : 'bg-gray-200 text-gray-500',
+                  'mb-4 w-full rounded-xl py-4 text-lg font-semibold xl:py-5 xl:text-xl',
+                )}
+                disabled={!isAllSolved}
+              >
+                제출하기
+              </AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>정말 시험을 제출하시겠습니까?</AlertDialogTitle>
+                  <AlertDialogDescription>제출 후에는 더 이상 답안을 수정할 수 없습니다.</AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>취소하기</AlertDialogCancel>
+                  <AlertDialogAction onClick={onSubmit}>제출하기</AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
           </div>
         </aside>
       </div>

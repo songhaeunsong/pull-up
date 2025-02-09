@@ -1,12 +1,24 @@
+import { useGetMemberInfo } from '@/api/member';
 import SideBar from '@/components/dashboard/sidebar';
 import MobileTopBar from '@/components/dashboard/sidebar/MobileTopBar';
 import useResponsive from '@/hooks/useResponsive';
-import { memberStore } from '@/stores/memberStore';
-import { Outlet } from 'react-router-dom';
+import { useEffect } from 'react';
+import { Outlet, useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 const DashBoardLayout = () => {
   const { isMobile, isTabletMd } = useResponsive();
-  const { member } = memberStore();
+  const navigate = useNavigate();
+  const { data: member, isLoading } = useGetMemberInfo();
+
+  useEffect(() => {
+    if (!isLoading && !member) {
+      toast.error('로그인이 필요합니다.', { position: 'bottom-center' });
+      navigate('/signin');
+      return;
+    }
+  }, [member, isLoading]);
+
   const onClick = () => {
     console.log('about');
   };
@@ -16,10 +28,10 @@ const DashBoardLayout = () => {
       {isMobile || isTabletMd ? (
         <div className="flex flex-col gap-5 p-6">
           <MobileTopBar
-            image={member.profileImageUrl}
-            name={member.name}
-            email={member.email}
-            subjects={member.interestSubjects}
+            image={member?.profileImageUrl ?? ''}
+            name={member?.name ?? ''}
+            email={member?.email ?? ''}
+            subjects={member?.interestSubjects ?? []}
             onClick={onClick}
           />
           <Outlet />
@@ -30,10 +42,10 @@ const DashBoardLayout = () => {
             <Outlet />
           </main>
           <SideBar
-            image={member.profileImageUrl}
-            name={member.name}
-            email={member.email}
-            subjects={member.interestSubjects}
+            image={member?.profileImageUrl ?? ''}
+            name={member?.name ?? ''}
+            email={member?.email ?? ''}
+            subjects={member?.interestSubjects ?? []}
             onClick={onClick}
           />
         </div>

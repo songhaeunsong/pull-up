@@ -1,4 +1,5 @@
 import { createMemberAnswer, useGetInterview } from '@/api/interview';
+import { useGetMemberInfo } from '@/api/member';
 import InputForm from '@/components/interview/inputForm';
 import InterviewCard from '@/components/interview/interviewCard';
 import { memberStore } from '@/stores/memberStore';
@@ -7,7 +8,8 @@ import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const InterviewPage = () => {
-  const { setIsSolvedToday } = memberStore();
+  const { data: member } = useGetMemberInfo();
+  const { setIsSolvedToday, setInterviewId } = memberStore();
 
   const navigate = useNavigate();
   const [hint, setHint] = useState(false);
@@ -19,14 +21,11 @@ const InterviewPage = () => {
     keywords: ['Java', 'Exception'],
   });
 
-  // 더미데이터
-  const username = '김싸피';
-
   useEffect(() => {
     if (interview) {
       setInterviewData(interview);
     }
-  }, [interview]);
+  }, [interview, member]);
 
   if (!interviewData) return null;
 
@@ -44,9 +43,10 @@ const InterviewPage = () => {
       return;
     }
 
-    const interviewAnswerId = await createMemberAnswer(interviewData.interviewId, interviewAnswer);
+    const data = await createMemberAnswer(interviewData.interviewId, interviewAnswer);
     setIsSolvedToday(true);
-    navigate(`/interview/result/${interviewAnswerId}`);
+    setInterviewId(data.interviewAnswerId);
+    navigate(`/interview/result/${data.interviewAnswerId}`);
 
     console.log('제출 답안: ', interviewAnswer);
     setInterviewAnswer('');
@@ -63,7 +63,7 @@ const InterviewPage = () => {
     <div className="flex min-h-full w-full items-center justify-center bg-gradient-to-b from-primary-50 to-white p-6 md:p-10">
       <div className="flex w-[873px] flex-col items-center justify-center gap-12 pt-[94px] sm:pt-16">
         <div className="text-xl font-extrabold md:text-2xl lg:text-3xl">
-          <span className="text-primary-600">{`${username}`}</span>
+          <span className="text-primary-600">{`${member?.name}`}</span>
           <span>님 만을 위한 오늘의 맞춤 문제🎯</span>
         </div>
         <InterviewCard
