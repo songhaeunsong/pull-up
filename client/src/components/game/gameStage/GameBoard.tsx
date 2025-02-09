@@ -7,22 +7,22 @@ interface GameBoardProps {
   playerNumber: 1 | 2;
   problems: Card[];
 }
+
 const GameBoard = ({ playerNumber, problems }: GameBoardProps) => {
   const { sendMessage, roomInfo } = useWebSocket();
 
   const [selectedCards, setSelectedCards] = useState<number[]>([]);
+  const [shake, setShake] = useState(false);
 
   const checkCardPair = (cardIndex1: number, cardIndex2: number) => {
-    if (problems[cardIndex1].cardId === problems[cardIndex2].cardId) {
-      problems[cardIndex1].disabled = true;
-      problems[cardIndex2].disabled = true;
+    sendMessage('/app/card/submit', {
+      roomId: roomInfo.roomId,
+      playerId: playerNumber,
+      contents: [problems[cardIndex1].content, problems[cardIndex2].content],
+    });
 
-      sendMessage('/app/card/submit', {
-        roomId: roomInfo.roomId,
-        playerId: playerNumber,
-        problemNumber: problems[cardIndex1].cardId,
-      });
-    }
+    setShake(true);
+    setTimeout(() => setShake(false), 500);
   };
 
   const handleClickCard = (index: number) => {
@@ -44,7 +44,13 @@ const GameBoard = ({ playerNumber, problems }: GameBoardProps) => {
   return (
     <div className="grid grid-cols-4 grid-rows-4 rounded-md bg-primary-400 p-1 shadow-sm">
       {problems.map((card, i) => (
-        <GameCard key={i} card={card} isSelected={selectedCards.includes(i)} onClick={() => handleClickCard(i)} />
+        <GameCard
+          key={i}
+          shake={shake}
+          card={card}
+          isSelected={selectedCards.includes(i)}
+          onClick={() => handleClickCard(i)}
+        />
       ))}
     </div>
   );

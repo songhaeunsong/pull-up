@@ -1,4 +1,4 @@
-import { usePostCreateGame, usePostJoinGame } from '@/api/game';
+import { useDeleteRoom, usePostCreateGame, usePostCreateRoomRandom, usePostJoinGame } from '@/api/game';
 import Modal from '../common/modal';
 import CreateRoom from './gameModalComponent/CreateRoom';
 import JoinGame from './gameModalComponent/JoinGame';
@@ -9,6 +9,8 @@ import useWebSocket from '@/hooks/useWebSocket';
 import WaitingAfterCreating from './gameModalComponent/waiting/WaitingAfterCreating';
 import { toast } from 'react-toastify';
 import { useRoomStore } from '@/stores/roomStore';
+import { GetRandomTypeResponse } from '@/types/response/game';
+import WaitingRamdom from './gameModalComponent/waiting/WaitingRandom';
 
 const GameModals = () => {
   const navigate = useNavigate();
@@ -19,11 +21,15 @@ const GameModals = () => {
 
   const postCreateGame = usePostCreateGame();
   const postJoinGame = usePostJoinGame();
+  const deleteRoom = useDeleteRoom();
+
+  const postCreateGameRandom = usePostCreateRoomRandom();
 
   const [isPlayerReady, setIsPlayerReady] = useState(false);
 
   const [codeForInviting, setCodeForInviting] = useState('');
   const [codeForJoinning, setCodeForJoinning] = useState('');
+  const [isCreateMode, setIsCreateMode] = useState(false);
 
   const createRoomTimeout = () => {
     createRoomTimeoutRef.current = setTimeout(() => {
@@ -31,6 +37,8 @@ const GameModals = () => {
         toast.error('방을 다시 만들어주세요!', {
           position: 'bottom-center',
         });
+
+        setIsCreateMode(false);
         setRoomId('');
         setIsPlayerReady(false);
       }
@@ -39,6 +47,12 @@ const GameModals = () => {
 
   const handleCloseModal = (isOpen: boolean) => {
     if (!isOpen) {
+      if (roomId && isCreateMode) {
+        deleteRoom(roomId);
+        setRoomId('');
+        setIsCreateMode(false);
+      }
+
       if (createRoomTimeoutRef.current) {
         clearTimeout(createRoomTimeoutRef.current);
       }
@@ -53,6 +67,8 @@ const GameModals = () => {
 
   const handleCreateRoom = async () => {
     setIsPlayerReady(true);
+    setIsCreateMode(true);
+
     const selects = {
       algorithm: true,
       computerArchitecture: true,
@@ -63,8 +79,8 @@ const GameModals = () => {
     }; // 더미
 
     const { roomId } = await postCreateGame(selects);
-    setCodeForInviting(roomId);
     setRoomId(roomId);
+    setCodeForInviting(roomId);
 
     createRoomTimeout();
   };
@@ -88,13 +104,43 @@ const GameModals = () => {
     setCodeForJoinning('');
   };
 
+  const handleRandomRoom = async ({ randomMatchType, roomId: randomRoomId }: GetRandomTypeResponse) => {
+    setIsPlayerReady(true);
+
+    if (randomMatchType === 'CREATE') {
+      setIsCreateMode(true);
+      const { roomId: createdRondomId } = await postCreateGameRandom();
+      setRoomId(createdRondomId);
+
+      return;
+    }
+
+    if (randomMatchType === 'JOIN') {
+      setRoomId(randomRoomId);
+      const { isReady } = await postJoinGame(randomRoomId);
+      if (!isReady) {
+        toast.error('다시 시도해주세요.', {
+          position: 'bottom-center',
+        });
+
+        setIsPlayerReady(false);
+      }
+    }
+  };
+
   useEffect(() => {
     if (!roomId) return;
 
     setTimeout(() => {
-      sendMessage(`/app/game/${roomId}/status`);
+      sendMessage(`/app/game/${roomId}/status`, {});
     }, 3000);
   }, [roomId]);
+
+  useEffect(() => {
+    if (roomStatus === 'FINISHED') {
+      navigate('/game/result');
+    }
+  }, [roomStatus]);
 
   useEffect(() => {
     if (roomStatus === 'PLAYING') {
@@ -119,7 +165,7 @@ const GameModals = () => {
         triggerColor="primary"
         onOpenChange={(isOpen: boolean) => handleCloseModal(isOpen)}
       >
-        <Waiting text="2P를 찾고 있어요!" />
+        <WaitingRamdom handleGameState={handleRandomRoom} />
       </Modal>
       <Modal triggerName="방 생성" triggerColor="primary" onOpenChange={(isOpen: boolean) => handleCloseModal(isOpen)}>
         {isPlayerReady ? (

@@ -1,6 +1,5 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
 import api from './instance';
-import { Streak } from '@/types/chart';
 import {
   InterviewAnswerDetailResponse,
   InterviewAnswerListResponse,
@@ -11,8 +10,7 @@ import {
 } from '@/types/interview';
 import { LikeResponse } from '@/types/common';
 import { queryClient } from '@/main';
-
-type GetStreakResponse = Streak[];
+import { GetStreakResponse } from '@/types/response/interview';
 
 const getStreak = async () => {
   const response = await api.get<GetStreakResponse>('interview/me/streak');
