@@ -69,12 +69,10 @@ const useWebSocket = () => {
     statusSubscription.current?.unsubscribe();
     roomSubscription.current?.unsubscribe();
 
-    if (isGameWaitingPage) {
-      statusSubscription.current = client.current.subscribe(`/topic/game/${roomId}/status`, (message) => {
-        const { status } = JSON.parse(message.body);
-        setRoomStatus(status);
-      });
-    }
+    statusSubscription.current = client.current.subscribe(`/topic/game/${roomId}/status`, (message) => {
+      const { status } = JSON.parse(message.body);
+      setRoomStatus(status);
+    });
 
     if (isGameStagePage) {
       roomSubscription.current = client.current.subscribe(`/topic/game/${roomId}`, (message) => {
