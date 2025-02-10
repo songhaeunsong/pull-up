@@ -1,3 +1,4 @@
+import { useGetInterviewResult } from '@/api/interview';
 import Icon from '@/components/common/icon';
 import { memberStore } from '@/stores/memberStore';
 import { InterviewResultResponse } from '@/types/interview';
@@ -6,37 +7,31 @@ import { useNavigate } from 'react-router-dom';
 
 const DashboardFeedback = () => {
   const navigate = useNavigate();
-  const isSolvedToday = true;
-  //const { data: result } = useGetInterviewResult(1);
+  const { isSolvedToday, interviewId, interviewAnswerId } = memberStore();
+  const { data: result, error } = useGetInterviewResult(interviewId);
+  console.log(result);
 
-  const { interviewId } = memberStore();
   const [resultData, setResultData] = useState<InterviewResultResponse>({
     interviewId: 1,
-    question: 'Checked Exception과 Unchecked Exception의 차이는 ?',
+    question: '프로세스와 스레드의 차이에 대해서 설명해주세요.',
     memberAnswer:
-      'Checked Exception은은 컴파일 시점에 체크되며 반드시 예외 처리를 해야 하고, Unchecked Exception은 런타임 시점에 발생하는 예외로 명시적인 예외 처리를 강제하지 않는다.',
-    keywords: ['컴파일 시점', '런타임 시점', '예외 처리 강제'],
+      '프로세스는 운영체제에서 독립적으로 실행되는 프로그램의 단위이며, 스레드는 프로세스 내에서 실행되는 작은 작업 단위입니다. 각 프로세스는 독립적인 메모리 공간을 가지고 있지만, 스레드는 프로세스 내에서 메모리를 공유합니다.',
+    keywords: ['프로세스', '스레드', '메모리 공유'],
     strength:
-      'Checked Exception이 컴파일 시점에서 체크된다는 점과 예외 처리가 강제된다는 점을 잘 언급하였고, Unchecked Exception이 런타임 시점에서 발생하며 예외 처리가 강제되지 않는다는 점을 명확하게 설명하였습니다. 또한, 짧지만 핵심적인 내용을 담고 있어 면접관이 빠르게 이해할 수 있습니다.',
+      '프로세스와 스레드의 정의를 정확하게 설명하였고, 스레드가 프로세스 내에서 메모리를 공유한다는 점을 명확히 언급하였습니다. 또한, 각 프로세스가 독립적인 메모리 공간을 갖는다는 점도 잘 설명하였습니다.',
     weakness:
-      'Checked Exception은 try-catch 또는 throws로 반드시 처리해야 한다는 점을 명확히 하면 좋습니다. 또한, Unchecked Exception의 경우 RuntimeException을 상속받아 명시적인 예외 처리를 강제하지 않는다는 점을 보강하면 더 완벽한 답변이 될 것 같습니다.',
+      '프로세스 간의 통신 방법(IPC)에 대한 설명이 부족했습니다. 또한, 스레드 간의 동기화 문제와 관련된 예시를 보완하면 더 완벽한 답변이 될 것입니다.',
     answer:
-      'Checked Exception과 Unchecked Exception의 차이는 예외 처리의 강제 여부에 있습니다. Checked Exception은 컴파일 시점에 체크되며, IOException이나 SQLException처럼 반드시 try-catch로 처리하거나 throws로 선언해야 합니다. 반면, Unchecked Exception은 NullPointerException, ArrayIndexOutOfBoundsException처럼 RuntimeException을 상속받아 예외 처리를 강제하지 않으며, 주로 프로그래머의 실수로 인해 발생합니다. 예를 들어, 파일을 열 때 FileNotFoundException이 발생할 수 있으므로 예외 처리를 강제하지만, NullPointerException은 개발자가 적절한 로직을 구현하면 방지할 수 있습니다. 즉, Checked Exception은 프로그램 실행을 예측 가능한 예외에 대비하도록 강제하고, Unchecked Exception은 개발자의 책임으로 남기는 차이가 있습니다.',
+      '프로세스는 운영체제에서 독립적으로 실행되는 프로그램 단위로, 각 프로세스는 자신만의 메모리 공간(코드, 데이터, 힙, 스택)을 갖습니다. 반면, 스레드는 프로세스 내에서 실행되는 작업 단위로, 같은 프로세스 내의 다른 스레드들과 메모리 공간을 공유합니다. 프로세스 간에는 메모리를 공유하지 않으므로 통신을 위해 IPC(Inter-Process Communication)가 필요하지만, 스레드는 같은 메모리 공간을 공유하여 빠른 통신이 가능합니다. 그러나 이로 인해 동기화 문제가 발생할 수 있으므로 적절한 동기화 기법이 필요합니다.',
     date: '2025-02-05T14:28:35.123456789',
   });
 
-  //setIsSolvedToday(true);
-  console.log(isSolvedToday);
-
   useEffect(() => {
-    if (isSolvedToday) {
-      // memberStore에서 interviewAnswerId 받아와서 뿌려주기
+    if (isSolvedToday && result) {
+      setResultData(result);
     }
-  }, [isSolvedToday]);
-
-  const handleViewDetails = () => {
-    navigate(`/interview/result/${resultData.interviewId}`);
-  };
+  }, [isSolvedToday, result]);
+  console.log(isSolvedToday);
 
   return (
     <div className="relative flex flex-col gap-3 lg:flex-row">
@@ -64,7 +59,7 @@ const DashboardFeedback = () => {
           </div>
 
           <button
-            onClick={handleViewDetails}
+            onClick={() => navigate(`/interview/result/${interviewAnswerId}`)}
             className="flex w-fit items-center justify-center gap-2 rounded-lg border border-primary-500 bg-primary-50 px-2 py-1 font-semibold text-primary-500"
           >
             <div>자세히 보기</div>
