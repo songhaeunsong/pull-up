@@ -6,7 +6,11 @@ import { Subject } from '@/types/member';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 
-const ProfileModal = () => {
+interface ProfileModalProps {
+  onClose: () => void;
+}
+
+const ProfileModal = ({ onClose }: ProfileModalProps) => {
   const [selectedSubjects, setSelectedSubjects] = useState<Subject[]>([]);
   const isDisabled = selectedSubjects.length === 0;
 
@@ -16,6 +20,7 @@ const ProfileModal = () => {
 
   const onSubmit = async (subjects: Subject[]) => {
     const status = await updateInterestSubjects(subjects);
+    onClose();
     if (status === 200) {
       toast.success('관심심 과목이 수정되었습니다.', { position: 'bottom-center' });
     } else {
