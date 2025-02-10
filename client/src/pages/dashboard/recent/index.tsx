@@ -11,7 +11,7 @@ const Recent = () => {
   const { data: examAll } = useGetExamAll();
 
   const examData =
-    examAll?.content.map((exam) => ({
+    examAll?.getExamResponses.map((exam) => ({
       id: exam.examId,
       title: exam.examName,
       date: convertDate(exam.date),
