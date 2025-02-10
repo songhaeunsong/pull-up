@@ -33,7 +33,7 @@ export const useUpdateInterestSubjects = (subjects: Subject[]) => {
     onMutate: async () => {
       await queryClient.cancelQueries({ queryKey: ['member'] });
       const previousData = queryClient.getQueryData<Member | null>(['member']);
-
+      console.log('previousData', previousData);
       if (previousData) {
         queryClient.setQueryData<Member>(['member'], {
           ...previousData,
