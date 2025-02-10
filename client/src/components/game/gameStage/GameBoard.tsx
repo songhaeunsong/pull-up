@@ -21,8 +21,10 @@ const GameBoard = ({ playerNumber, problems }: GameBoardProps) => {
       contents: [problems[cardIndex1].content, problems[cardIndex2].content],
     });
 
-    setShake(true);
-    setTimeout(() => setShake(false), 500);
+    if (!problems[cardIndex1].disabled && !problems[cardIndex2].disabled) {
+      setShake(true);
+      setTimeout(() => setShake(false), 500);
+    }
   };
 
   const handleClickCard = (index: number) => {
