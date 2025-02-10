@@ -10,7 +10,7 @@ import { toast } from 'react-toastify';
 
 const InterviewPage = () => {
   const { data: member } = useGetMemberInfo();
-  const { setIsSolvedToday, setInterviewId, setInteverviewAnswerId } = memberStore();
+  const { setIsSolvedToday, setInterviewId, setInterviewAnswerId } = memberStore();
 
   const navigate = useNavigate();
   const [hint, setHint] = useState(false);
@@ -45,8 +45,8 @@ const InterviewPage = () => {
 
       setIsSolvedToday(true);
       setInterviewId(data.interviewAnswerId);
-      setInteverviewAnswerId(data.interviewAnswerId);
-      navigate(`/interview/result/${data.interviewAnswerId}`);
+      setInterviewAnswerId(data.interviewAnswerId);
+      navigate(`/interview/result/${data.interviewId}`);
     } catch (error) {
       console.error('답변 작성을 실패했습니다.', error);
       toast.error('답변 작성을 실패했습니다.', { position: 'bottom-center' });

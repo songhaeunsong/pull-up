@@ -23,11 +23,11 @@ const InterviewResultPage = () => {
   const [interviewListData, setInterviewListData] = useState<InterviewListResponse[]>();
 
   useEffect(() => {
-    if (!isResultLoading) {
+    if (!isResultLoading && result) {
       setResultData(result);
     }
 
-    if (!isInterviewLoading) {
+    if (!isInterviewLoading && interviewList) {
       setInterviewListData(interviewList);
       console.log(interviewListData);
     }
