@@ -9,7 +9,7 @@ import { useNavigate } from 'react-router-dom';
 
 const InterviewPage = () => {
   const { data: member } = useGetMemberInfo();
-  const { setIsSolvedToday, setInterviewId } = memberStore();
+  const { setIsSolvedToday, setInterviewId, setInteverviewAnswerId } = memberStore();
 
   const navigate = useNavigate();
   const [hint, setHint] = useState(false);
@@ -46,6 +46,7 @@ const InterviewPage = () => {
     const data = await createMemberAnswer(interviewData.interviewId, interviewAnswer);
     setIsSolvedToday(true);
     setInterviewId(data.interviewAnswerId);
+    setInteverviewAnswerId(data.interviewAnswerId);
     navigate(`/interview/result/${data.interviewAnswerId}`);
 
     console.log('제출 답안: ', interviewAnswer);
