@@ -3,14 +3,11 @@ import SubjectSelector from '@/components/common/csConditionSelector/subjectSele
 import { SUBJECT_OPTIONS } from '@/components/common/csConditionSelector/subjectSelector/SubjectOptions';
 import { Button } from '@/components/ui/button';
 import { Subject } from '@/types/member';
+import { DialogClose } from '@radix-ui/react-dialog';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 
-interface ProfileModalProps {
-  onClose: () => void;
-}
-
-const ProfileModal = ({ onClose }: ProfileModalProps) => {
+const ProfileModal = () => {
   const [selectedSubjects, setSelectedSubjects] = useState<Subject[]>([]);
   const isDisabled = selectedSubjects.length === 0;
 
@@ -19,11 +16,13 @@ const ProfileModal = ({ onClose }: ProfileModalProps) => {
   };
 
   const onSubmit = async (subjects: Subject[]) => {
-    const status = await updateInterestSubjects(subjects);
-    onClose();
-    if (status === 200) {
-      toast.success('관심심 과목이 수정되었습니다.', { position: 'bottom-center' });
-    } else {
+    try {
+      const status = await updateInterestSubjects(subjects);
+      if (status === 200) {
+        toast.success('관심 과목이 수정되었습니다.', { position: 'bottom-center' });
+      }
+    } catch (error) {
+      console.error('관심 과목 수정에 실패했습니다.', error);
       toast.error('관심 과목 수정에 실패했습니다.', { position: 'bottom-center' });
     }
   };
@@ -42,9 +41,11 @@ const ProfileModal = ({ onClose }: ProfileModalProps) => {
           />
         ))}
       </div>
-      <Button disabled={isDisabled} onClick={() => onSubmit(selectedSubjects)}>
-        수정 완료
-      </Button>
+      <DialogClose asChild>
+        <Button disabled={isDisabled} onClick={() => onSubmit(selectedSubjects)}>
+          수정 완료
+        </Button>
+      </DialogClose>
     </div>
   );
 };

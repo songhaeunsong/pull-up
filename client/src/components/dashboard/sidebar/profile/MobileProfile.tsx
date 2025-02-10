@@ -1,7 +1,6 @@
 import Modal from '@/components/common/modal';
 import SubjectTag from '@/components/common/subjectTag';
 import ProfileModal from '../profileModal';
-import { useState } from 'react';
 
 interface MobileProfileProps {
   image: string;
@@ -11,8 +10,6 @@ interface MobileProfileProps {
 }
 
 const MobileProfile = ({ image, name, email, subjects }: MobileProfileProps) => {
-  const [isOpen, setIsOpen] = useState(false);
-
   return (
     <div className="flex flex-row justify-between gap-3 rounded-2xl bg-white p-5 shadow-sm">
       <div className="grid grid-cols-[auto_auto] grid-rows-[auto_auto] gap-6">
@@ -31,8 +28,8 @@ const MobileProfile = ({ image, name, email, subjects }: MobileProfileProps) => 
         </div>
       </div>
       <div className="mt-1 flex justify-end lg:mt-0 lg:w-full">
-        <Modal triggerName="과목 수정" triggerColor="transparent" onOpenChange={setIsOpen}>
-          <ProfileModal onClose={() => setIsOpen(false)} />
+        <Modal triggerName="과목 수정" triggerColor="transparent">
+          <ProfileModal />
         </Modal>
       </div>
     </div>
