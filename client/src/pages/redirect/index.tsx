@@ -7,27 +7,36 @@ import { useNavigate } from 'react-router-dom';
 const RedirectPage = () => {
   const navigate = useNavigate();
   const { data: auth, isLoading: isAuthLoading } = useAuthInfo();
-  const { data: member, isLoading: isMemberLoading } = useGetMemberInfo();
+  const { refetch } = useGetMemberInfo();
   const { setMember, setIsSolvedToday, setIsLoggedIn, setInterviewId, setInteverviewAnswerId } = memberStore();
 
   useEffect(() => {
     const handleRedirect = async () => {
-      if (!isAuthLoading && !isMemberLoading && auth && member) {
-        // 미가입시
-        if (!auth.isSignedUp) {
-          setIsLoggedIn(true);
-          navigate('/signup');
-          return;
-        } else {
+      if (!isAuthLoading && !auth) {
+        navigate('/signin');
+        return;
+      }
+
+      if (auth && !isAuthLoading) {
+        const memberData = await refetch();
+
+        if (memberData) {
+          // 미가입시
+          if (!auth.isSignedUp) {
+            setIsLoggedIn(true);
+            navigate('/signup');
+            return;
+          }
+
           // 관심과목 미선택시
-          if (!member.interestSubjects) {
+          if (!memberData.interestSubjects) {
             setIsLoggedIn(true);
             navigate('/signup');
             return;
           }
 
           // 유저 정보 저장
-          setMember(member);
+          setMember(memberData);
           setIsLoggedIn(true);
           setIsSolvedToday(auth.isSolvedToday);
           setInterviewId(auth.interviewId);
@@ -35,14 +44,10 @@ const RedirectPage = () => {
           navigate(auth.isSolvedToday ? `/interview/result/${auth.interviewId}` : '/interview');
         }
       }
-
-      if (!isAuthLoading && !auth) {
-        navigate('/signin');
-      }
     };
 
     handleRedirect();
-  }, [auth, member, isAuthLoading, isMemberLoading]);
+  }, [auth, isAuthLoading]);
 
   return null;
 };

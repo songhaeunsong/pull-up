@@ -1,16 +1,16 @@
 import SwipeCard from '@/components/common/swipeCard';
 import MobileProfile from './profile/MobileProfile';
 import Card from './card';
+import { Subject } from '@/types/member';
 
 interface MobileTopBarProps {
   image: string;
   name: string;
   email: string;
-  subjects: string[];
-  onClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  subjects: Subject[];
 }
 
-const MobileTopBar = ({ image, name, email, subjects, onClick }: MobileTopBarProps) => {
+const MobileTopBar = ({ image, name, email, subjects }: MobileTopBarProps) => {
   const dummyRecent = {
     content: '제11회 모의고사',
     date: '2025.01.12',
@@ -35,7 +35,7 @@ const MobileTopBar = ({ image, name, email, subjects, onClick }: MobileTopBarPro
 
   return (
     <div className="flex flex-col gap-4">
-      <MobileProfile image={image} name={name} email={email} subjects={subjects} onClick={onClick} />
+      <MobileProfile image={image} name={name} email={email} subjects={subjects} />
       <SwipeCard components={examComponents} dots={true} />
     </div>
   );
