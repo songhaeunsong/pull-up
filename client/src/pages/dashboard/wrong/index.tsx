@@ -4,6 +4,7 @@ import RouteHeader from '@/components/common/routeheader';
 import ReviewList from '@/components/dashboard/reviewList';
 import { useGetWrongProblemAll } from '@/api/problem';
 import convertDate from '@/utils/convertDate';
+import { convertSubject } from '@/utils/convertSubject';
 
 const Wrong = () => {
   const navigate = useNavigate();
@@ -15,7 +16,7 @@ const Wrong = () => {
       id: item.problemId,
       title: item.question,
       date: convertDate(item.date),
-      tags: item.subject,
+      tags: convertSubject(item.subject),
     })) || [];
 
   const onHandleBack = () => {

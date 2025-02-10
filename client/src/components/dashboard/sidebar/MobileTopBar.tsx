@@ -2,6 +2,7 @@ import SwipeCard from '@/components/common/swipeCard';
 import MobileProfile from './profile/MobileProfile';
 import Card from './card';
 import { Subject } from '@/types/member';
+import { convertSubject } from '@/utils/convertSubject';
 
 interface MobileTopBarProps {
   image: string;
@@ -35,7 +36,7 @@ const MobileTopBar = ({ image, name, email, subjects }: MobileTopBarProps) => {
 
   return (
     <div className="flex flex-col gap-4">
-      <MobileProfile image={image} name={name} email={email} subjects={subjects} />
+      <MobileProfile image={image} name={name} email={email} subjects={convertSubject(subjects)} />
       <SwipeCard components={examComponents} dots={true} />
     </div>
   );

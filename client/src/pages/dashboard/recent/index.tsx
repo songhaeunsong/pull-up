@@ -4,6 +4,7 @@ import RouteHeader from '@/components/common/routeheader';
 import ReviewList from '@/components/dashboard/reviewList';
 import { useGetExamAll } from '@/api/exam';
 import convertDate from '@/utils/convertDate';
+import { convertSubject } from '@/utils/convertSubject';
 
 const Recent = () => {
   const navigate = useNavigate();
@@ -11,11 +12,11 @@ const Recent = () => {
   const { data: examAll } = useGetExamAll();
 
   const examData =
-    examAll?.content.map((exam) => ({
+    examAll?.getExamResponses.map((exam) => ({
       id: exam.examId,
       title: exam.examName,
       date: convertDate(exam.date),
-      tags: exam.subjects,
+      tags: convertSubject(exam.subjects),
     })) || [];
 
   const onHandleBack = () => {
