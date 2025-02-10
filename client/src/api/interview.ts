@@ -81,8 +81,21 @@ const getInterviewAnswers = (interviewAnswerId: number): Promise<InterviewAnswer
 
 export const useGetInterviewAnswers = (interviewAnswerId: number) => {
   return useQuery({
-    queryKey: ['interviewAnswerList', interviewAnswerId],
+    queryKey: ['interviewAnswers', interviewAnswerId],
     queryFn: () => getInterviewAnswers(interviewAnswerId),
+  });
+};
+
+// 다른 사람 답변 단건 조회
+const getInterviewAnswerDetail = (interviewAnswerId: number) => {
+  const data = api.get(`interview/${interviewAnswerId}`).json<InterviewAnswer>();
+  return data;
+};
+
+export const useGetInterviewAnswerDetail = (interviewAnswerId: number) => {
+  return useQuery({
+    queryKey: ['interviewAnswerDetail', interviewAnswerId],
+    queryFn: () => getInterviewAnswerDetail(interviewAnswerId),
   });
 };
 
@@ -97,15 +110,15 @@ export const useCreateInterviewAnswerLike = (interviewId: number, interviewAnswe
     mutationFn: () => createInterviewAnswerLike(interviewAnswerId),
     onMutate: async () => {
       await Promise.all([
-        queryClient.cancelQueries({ queryKey: ['interviewAnswerList', interviewId] }),
+        queryClient.cancelQueries({ queryKey: ['interviewAnswers', interviewId] }),
         queryClient.cancelQueries({ queryKey: ['interviewAnswerDetail', interviewAnswerId] }),
       ]);
 
-      const previousListData = queryClient.getQueryData(['interviewAnswerList', interviewId]);
+      const previousListData = queryClient.getQueryData(['interviewAnswers', interviewId]);
       const previousDetailData = queryClient.getQueryData(['interviewAnswerDetail', interviewAnswerId]);
 
       if (previousListData) {
-        queryClient.setQueryData(['interviewAnswerList', interviewId], (old: InterviewAnswer[]) =>
+        queryClient.setQueryData(['interviewAnswers', interviewId], (old: InterviewAnswer[]) =>
           old?.map((answer) =>
             answer.interviewAnswerId === interviewAnswerId
               ? {
@@ -130,7 +143,7 @@ export const useCreateInterviewAnswerLike = (interviewId: number, interviewAnswe
     },
     onError: (err, _, context) => {
       if (context?.previousListData) {
-        queryClient.setQueryData(['interviewAnswerList', interviewId], context.previousListData);
+        queryClient.setQueryData(['interviewAnswers', interviewId], context.previousListData);
       }
       if (context?.previousDetailData) {
         queryClient.setQueryData(['interviewAnswerDetail', interviewAnswerId], context.previousDetailData);
@@ -138,7 +151,7 @@ export const useCreateInterviewAnswerLike = (interviewId: number, interviewAnswe
       console.error('좋아요 요청을 실패했습니다.', err);
     },
     onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ['interviewAnswerList', interviewId] });
+      queryClient.invalidateQueries({ queryKey: ['interviewAnswers', interviewId] });
       queryClient.invalidateQueries({ queryKey: ['interviewAnswerDetail', interviewAnswerId] });
     },
   });
