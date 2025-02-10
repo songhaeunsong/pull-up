@@ -12,6 +12,7 @@ const useWebSocket = () => {
   const [roomStatus, setRoomStatus] = useState<RoomStatus>('WAITING');
   const [roomInfo, setRoomInfo] = useState<StompRoomInfo>({
     roomId: '',
+    roomStatus: 'WAITING',
     player1P: { memberId: 0, name: '', score: 0 },
     player2P: { memberId: 0, name: '', score: 0 },
     problemCardWithoutCardIds: [],
@@ -48,10 +49,9 @@ const useWebSocket = () => {
     return () => {
       if (client.current) {
         if (!location.pathname.startsWith('/game')) {
+          setRoomId('');
           console.log('Websocket: 연결 해제');
           client.current.deactivate();
-
-          setRoomId('');
         }
       }
     };
@@ -69,16 +69,18 @@ const useWebSocket = () => {
     statusSubscription.current?.unsubscribe();
     roomSubscription.current?.unsubscribe();
 
-    statusSubscription.current = client.current.subscribe(`/topic/game/${roomId}/status`, (message) => {
-      const { status } = JSON.parse(message.body);
-      setRoomStatus(status);
-    });
+    if (isGameWaitingPage) {
+      statusSubscription.current = client.current.subscribe(`/topic/game/${roomId}/status`, (message) => {
+        const { status } = JSON.parse(message.body);
+        setRoomStatus(status);
+      });
+    }
 
     if (isGameStagePage) {
       roomSubscription.current = client.current.subscribe(`/topic/game/${roomId}`, (message) => {
-        const { player1P, player2P, problemCardWithoutCardIds, roomId } = JSON.parse(message.body);
+        const { roomId, roomStatus, player1P, player2P, problemCardWithoutCardIds } = JSON.parse(message.body);
 
-        setRoomInfo({ player1P, player2P, problemCardWithoutCardIds, roomId });
+        setRoomInfo({ roomId, roomStatus, player1P, player2P, problemCardWithoutCardIds });
       });
     }
   };
