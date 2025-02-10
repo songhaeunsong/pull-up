@@ -119,6 +119,6 @@ export const useGetGameResult = () => {
 
   return useQuery({
     queryKey: ['gameResult'],
-    queryFn: () => getGameResult('4'),
+    queryFn: () => getGameResult(roomId),
   });
 };

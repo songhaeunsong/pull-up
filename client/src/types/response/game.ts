@@ -16,6 +16,10 @@ export interface GetRandomTypeResponse {
 }
 
 export interface GetGameResultResponse {
-  gameRoomResultStatus: 'WIN' | 'DRAW';
-  winnerName: string | null;
+  gameRoomResultStatus: 'WIN' | 'DRAW' | 'LOSE';
+  isForfeitGame: boolean;
+  name: string;
+  score: number;
+  opponentName: string;
+  opponentScore: number;
 }

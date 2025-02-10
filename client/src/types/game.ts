@@ -14,6 +14,7 @@ export interface Player {
 
 export interface StompRoomInfo {
   roomId: string;
+  roomStatus: RoomStatus;
   player1P: Player;
   player2P: Player;
   problemCardWithoutCardIds: Card[];
