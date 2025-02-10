@@ -47,7 +47,7 @@ export const createMemberAnswer = async (interviewId: number, answer: string): P
 
 // 결과 조회
 const getInterviewResult = (interviewAnswerId: number): Promise<InterviewResultResponse> => {
-  const data = api.get(`interview/${interviewAnswerId}/result`).json<InterviewResultResponse>();
+  const data = api.get(`interview/result/${interviewAnswerId}`).json<InterviewResultResponse>();
   return data;
 };
 
