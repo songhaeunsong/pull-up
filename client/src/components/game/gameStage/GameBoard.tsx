@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import GameCard from './GameCard';
 import { Card } from '@/types/game';
-import useWebSocket from '@/hooks/useWebSocket';
+import { useWebSocketStore } from '@/stores/useWebSocketStore';
 
 interface GameBoardProps {
   playerNumber: 1 | 2;
@@ -9,7 +9,7 @@ interface GameBoardProps {
 }
 
 const GameBoard = ({ playerNumber, problems }: GameBoardProps) => {
-  const { sendMessage, roomInfo } = useWebSocket();
+  const { sendMessage, roomInfo } = useWebSocketStore();
 
   const [selectedCards, setSelectedCards] = useState<number[]>([]);
   const [shake, setShake] = useState(false);

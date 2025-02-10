@@ -5,19 +5,19 @@ import JoinGame from './gameModalComponent/JoinGame';
 import Waiting from './gameModalComponent/waiting/Waiting';
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import useWebSocket from '@/hooks/useWebSocket';
 import WaitingAfterCreating from './gameModalComponent/waiting/WaitingAfterCreating';
 import { toast } from 'react-toastify';
 import { useRoomStore } from '@/stores/roomStore';
 import { GetRandomTypeResponse } from '@/types/response/game';
 import WaitingRamdom from './gameModalComponent/waiting/WaitingRandom';
+import { useWebSocketStore } from '@/stores/useWebSocketStore';
 
 const GameModals = () => {
   const navigate = useNavigate();
   const createRoomTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const { roomId, setRoomId } = useRoomStore();
-  const { roomStatus, sendMessage } = useWebSocket();
+  const { roomStatus, sendMessage } = useWebSocketStore();
 
   const postCreateGame = usePostCreateGame();
   const postJoinGame = usePostJoinGame();

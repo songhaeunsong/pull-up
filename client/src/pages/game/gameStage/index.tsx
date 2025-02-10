@@ -3,15 +3,15 @@ import ProgressBar from '@/components/common/progressBar';
 import GameBoard from '@/components/game/gameStage/GameBoard';
 import GameScoreBoard from '@/components/game/gameStage/GameScoreBoard';
 import { Button } from '@/components/ui/button';
-import useWebSocket from '@/hooks/useWebSocket';
 import { useRoomStore } from '@/stores/roomStore';
+import { useWebSocketStore } from '@/stores/useWebSocketStore';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const GameStage = () => {
   const navigate = useNavigate();
   const { roomId } = useRoomStore();
-  const { roomInfo, sendMessage } = useWebSocket();
+  const { roomInfo, sendMessage } = useWebSocketStore();
 
   const { data: idData, isLoading } = useGetId(roomId);
 
