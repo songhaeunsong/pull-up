@@ -6,13 +6,13 @@ import { useNavigate } from 'react-router-dom';
 
 const RedirectPage = () => {
   const navigate = useNavigate();
-  const { data: member } = useGetMemberInfo();
-  const { data: auth, isLoading } = useAuthInfo();
-  const { setMember, setIsSolvedToday, setIsLoggedIn, setInterviewId } = memberStore();
+  const { data: auth, isLoading: isAuthLoading } = useAuthInfo();
+  const { data: member, isLoading: isMemberLoading } = useGetMemberInfo();
+  const { setMember, setIsSolvedToday, setIsLoggedIn, setInterviewId, setInteverviewAnswerId } = memberStore();
 
   useEffect(() => {
     const handleRedirect = async () => {
-      if (!isLoading && auth) {
+      if (!isAuthLoading && !isMemberLoading && auth && member) {
         // 미가입시
         if (!auth.isSignedUp) {
           setIsLoggedIn(true);
@@ -20,7 +20,7 @@ const RedirectPage = () => {
           return;
         } else {
           // 관심과목 미선택시
-          if (!member?.interestSubjects) {
+          if (!member.interestSubjects) {
             setIsLoggedIn(true);
             navigate('/signup');
             return;
@@ -31,17 +31,18 @@ const RedirectPage = () => {
           setIsLoggedIn(true);
           setIsSolvedToday(auth.isSolvedToday);
           setInterviewId(auth.interviewId);
+          setInteverviewAnswerId(auth.interviewAnswerId);
           navigate(auth.isSolvedToday ? `/interview/result/${auth.interviewId}` : '/interview');
         }
       }
 
-      if (!isLoading && !auth) {
+      if (!isAuthLoading && !auth) {
         navigate('/signin');
       }
     };
 
     handleRedirect();
-  }, [auth, isLoading, navigate]);
+  }, [auth, member, isAuthLoading, isMemberLoading]);
 
   return null;
 };
