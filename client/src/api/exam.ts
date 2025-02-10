@@ -6,7 +6,6 @@ import { GetCorrectRateResponse, GetExamAllResponse, GetScoreResponse } from '@/
 const getScore = async () => {
   const response = await api.get<GetScoreResponse>('exam/me/score');
   const data = await response.json();
-
   return data;
 };
 
@@ -19,7 +18,6 @@ export const useGetScore = () =>
 const getCorrectRate = async () => {
   const response = await api.get<GetCorrectRateResponse>('exam/me/correct-rate');
   const data = await response.json();
-
   return data;
 };
 
@@ -30,7 +28,11 @@ export const useGetCorrectRate = () =>
   });
 
 // 최근에 푼 모의고사 전체 조회
-const getExamAll = () => api.get<GetExamAllResponse>('exam/me/all').json();
+const getExamAll = async () => {
+  const response = await api.get<GetExamAllResponse>('exam/me/all');
+  const responseData = await response.json();
+  return responseData;
+};
 
 export const useGetExamAll = () =>
   useQuery({
@@ -39,7 +41,11 @@ export const useGetExamAll = () =>
   });
 
 // 최근에 푼 모의고사 단건 조회
-const getRecentExam = () => api.get<Exam>('exam/me/recent').json();
+const getRecentExam = async () => {
+  const response = await api.get<Exam>('exam/me/recent');
+  const responseData = await response.json();
+  return responseData;
+};
 
 export const useGetRecentExam = () =>
   useQuery({
@@ -76,7 +82,6 @@ export const useGetExamDetails = (examId: number) => {
 export const postExamAnswer = async (examId: number, data: ExamResultRequest) => {
   return await api.post(`exam/${examId}`, {
     json: data,
-    headers: { 'Content-Type': 'application/json' },
   });
 };
 

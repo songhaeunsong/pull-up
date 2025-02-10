@@ -17,7 +17,6 @@ const ExamPage = () => {
           subjects: subjects,
         };
         const response = await postExam(requestBody);
-
         navigate(`/exam/${response.examId}`);
       } catch (error) {
         console.error('모의고사 생성 실패: ', error);

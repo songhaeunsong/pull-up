@@ -44,7 +44,7 @@ const ExamDetailPage = () => {
       setAnswer(problem.problemId, '');
     });
 
-    setIsInitialized(true);
+    //setIsInitialized(true);
   }, [examProblems, isInitialized, resetExamState, initializeAndSetOptions, setSolutionPage, setAnswer]);
 
   if (!examProblems) {
@@ -88,7 +88,7 @@ const ExamDetailPage = () => {
               onClick={() => {
                 document
                   .getElementById(`problem-${problem.problemId}`)
-                  ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
+                  ?.scrollIntoView({ behavior: 'smooth', block: window.innerWidth >= 768 ? 'center' : 'end' });
               }}
             />
           ))}
@@ -101,7 +101,7 @@ const ExamDetailPage = () => {
     <div className="flex gap-12 bg-Main md:px-16 md:py-10">
       <div className="relative flex w-full flex-col gap-4 sm:mt-16 md:flex-row">
         {/* Info Section - Mobile View */}
-        <section className="sticky top-2 border border-b-2 bg-white px-10 pb-2 pt-[86px] sm:pt-[8px] md:hidden">
+        <section className="sticky top-2 border border-b-2 bg-white px-10 pt-[86px] sm:pt-[8px] md:hidden">
           <Accordion type="single" defaultValue="timeLeft" collapsible>
             {infoSections.map(({ id, title, icon, content }) => (
               <AccordionItem key={id} value={id}>
