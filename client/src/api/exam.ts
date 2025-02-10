@@ -49,12 +49,9 @@ export const useGetRecentExam = () =>
 
 // 모의고사 생성
 export const postExam = async (data: ExamCreateRequest) => {
-  return await api
-    .post('exam/me', {
-      json: data,
-      headers: { 'Content-Type': 'application/json' },
-    })
-    .json<{ examId: number }>();
+  const response = await api.post('exam/me', { json: data });
+  const responseData = await response.json<{ examId: number }>();
+  return responseData;
 };
 
 // 모의고사 조회
