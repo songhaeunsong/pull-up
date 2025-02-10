@@ -29,6 +29,7 @@ const InterviewResultPage = () => {
 
     if (!isInterviewLoading) {
       setInterviewListData(interviewList);
+      console.log(interviewListData);
     }
   }, [result, interviewList, isResultLoading, isInterviewLoading]);
 
