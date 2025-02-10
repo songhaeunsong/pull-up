@@ -27,9 +27,13 @@ const SideMenu = ({ isOpen, interviewList, handleMenuClick, handleSearchClick, o
           </button>
         </div>
         <div className="flex w-full flex-col gap-2">
-          {interviewList.map((item, id) => (
-            <MenuItem key={id} title={item.question} onInterviewClick={() => onInterviewClick(item.interviewId)} />
-          ))}
+          {interviewList.length > 0 ? (
+            interviewList.map((item, id) => (
+              <MenuItem key={id} title={item.question} onInterviewClick={() => onInterviewClick(item.interviewId)} />
+            ))
+          ) : (
+            <div className="flex justify-center">목록이 없습니다.</div>
+          )}
         </div>
       </div>
     </div>
