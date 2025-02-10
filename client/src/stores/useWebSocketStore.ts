@@ -20,7 +20,7 @@ export const useWebSocketStore = create<WebSocketState>((set, get) => ({
   roomStatus: 'WAITING',
   roomInfo: {
     roomId: '',
-    roomStatus: 'WAITING',
+    gameRoomStatus: 'WAITING',
     player1P: { memberId: 0, name: '', score: 0 },
     player2P: { memberId: 0, name: '', score: 0 },
     problemCardWithoutCardIds: [],
@@ -83,8 +83,8 @@ export const useWebSocketStore = create<WebSocketState>((set, get) => ({
     });
 
     const roomSub = client.subscribe(`/topic/game/${roomId}`, (message) => {
-      const { roomId, roomStatus, player1P, player2P, problemCardWithoutCardIds } = JSON.parse(message.body);
-      set({ roomInfo: { roomId, roomStatus, player1P, player2P, problemCardWithoutCardIds } });
+      const { roomId, gameRoomStatus, player1P, player2P, problemCardWithoutCardIds } = JSON.parse(message.body);
+      set({ roomInfo: { roomId, gameRoomStatus, player1P, player2P, problemCardWithoutCardIds } });
     });
 
     set({ statusSubscription: statusSub, roomSubscription: roomSub });

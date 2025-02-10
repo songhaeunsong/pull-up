@@ -14,15 +14,12 @@ const GameStage = () => {
 
   const { data: idData, isLoading } = useGetId(roomId);
 
-  const handleTimeout = () => {
-    sendMessage('app/card/check', {
-      checkType: 'TIME_OVER',
-    });
-  };
-
   useEffect(() => {
-    if (roomInfo.roomStatus === 'FINISHED') {
-      handleTimeout();
+    if (roomInfo.gameRoomStatus === 'FINISHED') {
+      sendMessage('app/card/check', {
+        checkType: 'TIME_OVER',
+      });
+
       navigate('/game/result');
     }
   }, [roomInfo]);
