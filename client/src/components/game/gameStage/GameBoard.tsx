@@ -15,7 +15,8 @@ const GameBoard = ({ playerNumber, problems }: GameBoardProps) => {
   const [shake, setShake] = useState(false);
 
   const checkCardPair = (cardIndex1: number, cardIndex2: number) => {
-    sendMessage('/app/card/submit', {
+    sendMessage('/app/card/check', {
+      checkType: 'SUBMIT',
       roomId: roomInfo.roomId,
       playerId: playerNumber,
       contents: [problems[cardIndex1].content, problems[cardIndex2].content],
