@@ -1,12 +1,15 @@
-import { useGetInterviewResult } from '@/api/interview';
-import { memberStore } from '@/stores/memberStore';
 import Icon from '@/components/common/icon';
+import { memberStore } from '@/stores/memberStore';
 import { InterviewResultResponse } from '@/types/interview';
 import { useEffect, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 const DashboardFeedback = () => {
-  const { data: result } = useGetInterviewResult(1);
-  const { setIsSolvedToday, setInterviewId } = memberStore();
+  const navigate = useNavigate();
+  const isSolvedToday = true;
+  //const { data: result } = useGetInterviewResult(1);
+
+  const { interviewId } = memberStore();
   const [resultData, setResultData] = useState<InterviewResultResponse>({
     interviewId: 1,
     question: 'Checked Exception과 Unchecked Exception의 차이는 ?',
@@ -22,19 +25,28 @@ const DashboardFeedback = () => {
     date: '2025-02-05T14:28:35.123456789',
   });
 
+  //setIsSolvedToday(true);
+  console.log(isSolvedToday);
+
   useEffect(() => {
-    if (result) {
-      setResultData(result);
+    if (isSolvedToday) {
+      // memberStore에서 interviewAnswerId 받아와서 뿌려주기
     }
-  }, [result]);
+  }, [isSolvedToday]);
+
+  const handleViewDetails = () => {
+    navigate(`/interview/result/${resultData.interviewId}`);
+  };
 
   return (
-    <div className="flex gap-3">
+    <div className="relative flex flex-col gap-3 lg:flex-row">
       <div className="flex flex-1 flex-col gap-3">
-        <div className="flex flex-1 items-center rounded-xl border border-stone-200 p-6">
+        {/* 문제 */}
+        <div className="flex flex-1 items-center justify-center rounded-xl border border-stone-200 p-6">
           <span className="break-keep text-center text-lg font-bold">{resultData.question}</span>
         </div>
-        <div className="flex flex-1 flex-col items-center justify-center gap-2 rounded-xl border border-stone-200">
+        {/* 키워드 */}
+        <div className="flex flex-1 flex-col items-center justify-center gap-2 rounded-xl border border-stone-200 p-6">
           <div className="w-fit rounded-md bg-primary-500 px-3 py-1 text-sm text-white">키워드</div>
           <div className="flex flex-wrap justify-center gap-3">
             {resultData.keywords.map((keyword, id) => (
@@ -43,10 +55,21 @@ const DashboardFeedback = () => {
           </div>
         </div>
       </div>
+      {/* 강점. 약점 */}
       <div className="flex flex-1 flex-col gap-3 rounded-xl border border-stone-200 p-5">
-        <div className="flex gap-2">
-          <Icon id={'ai'} size={24} />
-          <span className="text-xl font-semibold text-stone-950">AI 피드백</span>
+        <div className="flex items-center justify-between">
+          <div className="flex gap-2">
+            <Icon id={'ai'} size={24} />
+            <span className="text-xl font-semibold text-stone-950">AI 피드백</span>
+          </div>
+
+          <button
+            onClick={handleViewDetails}
+            className="flex w-fit items-center justify-center gap-2 rounded-lg border border-primary-500 bg-primary-50 px-2 py-1 font-semibold text-primary-500"
+          >
+            <div>자세히 보기</div>
+            <Icon id={'list'} size={16}></Icon>
+          </button>
         </div>
         <section>
           <span className="text-lg font-semibold text-primary-500">강점</span>
@@ -57,6 +80,18 @@ const DashboardFeedback = () => {
           <p>{resultData.weakness}</p>
         </section>
       </div>
+
+      {!isSolvedToday && (
+        <div className="absolute inset-0 flex flex-col items-center justify-center bg-white bg-opacity-80">
+          <p className="text-lg font-bold text-primary-500">아직 문제를 풀지 않았어요!</p>
+          <button
+            onClick={() => navigate('/interview')}
+            className="mt-4 w-[80%] rounded-xl bg-primary-500 p-3 text-lg font-semibold text-white lg:text-xl lg:font-bold"
+          >
+            오늘의 문제 풀러 가기
+          </button>
+        </div>
+      )}
     </div>
   );
 };
