@@ -9,13 +9,14 @@ function useSideBarCard(limit: number = 10) {
 
   // 문제 데이터 가공(recent, archived)
   function getProcessedProblemList(
-    problemDtos?: { question: string; subject: string }[],
+    problemDtos?: { problemId: number; question: string; subject: string }[],
     defaultMessage: string = '문제 데이터가 없습니다.',
   ) {
     if (!problemDtos || problemDtos.length === 0) {
-      return [{ content: defaultMessage, date: '', subjects: [] }];
+      return [{ id: 0, content: defaultMessage, date: '', subjects: [] }];
     }
     return problemDtos.slice(0, Math.min(problemDtos.length, limit)).map((item) => ({
+      id: item.problemId,
       content: item.question,
       subjects: Array.isArray(item.subject) ? item.subject : [convertSubject(item.subject)],
     }));
@@ -23,9 +24,10 @@ function useSideBarCard(limit: number = 10) {
 
   // examData 가공
   const recentExamList = examAll?.getExamResponses?.slice(0, 1).map((item) => ({
+    id: item.examId,
     content: item.examName,
     subjects: convertSubject(item.subjects),
-  })) ?? [{ content: '최근 푼 모의고사 기록이 없습니다.', subjects: [] }];
+  })) ?? [{ id: 0, content: '최근 푼 모의고사 기록이 없습니다.', subjects: [] }];
 
   const wrongProblemList = getProcessedProblemList(recentWrongProblems?.recentWrongQuestionDtos);
   const archiveProblemList = getProcessedProblemList(archivedProblems?.bookmarkedProblemDtos);

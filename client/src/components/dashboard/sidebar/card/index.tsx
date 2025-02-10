@@ -6,11 +6,19 @@ import { Link } from 'react-router-dom';
 interface CardProps {
   link: string;
   title: string;
-  data: { content: string; date?: string; subjects: string[] };
+  data: {
+    id: number;
+    content: string;
+    date?: string;
+    subjects: string[];
+  };
 }
 
 const Card = ({ link, title, data }: CardProps) => {
   const { isMobile, isTabletMd } = useResponsive();
+  const generatedLink =
+    data.id === 0 ? link : link === 'recent' ? `/exam/${data.id}/result` : `/exam/problem/${data.id}`;
+
   return (
     <div className="flex w-full flex-col gap-2 pb-2">
       <nav>
@@ -26,7 +34,7 @@ const Card = ({ link, title, data }: CardProps) => {
         </div>
       </nav>
 
-      <div className="flex w-full flex-col items-center">
+      <Link to={generatedLink} className="flex w-full flex-col items-center">
         <button className="flex w-[99%] flex-col gap-6 rounded-2xl bg-white p-5 shadow-sm md:px-3 md:py-4">
           <div className="flex h-[30px] w-full justify-between md:h-[45px] lg:h-auto">
             <span className="text:base text-left font-medium text-stone-800 md:text-xs lg:text-base">
@@ -40,7 +48,7 @@ const Card = ({ link, title, data }: CardProps) => {
             ))}
           </div>
         </button>
-      </div>
+      </Link>
     </div>
   );
 };
