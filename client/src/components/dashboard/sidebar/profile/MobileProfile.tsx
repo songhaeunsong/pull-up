@@ -1,15 +1,15 @@
-import Icon from '@/components/common/icon';
+import Modal from '@/components/common/modal';
 import SubjectTag from '@/components/common/subjectTag';
+import ProfileModal from '../profileModal';
 
 interface MobileProfileProps {
   image: string;
   name: string;
   email: string;
   subjects: string[];
-  onClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
-const MobileProfile = ({ image, name, email, subjects, onClick }: MobileProfileProps) => {
+const MobileProfile = ({ image, name, email, subjects }: MobileProfileProps) => {
   return (
     <div className="flex flex-row justify-between gap-3 rounded-2xl bg-white p-5 shadow-sm">
       <div className="grid grid-cols-[auto_auto] grid-rows-[auto_auto] gap-6">
@@ -27,9 +27,11 @@ const MobileProfile = ({ image, name, email, subjects, onClick }: MobileProfileP
           </div>
         </div>
       </div>
-      <button className="mt-1 flex justify-end" onClick={onClick}>
-        <Icon id="about" />
-      </button>
+      <div className="mt-1 flex justify-end lg:mt-0 lg:w-full">
+        <Modal triggerName="과목 수정" triggerColor="transparent">
+          <ProfileModal />
+        </Modal>
+      </div>
     </div>
   );
 };
