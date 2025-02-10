@@ -4,6 +4,7 @@ import Streak from '@/components/dashboard/charts/Streak';
 import WinningRate from '@/components/dashboard/charts/WinningRate';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import ChartContainer from './ChartContainer';
+import DashboardFeedback from '@/components/dashboard/dashboardFeedback';
 
 const ACTIVE_STYLE =
   'data-[state=active]:border-b-[3px] data-[state=active]:border-primary-500 data-[state=active]:text-primary-500';
@@ -31,7 +32,9 @@ const MobileDashboardContainer = () => {
       <TabsContent value="today" className="w-full">
         <div className="flex min-h-[300px] flex-col rounded-2xl bg-white p-5">
           <ChartContainer>
-            <div className="flex items-center justify-center">오늘의 문제</div>
+            <div className="flex items-center justify-center">
+              <DashboardFeedback />
+            </div>
           </ChartContainer>
         </div>
       </TabsContent>
