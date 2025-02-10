@@ -4,19 +4,20 @@ import SideMenu from '@/components/interview/sideMenu';
 import InterviewFeedback from '@/components/interview/interviewFeedback';
 import { InterviewListResponse, InterviewResultResponse } from '@/types/interview';
 import { useEffect, useState } from 'react';
-import { useNavigate, useParams } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@radix-ui/react-tabs';
 import InterviewMyAnswer from '@/components/interview/myAnswer';
 import convertDate from '@/utils/convertDate';
 import Icon from '@/components/common/icon';
+import { memberStore } from '@/stores/memberStore';
 
 const InterviewResultPage = () => {
   const navigate = useNavigate();
-  const { interviewId } = useParams();
+  const { interviewAnswerId } = memberStore();
   const [isSideMenuOpen, setIsSideMenuOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const { data: result } = useGetInterviewResult(Number(interviewId));
+  const { data: result } = useGetInterviewResult(interviewAnswerId);
   const [resultData, setResultData] = useState<InterviewResultResponse>({
     interviewId: 1,
     question: 'Checked Exception과 Unchecked Exception의 차이는 ?',
