@@ -2,9 +2,8 @@ import { Subject } from '@/types/member';
 import Card from './card';
 import Profile from './profile';
 import { convertSubject } from '@/utils/convertSubject';
-import { useGetArchivedProblemAll, useGetWrongProblemAll } from '@/api/problem';
+import { useGetArchivedProblemAll, useGetRecentWrongProblem } from '@/api/problem';
 import { useGetExamAll } from '@/api/exam';
-import convertDate from '@/utils/convertDate';
 
 interface SideBarProps {
   image: string;
@@ -14,16 +13,18 @@ interface SideBarProps {
 }
 
 const SideBar = ({ image, name, email, subjects }: SideBarProps) => {
-  const { data: wrongProblems, isError } = useGetWrongProblemAll();
+  const { data: recentWrongProblems } = useGetRecentWrongProblem();
   const { data: archivedProblems } = useGetArchivedProblemAll();
   const { data: examAll } = useGetExamAll();
 
-  // 헬퍼 함수: 문제 리스트 가공
   function getProcessedProblemList(
     problemDtos?: { question: string; subject: string }[],
-    defaultMessage: string = '데이터가 없습니다.',
+    defaultMessage: string = '데이터가 없습니다!',
     limit: number = 10,
   ) {
+    if (!problemDtos || problemDtos.length === 0) {
+      return [{ content: defaultMessage, date: '', subjects: [] }];
+    }
     return (
       problemDtos?.slice(0, Math.min(problemDtos.length, limit)).map((item) => ({
         content: item.question,
@@ -32,13 +33,14 @@ const SideBar = ({ image, name, email, subjects }: SideBarProps) => {
     );
   }
 
-  // 부모 컴포넌트에서 데이터 가공
+  // 최근 모의고사
   const recentExamList = examAll?.getExamResponses?.slice(0, 1).map((item) => ({
     content: item.examName,
     subjects: convertSubject(item.subjects),
-    date: convertDate(item.date),
   })) ?? [{ content: '데이터가 없습니다.', subjects: [] }];
-  const wrongProblemList = getProcessedProblemList(wrongProblems?.wrongProblemDtos);
+  // 틀린 문제 리스트
+  const wrongProblemList = getProcessedProblemList(recentWrongProblems?.recentWrongQuestionDtos);
+  // 아카이브 문제 리스트
   const archiveProblemList = getProcessedProblemList(archivedProblems?.bookmarkedProblemDtos);
 
   return (

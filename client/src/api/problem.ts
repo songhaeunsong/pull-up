@@ -1,10 +1,18 @@
-import { ProblemBrief, ProblemDetail } from '@/types/problem';
+import { ProblemDetail } from '@/types/problem';
 import api from './instance';
 import { useQuery } from '@tanstack/react-query';
-import { GetArchivedProblemAllResponse, GetWrongProblemAllResponse } from '@/types/response/problems';
+import {
+  GetArchivedProblemAllResponse,
+  GetRecentWrongProblem,
+  GetWrongProblemAllResponse,
+} from '@/types/response/problems';
 
 // 내가 틀린 문제 최근 전체 조회
-const getWrongProblemAll = () => api.get<GetWrongProblemAllResponse>('problem/me/all').json();
+const getWrongProblemAll = async () => {
+  const response = await api.get<GetWrongProblemAllResponse>('problem/me/all');
+  const responseData = await response.json();
+  return responseData;
+};
 
 export const useGetWrongProblemAll = () =>
   useQuery({
@@ -13,7 +21,12 @@ export const useGetWrongProblemAll = () =>
   });
 
 // 내가 틀린 문제 최근 10건 조회
-const getRecentWrongProblem = () => api.get<ProblemBrief[]>('problem/wrong/recent').json();
+const getRecentWrongProblem = async () => {
+  const response = await api.get<GetRecentWrongProblem>('problem/wrong/recent');
+  const responseData = await response.json();
+  return responseData;
+};
+
 export const useGetRecentWrongProblem = () =>
   useQuery({
     queryKey: ['recentWrongProblems'],
