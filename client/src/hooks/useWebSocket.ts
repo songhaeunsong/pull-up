@@ -11,10 +11,10 @@ const useWebSocket = () => {
 
   const [roomStatus, setRoomStatus] = useState<RoomStatus>('WAITING');
   const [roomInfo, setRoomInfo] = useState<StompRoomInfo>({
+    roomId: '',
     player1P: { memberId: 0, name: '', score: 0 },
     player2P: { memberId: 0, name: '', score: 0 },
-    problems: [],
-    roomId: '',
+    problemCardWithoutCardIds: [],
   });
 
   const statusSubscription = useRef<StompSubscription | null>(null);
@@ -78,9 +78,9 @@ const useWebSocket = () => {
 
     if (isGameStagePage) {
       roomSubscription.current = client.current.subscribe(`/topic/game/${roomId}`, (message) => {
-        const { player1P, player2P, problems, roomId } = JSON.parse(message.body);
+        const { player1P, player2P, problemCardWithoutCardIds, roomId } = JSON.parse(message.body);
 
-        setRoomInfo({ player1P, player2P, problems, roomId });
+        setRoomInfo({ player1P, player2P, problemCardWithoutCardIds, roomId });
       });
     }
   };

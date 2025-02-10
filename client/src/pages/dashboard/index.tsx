@@ -9,13 +9,14 @@ import DashboardFeedback from '@/components/dashboard/dashboardFeedback';
 
 const DashBoardPage = () => {
   const { isMobile, isTabletMd } = useResponsive();
+
   return (
     <div className="w-full">
       {isMobile || isTabletMd ? (
         <MobileDashboardContainer />
       ) : (
-        <div className="grid w-full grid-cols-[2fr_1fr] gap-4 rounded-2xl bg-Main shadow-sm">
-          <div className="grid grid-rows-[1.5fr_1fr] gap-4">
+        <div className="grid h-full w-full grid-cols-[2fr_1fr] gap-4 bg-Main">
+          <div className="grid grid-rows-[1.5fr_1fr] gap-4 rounded-2xl">
             <div className="flex flex-col rounded-2xl bg-white p-5">
               <ChartContainer icon="feedback" title="오늘의 문제 및 피드백">
                 <DashboardFeedback />

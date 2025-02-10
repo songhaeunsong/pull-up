@@ -4,50 +4,58 @@ import react from '@vitejs/plugin-react';
 
 // https://vitejs.dev/config/
 
-export default defineConfig({
-  plugins: [
-    react(),
-    VitePWA({
-      registerType: 'prompt',
-      injectRegister: false,
+export default defineConfig(({ mode }) => {
+  const isProduction = mode === 'production';
+  console.log(isProduction);
 
-      pwaAssets: {
-        disabled: false,
-        config: true,
-      },
+  return {
+    plugins: [
+      react(),
+      VitePWA({
+        registerType: 'prompt',
+        injectRegister: false,
 
-      manifest: {
-        name: 'pull-up',
-        short_name: 'pup',
-        description: 'pull-up',
-        theme_color: '#ffffff',
-      },
+        pwaAssets: {
+          disabled: false,
+          config: true,
+        },
 
-      workbox: {
-        globPatterns: ['**/*.{js,css,html,svg,png,ico}'],
-        cleanupOutdatedCaches: true,
-        clientsClaim: true,
-      },
+        manifest: {
+          name: 'pull-up',
+          short_name: 'pup',
+          description: 'pull-up',
+          theme_color: '#ffffff',
+        },
 
-      devOptions: {
-        enabled: false,
-        navigateFallback: 'index.html',
-        suppressWarnings: true,
-        type: 'module',
+        workbox: {
+          globPatterns: ['**/*.{js,css,html,svg,png,ico}'],
+          cleanupOutdatedCaches: true,
+          clientsClaim: true,
+        },
+
+        devOptions: {
+          enabled: false,
+          navigateFallback: 'index.html',
+          suppressWarnings: true,
+          type: 'module',
+        },
+      }),
+    ],
+    resolve: {
+      alias: {
+        '@': '/src',
       },
-    }),
-  ],
-  resolve: {
-    alias: {
-      '@': '/src',
     },
-  },
-  define: {
-    global: 'window',
-  },
-  server: {
-    host: '0.0.0.0',
-    port: 5173,
-    allowedHosts: ['www.pull-up.store'],
-  },
+    define: {
+      global: 'window',
+    },
+    server: {
+      host: '0.0.0.0',
+      port: 5173,
+      hmr: {
+        host: 'www.pull-up.store',
+        protocol: 'wss',
+      },
+    },
+  };
 });
