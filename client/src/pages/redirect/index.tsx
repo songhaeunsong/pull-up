@@ -35,7 +35,7 @@ const RedirectPage = () => {
         }
       }
 
-      if (!auth) {
+      if (!isAuthLoading && !auth) {
         navigate('/signin');
       }
     };
