@@ -2,7 +2,7 @@ import { CorrectRate, Score } from '../chart';
 import { Exam } from '../exam';
 
 export interface GetExamAllResponse {
-  content: Exam[];
+  getExamResponses: Exam[];
   pageable: {
     page: number;
     size: number;

@@ -29,14 +29,16 @@ const ExamSolution = ({ answer, correctRate, explanation }: ExamSolutionProps) =
         <div className="flex flex-col gap-6">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <div className="rounded-lg border border-primary-500 bg-primary-50 px-3 py-1 text-primary-500">정답</div>
-              <span className="text-xl font-bold text-primary-500">{answer}</span>
+              <div className="inline-flex whitespace-nowrap rounded-lg border border-primary-500 bg-primary-50 px-2 py-1 text-primary-500 md:px-3">
+                정답
+              </div>
+              <span className="text-lg font-bold text-primary-500 lg:text-xl">{answer}</span>
             </div>
-            <div className="text-lg font-semibold text-secondary-600">
-              정답률 <span className="text-2xl">{correctRate}%</span>
+            <div className="flex flex-wrap items-center gap-1 whitespace-nowrap font-semibold text-secondary-600 md:text-lg">
+              정답률 <div className="text-lg md:text-2xl lg:text-2xl">{correctRate}%</div>
             </div>
           </div>
-          <span className="text-xl">{explanation}</span>
+          <span className="md:text-lg lg:text-xl">{explanation}</span>
         </div>
       )}
     </div>

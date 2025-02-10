@@ -20,7 +20,7 @@ const MobileProfile = ({ image, name, email, subjects }: MobileProfileProps) => 
         </div>
         <span className="text-right text-sm font-semibold text-stone-700">관심 과목</span>
         <div>
-          <div className="flex flex-wrap gap-1">
+          <div className="flex flex-wrap gap-2">
             {subjects.map((subject, id) => (
               <SubjectTag key={id} title={subject} />
             ))}

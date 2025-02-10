@@ -49,7 +49,7 @@ const ExamResultPage = () => {
       title: '점수',
       icon: 'score',
       content: (
-        <div className="text-xl md:text-2xl lg:text-3xl">
+        <div className="text-2xl text-3xl lg:text-3xl">
           <span className="text-primary-500">{score}</span> / 100
         </div>
       ),
@@ -68,7 +68,7 @@ const ExamResultPage = () => {
               onClick={() => {
                 document
                   .getElementById(`problem-${problem.problemId}`)
-                  ?.scrollIntoView({ behavior: 'smooth', block: 'center' }); // 문제로 이동
+                  ?.scrollIntoView({ behavior: 'smooth', block: 'center' });
               }}
             />
           ))}
@@ -78,11 +78,11 @@ const ExamResultPage = () => {
   ];
 
   return (
-    <div className="flex gap-12 bg-Main md:px-16 md:py-10">
-      <div className="relative flex w-full flex-col gap-4 sm:mt-16 md:flex-row">
+    <div className="flex gap-12 bg-Main md:px-8 md:py-10">
+      <div className="relative flex w-full flex-col gap-4 sm:mt-16 md:flex-row md:justify-center">
         {/* Info Section*/}
         <section className="sticky top-2 border border-b-2 bg-white px-10 pb-2 pt-[86px] sm:pt-[8px] md:hidden">
-          <Accordion type="single" defaultValue="timeLeft" collapsible>
+          <Accordion type="single" defaultValue="score" collapsible>
             {infoSections.map(({ id, title, icon, content }) => (
               <AccordionItem key={id} value={id}>
                 <AccordionTrigger>

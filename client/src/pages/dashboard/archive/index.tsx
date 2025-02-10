@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import RouteHeader from '@/components/common/routeheader';
 import ReviewList from '@/components/dashboard/reviewList';
 import { useGetArchivedProblemAll } from '@/api/problem';
+import { convertSubject } from '@/utils/convertSubject';
 
 const Archive = () => {
   const navigate = useNavigate();
@@ -14,7 +15,7 @@ const Archive = () => {
       id: item.problemId,
       title: item.question,
       date: item.date,
-      tags: item.subject,
+      tags: convertSubject(item.subject),
     })) || [];
 
   const onHandleBack = () => {
