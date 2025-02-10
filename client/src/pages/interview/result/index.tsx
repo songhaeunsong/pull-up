@@ -32,7 +32,7 @@ const InterviewResultPage = () => {
     }
   }, [result, interviewList, isResultLoading, isInterviewLoading]);
 
-  if (!resultData) {
+  if (!resultData || !interviewListData) {
     return null;
   }
 
@@ -60,7 +60,7 @@ const InterviewResultPage = () => {
       >
         <SideMenu
           isOpen={isSideMenuOpen}
-          interviewList={interviewListData ?? []}
+          interviewList={interviewListData}
           handleMenuClick={handleMenuClick}
           handleSearchClick={() => setIsModalOpen(true)}
           onInterviewClick={onInterviewClick}
