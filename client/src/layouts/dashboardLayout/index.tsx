@@ -19,10 +19,6 @@ const DashBoardLayout = () => {
     }
   }, [member, isLoading]);
 
-  const onClick = () => {
-    console.log('about');
-  };
-
   return (
     <div className="flex min-h-screen bg-Main pt-[94px] sm:pt-16">
       {isMobile || isTabletMd ? (
@@ -32,7 +28,6 @@ const DashBoardLayout = () => {
             name={member?.name ?? ''}
             email={member?.email ?? ''}
             subjects={member?.interestSubjects ?? []}
-            onClick={onClick}
           />
           <Outlet />
         </div>
@@ -46,7 +41,6 @@ const DashBoardLayout = () => {
             name={member?.name ?? ''}
             email={member?.email ?? ''}
             subjects={member?.interestSubjects ?? []}
-            onClick={onClick}
           />
         </div>
       )}

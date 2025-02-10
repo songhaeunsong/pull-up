@@ -1,20 +1,28 @@
+import { updateInterestSubjects } from '@/api/member';
 import SubjectSelector from '@/components/common/csConditionSelector/subjectSelector';
 import { SUBJECT_OPTIONS } from '@/components/common/csConditionSelector/subjectSelector/SubjectOptions';
 import { Button } from '@/components/ui/button';
+import { Subject } from '@/types/member';
 import { useState } from 'react';
+import { toast } from 'react-toastify';
 
-interface ProfileModalProps {
-  handleSubject: () => void;
-}
+const ProfileModal = () => {
+  const [selectedSubjects, setSelectedSubjects] = useState<Subject[]>([]);
+  const isDisabled = selectedSubjects.length === 0;
 
-const ProfileModal = ({ handleSubject }: ProfileModalProps) => {
-  const [selectedSubjectIds, setSelectedSubjectIds] = useState<string[]>([]);
-  const isDisabled = selectedSubjectIds.length === 0;
-
-  const handleSubjectClick = (id: string) => {
-    setSelectedSubjectIds((prev) => (prev.includes(id) ? prev.filter((subjectId) => subjectId !== id) : [...prev, id]));
-    console.log('selectedSubjectIds', selectedSubjectIds);
+  const handleSubjectClick = (id: Subject) => {
+    setSelectedSubjects((prev) => (prev.includes(id) ? prev.filter((subjectId) => subjectId !== id) : [...prev, id]));
   };
+
+  const onSubmit = async (subjects: Subject[]) => {
+    const status = await updateInterestSubjects(subjects);
+    if (status === 200) {
+      toast.success('관심심 과목이 수정되었습니다.', { position: 'bottom-center' });
+    } else {
+      toast.error('관심 과목 수정에 실패했습니다.', { position: 'bottom-center' });
+    }
+  };
+
   return (
     <div className="flex w-full flex-col gap-8 px-10 py-4">
       <div className="flex flex-col justify-between gap-3">
@@ -24,12 +32,12 @@ const ProfileModal = ({ handleSubject }: ProfileModalProps) => {
             id={subject.id}
             name={subject.name}
             icon={subject.icon}
-            isSelected={selectedSubjectIds.includes(subject.id)}
+            isSelected={selectedSubjects.includes(subject.id)}
             onClick={handleSubjectClick}
           />
         ))}
       </div>
-      <Button disabled={isDisabled} onClick={handleSubject}>
+      <Button disabled={isDisabled} onClick={() => onSubmit(selectedSubjects)}>
         수정 완료
       </Button>
     </div>

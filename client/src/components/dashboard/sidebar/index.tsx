@@ -7,10 +7,9 @@ interface SideBarProps {
   name: string;
   email: string;
   subjects: Subject[];
-  onClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
 }
 
-const SideBar = ({ image, name, email, subjects, onClick }: SideBarProps) => {
+const SideBar = ({ image, name, email, subjects }: SideBarProps) => {
   // 더미데이터
   const dummyRecent = {
     content: '제3회 모의고사',
@@ -30,7 +29,7 @@ const SideBar = ({ image, name, email, subjects, onClick }: SideBarProps) => {
 
   return (
     <div className="flex flex-row gap-3 rounded-2xl bg-white p-5 shadow-sm sm:w-full sm:gap-6 lg:w-[351px] lg:flex-col">
-      <Profile image={image} name={name} email={email} subjects={subjects} onClick={onClick} />
+      <Profile image={image} name={name} email={email} subjects={subjects} />
       <hr className="hidden border-2 border-stone-200 lg:block" />
       <div className="flex w-full flex-row gap-4 lg:flex-col">
         <Card link="/dashboard/recent" title="최근에 푼 모의고사" data={dummyRecent} />
