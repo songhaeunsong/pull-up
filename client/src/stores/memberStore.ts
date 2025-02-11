@@ -12,7 +12,7 @@ interface MemberState {
   setIsSolvedToday: (isSolvedToday: boolean) => void;
   setIsLoggedIn: (isLoggedIn: boolean) => void;
   setInterviewId: (interviewId: number) => void;
-  setInteverviewAnswerId: (interviewAnswerId: number) => void;
+  setInterviewAnswerId: (interviewAnswerId: number) => void;
   logoutMember: () => void;
 }
 
@@ -32,7 +32,7 @@ export const memberStore = create<MemberState>()(
       setIsSolvedToday: (isSolvedToday) => set({ isSolvedToday }),
       setIsLoggedIn: (isLoggedIn) => set({ isLoggedIn }),
       setInterviewId: (interviewId) => set({ interviewId }),
-      setInteverviewAnswerId: (interviewAnswerId) => set({ interviewAnswerId }),
+      setInterviewAnswerId: (interviewAnswerId) => set({ interviewAnswerId }),
       logoutMember: () => {
         set(initialState);
         sessionStorage.removeItem('member-storage');
