@@ -11,7 +11,17 @@ import { useRoomStore } from '@/stores/roomStore';
 import { GetRandomTypeResponse } from '@/types/response/game';
 import WaitingRamdom from './gameModalComponent/waiting/WaitingRandom';
 import { useWebSocketStore } from '@/stores/useWebSocketStore';
+import { FormFormEvent } from '@/types/event';
+import { SubjectSelect } from '@/types/game';
 
+const INITIAL_SELECT = {
+  algorithm: false,
+  computerArchitecture: false,
+  database: false,
+  dataStructure: false,
+  network: false,
+  operatingSystem: false,
+};
 const GameModals = () => {
   const navigate = useNavigate();
   const createRoomTimeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -28,7 +38,9 @@ const GameModals = () => {
   const [isPlayerReady, setIsPlayerReady] = useState(false);
 
   const [codeForJoinning, setCodeForJoinning] = useState('');
+
   const [isCreateMode, setIsCreateMode] = useState(false);
+  const [selectedSubjects, setSelectedSubjects] = useState<SubjectSelect>(INITIAL_SELECT);
 
   const createRoomTimeout = () => {
     createRoomTimeoutRef.current = setTimeout(() => {
@@ -58,6 +70,8 @@ const GameModals = () => {
         clearTimeout(createRoomTimeoutRef.current);
       }
 
+      setSelectedSubjects(INITIAL_SELECT);
+      setCodeForJoinning('');
       setIsPlayerReady(false);
     }
   };
@@ -66,26 +80,21 @@ const GameModals = () => {
     setCodeForJoinning(newCode);
   };
 
-  const handleCreateRoom = async () => {
+  const handleCreateRoom = async (e: FormFormEvent) => {
+    e.preventDefault();
+
     setIsPlayerReady(true);
     setIsCreateMode(true);
 
-    const selects = {
-      algorithm: true,
-      computerArchitecture: true,
-      database: true,
-      dataStructure: false,
-      network: true,
-      operatingSystem: true,
-    }; // 더미
-
-    const { roomId } = await postCreateGame(selects);
+    const { roomId } = await postCreateGame(selectedSubjects);
     setRoomId(roomId);
 
     createRoomTimeout();
   };
 
-  const handleJoinRoom = async () => {
+  const handleJoinRoom = async (event: FormFormEvent) => {
+    event.preventDefault();
+
     setIsPlayerReady(true);
 
     const { isReady } = await postJoinGame(codeForJoinning);
@@ -137,12 +146,6 @@ const GameModals = () => {
   }, [roomId]);
 
   useEffect(() => {
-    if (roomStatus === 'FINISHED') {
-      navigate('/game/result');
-    }
-  }, [roomStatus]);
-
-  useEffect(() => {
     if (roomId && roomStatus === 'PLAYING') {
       if (createRoomTimeoutRef.current) {
         clearTimeout(createRoomTimeoutRef.current);
@@ -174,7 +177,15 @@ const GameModals = () => {
         onOpenChange={(isOpen: boolean) => handleCloseModal(isOpen)}
         isOutsideClickable={false}
       >
-        {isPlayerReady ? <WaitingAfterCreating /> : <CreateRoom handleGameState={handleCreateRoom} />}
+        {isPlayerReady ? (
+          <WaitingAfterCreating />
+        ) : (
+          <CreateRoom
+            handleGameState={handleCreateRoom}
+            selectedSubjects={selectedSubjects}
+            setSelectedSubjects={setSelectedSubjects}
+          />
+        )}
       </Modal>
       <Modal
         triggerName="코드 입력"

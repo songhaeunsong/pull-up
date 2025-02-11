@@ -17,7 +17,7 @@ const Profile = ({ image, name, email, subjects }: ProfileProps) => {
   return (
     <div className="flex flex-row-reverse lg:block">
       <div className="mt-1 flex justify-end lg:mt-0 lg:w-full">
-        <Modal triggerName="과목 수정" triggerColor="transparent">
+        <Modal triggerName="과목 수정" triggerColor="transparent" isOutsideClickable={true}>
           <ProfileModal />
         </Modal>
       </div>

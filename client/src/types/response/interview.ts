@@ -1,7 +1,9 @@
 import { Streak } from '../chart';
 import { Interview } from '../interview';
 
-export type GetStreakResponse = Streak[];
+export interface GetStreakResponse {
+  dailySolvedHistories: Streak[];
+}
 
 // 오늘의 문제 조회 응답 타입
 export type InterviewResponse = Pick<Interview, 'interviewId' | 'question' | 'keywords'>;

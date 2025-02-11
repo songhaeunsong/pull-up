@@ -1,4 +1,7 @@
-export type InputChangeEvent = React.ChangeEvent<HTMLInputElement>;
-export type SelectChangeEvent = React.ChangeEvent<HTMLSelectElement>;
-export type FormEvent = React.FormEvent<HTMLFormElement>;
-export type InputKeyboardEvent = React.KeyboardEvent<HTMLInputElement>;
+import { ChangeEvent, FormEvent, KeyboardEvent, MouseEvent } from 'react';
+
+export type InputChangeEvent = ChangeEvent<HTMLInputElement>;
+export type SelectChangeEvent = ChangeEvent<HTMLSelectElement>;
+export type FormFormEvent = FormEvent<HTMLFormElement>;
+export type InputKeyboardEvent = KeyboardEvent<HTMLInputElement>;
+export type ButtonMouseEvent = MouseEvent<HTMLButtonElement>;

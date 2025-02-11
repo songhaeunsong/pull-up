@@ -11,10 +11,11 @@ const chartConfig = {
 } satisfies ChartConfig;
 
 const Analysis = () => {
-  const { data: analysisData, isLoading, isError } = useGetCorrectRate();
+  const { data: analysisData, isPending, isError } = useGetCorrectRate();
 
-  if (isLoading) return <>불러오는 중...</>;
-  if (isError || !analysisData) return <>차트 불러오기에 실패했어요</>;
+  if (isPending) return <>불러오는 중...</>;
+  if (isError) return <>차트 불러오기에 실패했어요</>;
+  if (!analysisData.examStrengthDtos.length) return <>모의고사를 풀고 장점과 약점을 확인하세요!</>;
 
   return (
     <ChartContainer config={chartConfig} className="mx-auto flex h-full w-full">
