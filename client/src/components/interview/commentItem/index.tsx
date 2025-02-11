@@ -1,4 +1,4 @@
-import { Comment } from '@/types/interview';
+import { Comment } from '@/types/comment';
 
 interface CommentItemProps {
   userEmail: string;
