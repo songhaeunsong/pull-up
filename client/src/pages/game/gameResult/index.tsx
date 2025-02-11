@@ -10,7 +10,7 @@ import { useWebSocketStore } from '@/stores/useWebSocketStore';
 
 const GameResultPage = () => {
   const { setRoomId, roomId } = useRoomStore();
-  const { updateSubscription, gameResult } = useWebSocketStore();
+  const { updateSubscription, gameResult, sendMessage } = useWebSocketStore();
 
   const navigate = useNavigate();
 
@@ -21,15 +21,16 @@ const GameResultPage = () => {
   const [isVisibleResult, setIsVisibleResult] = useState(false);
 
   useEffect(() => {
-    if (roomId) updateSubscription(roomId, 'result');
+    if (roomId) {
+      updateSubscription(roomId, 'result');
+      sendMessage(`/app/game/${roomId}/result`);
+    }
   }, [roomId]);
 
   const handleGoBack = () => {
     setRoomId('');
     navigate('/game');
   };
-
-  useEffect(() => {}, [updateSubscription]);
 
   useEffect(() => {
     if (isPending || isError) return;
