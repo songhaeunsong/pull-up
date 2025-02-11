@@ -1,6 +1,7 @@
 import { useCreateInterviewAnswerLike, useGetInterviewAnswers } from '@/api/interview';
 import RouteHeader from '@/components/common/routeheader';
 import InterviewAnswerItem from '@/components/interview/interviewAnswerItem';
+import Page404 from '@/pages/404';
 import { InterviewAnswer } from '@/types/interview';
 import convertDate from '@/utils/convertDate';
 import { useEffect, useState } from 'react';
@@ -20,7 +21,7 @@ const InterviewAnswersPage = () => {
   }, [getInterviewAnswers, isLoading]);
 
   if (!interviewAnswersData) {
-    return null;
+    return <Page404 />;
   }
 
   // 결과로 돌아가기

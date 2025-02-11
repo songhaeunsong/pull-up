@@ -7,6 +7,7 @@ import { InterviewResponse } from '@/types/interview';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import Page404 from '../404';
 
 const InterviewPage = () => {
   const { data: member } = useGetMemberInfo();
@@ -24,7 +25,7 @@ const InterviewPage = () => {
     }
   }, [interview, member]);
 
-  if (!interviewData) return null;
+  if (!interviewData) return <Page404 />;
 
   const onHintClick = () => {
     setHint(!hint);
@@ -42,7 +43,6 @@ const InterviewPage = () => {
 
     try {
       const data = await createMemberAnswer(interviewData.interviewId, interviewAnswer);
-      console.log('답변 제출: ', data);
 
       setIsSolvedToday(true);
       setInterviewId(data.interviewId);

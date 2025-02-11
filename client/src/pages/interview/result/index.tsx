@@ -9,6 +9,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@radix-ui/react-tabs';
 import InterviewMyAnswer from '@/components/interview/myAnswer';
 import convertDate from '@/utils/convertDate';
 import Icon from '@/components/common/icon';
+import Page404 from '@/pages/404';
 
 const InterviewResultPage = () => {
   const navigate = useNavigate();
@@ -32,7 +33,7 @@ const InterviewResultPage = () => {
   }, [result, interviewList, isResultLoading, isInterviewLoading]);
 
   if (!resultData || !interviewListData) {
-    return null;
+    return <Page404 />;
   }
 
   console.log('결과 데이터: ', resultData);
