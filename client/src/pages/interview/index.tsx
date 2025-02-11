@@ -7,6 +7,7 @@ import { InterviewResponse } from '@/types/interview';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
+import Page404 from '../404';
 
 const InterviewPage = () => {
   const { data: member } = useGetMemberInfo();
@@ -24,7 +25,7 @@ const InterviewPage = () => {
     }
   }, [interview, member]);
 
-  if (!interviewData) return null;
+  if (!interviewData) return <Page404 />;
 
   const onHintClick = () => {
     setHint(!hint);
@@ -44,9 +45,9 @@ const InterviewPage = () => {
       const data = await createMemberAnswer(interviewData.interviewId, interviewAnswer);
 
       setIsSolvedToday(true);
-      setInterviewId(data.interviewAnswerId);
+      setInterviewId(data.interviewId);
       setInterviewAnswerId(data.interviewAnswerId);
-      navigate(`/interview/result/${data.interviewId}`);
+      navigate(`/interview/result/${data.interviewAnswerId}`);
     } catch (error) {
       console.error('답변 작성을 실패했습니다.', error);
       toast.error('답변 작성을 실패했습니다.', { position: 'bottom-center' });

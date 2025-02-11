@@ -12,15 +12,15 @@ const interviewRoutes = [
         element: <InterviewPage />,
       },
       {
-        path: 'result/:interviewId',
+        path: 'result/:interviewAnswerId',
         element: <InterviewResultPage />,
       },
       {
-        path: 'result/:interviewId/answers',
+        path: ':interviewId/answers',
         element: <InterviewAnswersPage />,
       },
       {
-        path: 'result/:interviewId/answers/:interviewAnswerId',
+        path: ':interviewId/answers/:interviewAnswerId',
         element: <InterviewAnswerDetail />,
       },
     ],

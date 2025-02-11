@@ -5,6 +5,7 @@ import CommentItem from '@/components/interview/commentItem';
 import InputForm from '@/components/interview/inputForm';
 import InterviewAnswerItem from '@/components/interview/interviewAnswerItem';
 import { useComment } from '@/hooks/useComment';
+import Page404 from '@/pages/404';
 import { memberStore } from '@/stores/memberStore';
 import { Comment, InterviewAnswer } from '@/types/interview';
 import convertDate from '@/utils/convertDate';
@@ -12,7 +13,7 @@ import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 
 const InterviewAnswerDetail = () => {
-  const { member } = memberStore();
+  const { member } = memberStore.getState();
   const navigate = useNavigate();
   const { interviewId, interviewAnswerId } = useParams();
   const { data: interviewAnswer, isLoading: isAnswerLoading } = useGetInterviewAnswerDetail(Number(interviewAnswerId));
@@ -34,27 +35,33 @@ const InterviewAnswerDetail = () => {
     handleCommentDelete,
   } = useComment({ interviewAnswerId: Number(interviewAnswerId) });
 
-  const likeMutation = useCreateInterviewAnswerLike(Number(interviewId), Number(interviewAnswerId));
-  const handleLikeClick = () => {
-    likeMutation.mutate();
-  };
+  const likeMutation = useCreateInterviewAnswerLike(Number(interviewId));
 
   useEffect(() => {
-    if (!isAnswerLoading) {
+    if (!isAnswerLoading && interviewAnswer) {
       setInterviewAnswerData(interviewAnswer);
     }
-    if (!isCommentsLoading) {
+    if (!isCommentsLoading && comments) {
       setCommentsData(comments);
     }
   }, [interviewAnswer, isAnswerLoading, comments, isCommentsLoading]);
 
-  if (!member || !interviewAnswerData || !commentsData) {
-    return null;
-  }
+  console.log('멤버 데이터: ', member);
 
+  // 다른 사람 답변 목록으로 돌아가기
   const onBackClick = () => {
-    navigate(`/interview/result/${interviewId}/answers`);
+    navigate(-1);
   };
+
+  // 좋아요 토글
+  const handleLikeClick = () => {
+    likeMutation.mutate(Number(interviewAnswerId));
+    console.log('좋아요 호출: ', interviewAnswerId);
+  };
+
+  if (!member || !interviewAnswerData || !commentsData) {
+    return <Page404 />;
+  }
 
   return (
     <div className="min-h-full bg-Main px-6 py-10 md:px-10 xl:px-20">

@@ -74,22 +74,22 @@ export const useGetInterviewList = () => {
 };
 
 // 다른 사람 답변 전체 조회
-const getInterviewAnswers = (interviewAnswerId: number): Promise<InterviewAnswer[]> => {
-  const data = api.get(`interview/${interviewAnswerId}/all`).json<InterviewAnswer[]>();
-  return data;
+const getInterviewAnswers = async (interviewId: number): Promise<InterviewAnswer[]> => {
+  const response = await api.get(`interview/${interviewId}/all`).json<{ interviewAnswers: InterviewAnswer[] }>();
+  return response.interviewAnswers;
 };
 
-export const useGetInterviewAnswers = (interviewAnswerId: number) => {
+export const useGetInterviewAnswers = (interviewId: number) => {
   return useQuery({
-    queryKey: ['interviewAnswers', interviewAnswerId],
-    queryFn: () => getInterviewAnswers(interviewAnswerId),
+    queryKey: ['interviewAnswers', interviewId],
+    queryFn: () => getInterviewAnswers(interviewId),
   });
 };
 
 // 다른 사람 답변 단건 조회
-const getInterviewAnswerDetail = (interviewAnswerId: number) => {
-  const data = api.get(`interview/${interviewAnswerId}`).json<InterviewAnswer>();
-  return data;
+const getInterviewAnswerDetail = async (interviewAnswerId: number) => {
+  const response = await api.get(`interview/${interviewAnswerId}`).json<{ interviewAnswer: InterviewAnswer }>();
+  return response.interviewAnswer;
 };
 
 export const useGetInterviewAnswerDetail = (interviewAnswerId: number) => {
@@ -105,10 +105,10 @@ const createInterviewAnswerLike = async (interviewAnswerId: number): Promise<Lik
   return data;
 };
 
-export const useCreateInterviewAnswerLike = (interviewId: number, interviewAnswerId: number) => {
+export const useCreateInterviewAnswerLike = (interviewId: number) => {
   return useMutation({
-    mutationFn: () => createInterviewAnswerLike(interviewAnswerId),
-    onMutate: async () => {
+    mutationFn: (interviewAnswerId: number) => createInterviewAnswerLike(interviewAnswerId),
+    onMutate: async (interviewAnswerId) => {
       await Promise.all([
         queryClient.cancelQueries({ queryKey: ['interviewAnswers', interviewId] }),
         queryClient.cancelQueries({ queryKey: ['interviewAnswerDetail', interviewAnswerId] }),
@@ -141,7 +141,7 @@ export const useCreateInterviewAnswerLike = (interviewId: number, interviewAnswe
 
       return { previousListData, previousDetailData };
     },
-    onError: (err, _, context) => {
+    onError: (err, interviewAnswerId, context) => {
       if (context?.previousListData) {
         queryClient.setQueryData(['interviewAnswers', interviewId], context.previousListData);
       }
@@ -150,7 +150,7 @@ export const useCreateInterviewAnswerLike = (interviewId: number, interviewAnswe
       }
       console.error('좋아요 요청을 실패했습니다.', err);
     },
-    onSettled: () => {
+    onSettled: (_, __, interviewAnswerId) => {
       queryClient.invalidateQueries({ queryKey: ['interviewAnswers', interviewId] });
       queryClient.invalidateQueries({ queryKey: ['interviewAnswerDetail', interviewAnswerId] });
     },
