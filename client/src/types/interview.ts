@@ -46,4 +46,7 @@ export type InterviewResultResponse = Pick<
 export type InterviewListResponse = Pick<Interview, 'interviewId' | 'interviewAnswerId' | 'question'>;
 
 // 댓글 작성 요청 타입
-export type CommentRequest = Pick<Comment, 'content'> & { interviewAnswerId: number };
+export type CommentCreateRequest = Pick<Comment, 'content'> & { interviewAnswerId: number };
+
+// 댓글 수정 요청 타입
+export type CommentUpdateRequest = Pick<Comment, 'commentId' | 'content'>;

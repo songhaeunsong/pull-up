@@ -43,7 +43,6 @@ const InterviewAnswerDetail = () => {
     }
     if (!isCommentsLoading && comments) {
       setCommentsData(comments);
-      console.log('댓글 목록: ', comments);
     }
   }, [interviewAnswer, isAnswerLoading, comments, isCommentsLoading]);
 
@@ -58,7 +57,6 @@ const InterviewAnswerDetail = () => {
     console.log('좋아요: ', interviewAnswer?.isLiked);
   };
 
-  console.log('멤버 데이터: ', member?.email);
   if (!member || !interviewAnswerData || !commentsData) {
     return <Page404 />;
   }

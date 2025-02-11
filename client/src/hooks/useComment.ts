@@ -1,5 +1,6 @@
 import { useCreateComment, useDeleteComment, useUpdateComment } from '@/api/comment';
 import { useState } from 'react';
+import { toast } from 'react-toastify';
 
 interface useCommentProps {
   interviewAnswerId: number;
@@ -8,22 +9,21 @@ interface useCommentProps {
 export const useComment = ({ interviewAnswerId }: useCommentProps) => {
   // 댓글 작성
   const [inputValue, setInputValue] = useState('');
-  const createCommentMutation = useCreateComment({
-    interviewAnswerId: interviewAnswerId,
-    content: inputValue,
-  });
+  const createComment = useCreateComment(interviewAnswerId);
 
   const onChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
     setInputValue(e.target.value);
   };
 
   const onSubmit = async () => {
-    createCommentMutation.mutate();
+    if (!inputValue.trim()) return;
+    createComment({ interviewAnswerId, content: inputValue });
     setInputValue('');
   };
 
   const onKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    if (e.key === 'Enter') {
+    if (e.key === 'Enter' && !e.shiftKey) {
+      e.preventDefault();
       onSubmit();
     }
   };
@@ -33,17 +33,14 @@ export const useComment = ({ interviewAnswerId }: useCommentProps) => {
     id: number;
     content: string;
   }>();
-  const updateCommentMutation = useUpdateComment(
-    interviewAnswerId,
-    Number(updatedComment?.id),
-    updatedComment?.content ?? '',
-  );
+  const updateComment = useUpdateComment(interviewAnswerId);
 
-  // 댓글 수정 활성화
+  // 댓글칸 활성화
   const handleCommentUpdate = (comment: string, commentId: number) => {
     setUpdatedComment({ id: commentId, content: comment });
   };
 
+  // 댓글 수정 중
   const onCommentChange = (e: React.ChangeEvent<HTMLTextAreaElement>, commentId: number) => {
     setUpdatedComment((prev) => ({
       ...prev,
@@ -59,14 +56,26 @@ export const useComment = ({ interviewAnswerId }: useCommentProps) => {
 
   // 수정 완료
   const onConfirmClick = async () => {
-    updateCommentMutation.mutate();
+    if (!updatedComment) {
+      return;
+    }
+
+    if (updatedComment.content === '') {
+      toast.error('댓글을 입력하세요.', { position: 'bottom-center' });
+      return;
+    }
+
+    updateComment({
+      commentId: Number(updatedComment.id),
+      content: updatedComment.content,
+    });
     setUpdatedComment({ id: 0, content: '' });
   };
 
   // 댓글 삭제
-  const deleteCommentMutation = useDeleteComment(interviewAnswerId);
+  const deleteComment = useDeleteComment(interviewAnswerId);
   const handleCommentDelete = async (commentId: number) => {
-    deleteCommentMutation.mutate(commentId);
+    deleteComment(commentId);
   };
 
   return {

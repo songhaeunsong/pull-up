@@ -1,7 +1,7 @@
 import { queryClient } from '@/main';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import api from './instance';
-import { Comment, CommentRequest, InterviewAnswer } from '@/types/interview';
+import { Comment, CommentCreateRequest, CommentUpdateRequest, InterviewAnswer } from '@/types/interview';
 import { CreateResponse } from '@/types/common';
 import { now } from 'lodash';
 import { memberStore } from '@/stores/memberStore';
@@ -20,33 +20,38 @@ export const useGetComments = (interviewAnswerId: number) => {
 };
 
 // 댓글 작성
-const createComment = async (comment: CommentRequest): Promise<CreateResponse> => {
+const createComment = async (comment: CommentCreateRequest): Promise<CreateResponse> => {
   const data = await api
-    .post(`interview/${comment.interviewAnswerId}/comment`, { json: { comment } })
+    .post(`interview/${comment.interviewAnswerId}/comment`, { json: { content: comment.content } })
     .json<CreateResponse>();
+  console.log('댓글 작성 api 실행');
   return data;
 };
 
-export const useCreateComment = (comment: CommentRequest) => {
-  return useMutation({
-    mutationFn: () => createComment(comment),
-    onMutate: async () => {
-      await queryClient.cancelQueries({ queryKey: ['interviewAnswerDetail', comment.interviewAnswerId] });
-      await queryClient.cancelQueries({ queryKey: ['commnets', comment.interviewAnswerId] });
+export const useCreateComment = (interviewAnswerId: number) => {
+  const { mutate } = useMutation({
+    mutationFn: (comment: CommentCreateRequest) => {
+      console.log('Mutation function called with:', comment); // 디버깅용
+      return createComment(comment);
+    },
 
-      const previousAnswers = queryClient.getQueryData(['interviewAnswerDetail', comment.interviewAnswerId]);
-      const previousComments = queryClient.getQueryData(['comments', comment.interviewAnswerId]);
+    onMutate: async (comment: CommentCreateRequest) => {
+      await queryClient.cancelQueries({ queryKey: ['interviewAnswerDetail', interviewAnswerId] });
+      await queryClient.cancelQueries({ queryKey: ['commnets', interviewAnswerId] });
 
-      queryClient.setQueryData(['interviewAnswerDetail', comment.interviewAnswerId], (old: InterviewAnswer) => ({
+      const previousAnswers = queryClient.getQueryData(['interviewAnswerDetail', interviewAnswerId]);
+      const previousComments = queryClient.getQueryData(['comments', interviewAnswerId]);
+
+      queryClient.setQueryData(['interviewAnswerDetail', interviewAnswerId], (old: InterviewAnswer) => ({
         ...old,
         commentCount: old.commentCount + 1,
       }));
-      queryClient.setQueryData(['comments', comment.interviewAnswerId], (old: Comment[]) => [
+      queryClient.setQueryData(['comments', interviewAnswerId], (old: Comment[]) => [
         ...old,
         {
           commentId: 0,
-          writer: memberStore().member?.name,
-          email: memberStore().member?.email,
+          writer: '',
+          email: memberStore.getState().member?.email,
           content: comment.content,
           createdAt: now(),
         },
@@ -57,36 +62,40 @@ export const useCreateComment = (comment: CommentRequest) => {
     onError: (err, _, context) => {
       if (context?.previousAnswers || context?.previousComments) {
         console.error('댓글 작성 요청을 실패했습니다.', err);
-        queryClient.setQueryData(['interviewAnswerDetail', comment.interviewAnswerId], context.previousAnswers);
-        queryClient.setQueryData(['comments', comment.interviewAnswerId], context.previousComments);
+        queryClient.setQueryData(['interviewAnswerDetail', interviewAnswerId], context.previousAnswers);
+        queryClient.setQueryData(['comments', interviewAnswerId], context.previousComments);
       }
     },
     onSettled: () => {
       queryClient.invalidateQueries({
-        queryKey: ['interviewAnswerDetail', comment.interviewAnswerId],
+        queryKey: ['interviewAnswerDetail', interviewAnswerId],
       });
       queryClient.invalidateQueries({
-        queryKey: ['comments', comment.interviewAnswerId],
+        queryKey: ['comments', interviewAnswerId],
       });
     },
   });
+
+  return mutate;
 };
 
 // 댓글 수정
-const updateComment = async (commentId: number, comment: string): Promise<void> => {
-  return await api.patch(`interview/interview-answer/comment/${commentId}`, { json: { comment } }).json();
+const updateComment = async (comment: CommentUpdateRequest): Promise<void> => {
+  return await api
+    .patch(`interview/interview-answer/comment/${comment.commentId}`, { json: { content: comment.content } })
+    .json();
 };
 
-export const useUpdateComment = (interviewAnswerId: number, commentId: number, comment: string) => {
-  return useMutation({
-    mutationFn: () => updateComment(commentId, comment),
-    onMutate: async () => {
+export const useUpdateComment = (interviewAnswerId: number) => {
+  const { mutate } = useMutation({
+    mutationFn: (comment: CommentUpdateRequest) => updateComment(comment),
+    onMutate: async (comment: CommentUpdateRequest) => {
       await queryClient.cancelQueries({ queryKey: ['comments', interviewAnswerId] });
 
       const previousData = queryClient.getQueryData(['comments', interviewAnswerId]);
 
       queryClient.setQueryData(['comments', interviewAnswerId], (old: Comment[]) =>
-        old.map((c: Comment) => (c.commentId === commentId ? { ...c, content: comment } : c)),
+        old.map((c: Comment) => (c.commentId === comment.commentId ? { ...c, content: comment.content } : c)),
       );
 
       return { previousData };
@@ -103,6 +112,8 @@ export const useUpdateComment = (interviewAnswerId: number, commentId: number, c
       });
     },
   });
+
+  return mutate;
 };
 
 // 댓글 삭제
@@ -111,7 +122,7 @@ const deleteComment = async (commentId: number) => {
 };
 
 export const useDeleteComment = (interviewAnswerId: number) => {
-  return useMutation({
+  const { mutate } = useMutation({
     mutationFn: (commentId: number) => deleteComment(commentId),
     onMutate: async (commentId: number) => {
       await queryClient.cancelQueries({ queryKey: ['interviewAnswerDetail', interviewAnswerId] });
@@ -146,4 +157,6 @@ export const useDeleteComment = (interviewAnswerId: number) => {
       });
     },
   });
+
+  return mutate;
 };
