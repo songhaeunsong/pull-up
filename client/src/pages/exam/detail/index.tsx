@@ -29,6 +29,7 @@ const ExamDetailPage = () => {
   const answers = useExamStore(useShallow((state) => state.answers));
   const { resetExamState, setAnswer, setSolutionPage, initializeAndSetOptions } = useExamStore();
   const [isInitialized, setIsInitialized] = useState(false);
+
   const isAllSolved = useMemo(() => {
     return (examProblems || []).every(
       (problem) => answers[problem.problemId] && answers[problem.problemId].trim() !== '',

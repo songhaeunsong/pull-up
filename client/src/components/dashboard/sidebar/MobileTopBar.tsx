@@ -16,9 +16,9 @@ const MobileTopBar = ({ image, name, email, subjects }: MobileTopBarProps) => {
   const { recentExamList, wrongProblemList, archiveProblemList } = useSideBarCard(5);
 
   const examComponents = [
-    { id: 'recent', component: <Card link="/dashboard/recent" title="최근에 푼 모의고사" data={recentExamList[0]} /> },
-    { id: 'wrong', component: <Card link="/dashboard/wrong" title="내가 틀린 문제" data={wrongProblemList[0]} /> },
-    { id: 'archive', component: <Card link="/dashboard/archive" title="아카이브" data={archiveProblemList[0]} /> },
+    { id: 'recent', component: <Card link="recent" title="최근에 푼 모의고사" data={recentExamList[0]} /> },
+    { id: 'wrong', component: <Card link="wrong" title="내가 틀린 문제" data={wrongProblemList[0]} /> },
+    { id: 'archive', component: <Card link="archive" title="아카이브" data={archiveProblemList[0]} /> },
   ];
 
   return (
