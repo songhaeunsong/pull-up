@@ -73,6 +73,15 @@ export const useGetInterviewList = () => {
   });
 };
 
+// 지난 오늘의 문제 검색 조회
+export const getInterviewListByKeyword = async (keyword: string): Promise<InterviewListResponse[]> => {
+  const response = await api
+    .get(`interview?keyword=${keyword}`)
+    .json<{ searchedInterviewQuestions: InterviewListResponse[] }>();
+
+  return response.searchedInterviewQuestions;
+};
+
 // 다른 사람 답변 전체 조회
 const getInterviewAnswers = async (interviewId: number): Promise<InterviewAnswer[]> => {
   const response = await api.get(`interview/${interviewId}/all`).json<{ interviewAnswers: InterviewAnswer[] }>();
