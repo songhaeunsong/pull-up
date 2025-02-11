@@ -11,7 +11,7 @@ interface HeaderItem {
 
 const MobileHeader = () => {
   const location = useLocation();
-  const { member, isLoggedIn, logoutMember, isSolvedToday, interviewId } = memberStore();
+  const { member, isLoggedIn, logoutMember, isSolvedToday, interviewAnswerId } = memberStore.getState();
 
   const headerItems: HeaderItem[] = [
     { label: '시험모드', path: '/exam' },
@@ -36,7 +36,15 @@ const MobileHeader = () => {
     >
       <div className="flex w-full items-center justify-between">
         <div className="text-2xl font-bold">
-          <Link to={!isLoggedIn || !member ? '/' : !isSolvedToday ? '/interview' : `/interview/result/${interviewId}`}>
+          <Link
+            to={
+              !isLoggedIn || !member?.email
+                ? '/'
+                : !isSolvedToday
+                  ? '/interview'
+                  : `/interview/result/${interviewAnswerId}`
+            }
+          >
             Pull Up!
           </Link>
         </div>

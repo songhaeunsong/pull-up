@@ -7,7 +7,7 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const HomePage = () => {
-  const { isLoggedIn } = memberStore();
+  const { isLoggedIn, isSolvedToday, interviewAnswerId, member } = memberStore.getState();
   const navigate = useNavigate();
 
   const setupNotification = async () => {
@@ -25,8 +25,20 @@ const HomePage = () => {
 
   const onClick = () => {
     if (isLoggedIn) {
-      navigate('/signup');
-      return;
+      if (!member?.email) {
+        // 선호 과목을 선택하지 않았을 경우
+        navigate('/signup');
+        return;
+      }
+
+      if (isSolvedToday) {
+        // 문제를 풀었을 경우
+        navigate(`/interview/result/${interviewAnswerId}`);
+        return;
+      } else {
+        navigate('/interview');
+        return;
+      }
     } else {
       navigate('/signin');
     }
