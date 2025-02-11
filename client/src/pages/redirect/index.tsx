@@ -8,7 +8,7 @@ const RedirectPage = () => {
   const navigate = useNavigate();
   const { data: auth, isLoading: isAuthLoading } = useAuthInfo();
   const { refetch } = useGetMemberInfo();
-  const { setMember, setIsSolvedToday, setIsLoggedIn, setInterviewId, setInterviewAnswerId } = memberStore();
+  const { setMember, setIsSolvedToday, setIsLoggedIn, setInterviewAnswerId } = memberStore();
 
   useEffect(() => {
     const handleRedirect = async () => {
@@ -34,14 +34,14 @@ const RedirectPage = () => {
             navigate('/signup');
             return;
           }
-
+          console.log('멤버 정보 저장: ', memberData);
           // 유저 정보 저장
           setMember(memberData);
+          console.log('현재 상태의 멤버 데이터:', memberStore.getState().member);
           setIsLoggedIn(true);
           setIsSolvedToday(auth.isSolvedToday);
-          setInterviewId(auth.interviewId);
           setInterviewAnswerId(auth.interviewAnswerId);
-          navigate(auth.isSolvedToday ? `/interview/result/${auth.interviewId}` : '/interview');
+          navigate(auth.isSolvedToday ? `/interview/result/${auth.interviewAnswerId}` : '/interview');
         }
       }
     };

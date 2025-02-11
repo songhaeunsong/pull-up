@@ -11,7 +11,7 @@ interface HeaderItem {
 
 const Header = () => {
   const location = useLocation();
-  const { member, isLoggedIn, logoutMember, isSolvedToday, interviewId } = memberStore();
+  const { member, isLoggedIn, logoutMember, isSolvedToday, interviewAnswerId } = memberStore.getState();
 
   const headerItems: HeaderItem[] = [
     { label: '시험모드', path: '/exam' },
@@ -36,7 +36,15 @@ const Header = () => {
     >
       <div className="text-3xl font-bold">
         {/* 로그인이면 로고->오늘의 문제, 비로그인이면 로고->메인인 */}
-        <Link to={!isLoggedIn || !member ? '/' : !isSolvedToday ? '/interview' : `/interview/result/${interviewId}`}>
+        <Link
+          to={
+            !isLoggedIn || !member?.email
+              ? '/'
+              : !isSolvedToday
+                ? '/interview'
+                : `/interview/result/${interviewAnswerId}`
+          }
+        >
           Pull Up!
         </Link>
       </div>
