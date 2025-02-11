@@ -7,8 +7,8 @@ import { useNavigate } from 'react-router-dom';
 
 const DashboardFeedback = () => {
   const navigate = useNavigate();
-  const { isSolvedToday, interviewId, interviewAnswerId } = memberStore();
-  const { data: result, error } = useGetInterviewResult(interviewId);
+  const { isSolvedToday, interviewAnswerId } = memberStore();
+  const { data: result } = useGetInterviewResult(interviewAnswerId);
 
   const [resultData, setResultData] = useState<InterviewResultResponse>({
     interviewId: 1,
