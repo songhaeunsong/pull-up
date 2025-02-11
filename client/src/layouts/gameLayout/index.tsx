@@ -21,12 +21,6 @@ const GameLayout = () => {
     };
   }, []);
 
-  useEffect(() => {
-    if (roomId) {
-      updateSubscription(roomId);
-    }
-  }, [roomId]);
-
   return (
     <div className={cn(SM_STYLE, BASIC_STYLE)}>
       <Header />
