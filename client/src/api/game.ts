@@ -4,7 +4,7 @@ import { WinningRate } from '@/types/chart';
 import { SubjectSelect } from '@/types/game';
 import {
   GetGameResultResponse,
-  GetIdResponse,
+  GetPlayerTypeResponse,
   GetRandomTypeResponse,
   PostCreateGameResponse,
   PostJoinGameResponse,
@@ -68,16 +68,16 @@ export const useDeleteRoom = () => {
   return mutate;
 };
 
-const getId = async (roomId: string) => {
-  const response = await api.get<GetIdResponse>(`game/room/${roomId}/player`);
+const getPlayerType = async (roomId: string) => {
+  const response = await api.get<GetPlayerTypeResponse>(`game/room/${roomId}/player`);
   const data = await response.json();
   return data;
 };
 
-export const useGetId = (roomId: string) =>
+export const useGetPlayerType = (roomId: string) =>
   useQuery({
-    queryKey: ['myId'],
-    queryFn: () => getId(roomId),
+    queryKey: ['myPlayerNumber'],
+    queryFn: () => getPlayerType(roomId),
   });
 
 const getRandomType = async () => {

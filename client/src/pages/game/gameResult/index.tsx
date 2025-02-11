@@ -4,13 +4,16 @@ import { cn } from '@/lib/utils';
 import confetti from 'canvas-confetti';
 import { useNavigate } from 'react-router-dom';
 import { useRoomStore } from '@/stores/roomStore';
-import { useGetGameResult } from '@/api/game';
+import { OPPONENT } from '@/constants/game';
+import { useGetPlayerType } from '@/api/game';
+import { useWebSocketStore } from '@/stores/useWebSocketStore';
 
 const GameResultPage = () => {
   const navigate = useNavigate();
-  const { setRoomId } = useRoomStore();
+  const { setRoomId, roomId } = useRoomStore();
+  const { gameResult } = useWebSocketStore();
 
-  const { data: gameResultData, isPending, isError } = useGetGameResult();
+  const { data: playerTypeData, isPending, isError } = useGetPlayerType(roomId);
 
   const [animatedScore, setAnimatedScore] = useState(0);
   const [animatedOpponentScore, setAnimatedOpponentScore] = useState(0);
@@ -22,7 +25,7 @@ const GameResultPage = () => {
   };
 
   useEffect(() => {
-    if (!gameResultData) return;
+    if (isPending || isError || !gameResult) return;
 
     const animateValue = (start: number, end: number, interval: number, setter: (value: number) => void) => {
       let currentValue = start;
@@ -41,15 +44,16 @@ const GameResultPage = () => {
       setTimeout(step, interval);
     };
 
-    animateValue(0, gameResultData.score, 200, setAnimatedScore);
-    animateValue(0, gameResultData.opponentScore, 200, setAnimatedOpponentScore);
-  }, [gameResultData]);
+    animateValue(0, gameResult[playerTypeData.playerType].score, 200, setAnimatedScore);
+    animateValue(0, gameResult[playerTypeData.playerType].score, 200, setAnimatedOpponentScore);
+  }, [gameResult]);
 
   useEffect(() => {
-    if (!gameResultData) return;
+    if (!gameResult) return;
+    if (isPending || isError || !gameResult) return;
 
     if (isVisibleResult) {
-      if (gameResultData.gameRoomResultStatus === 'WIN') {
+      if (gameResult[playerTypeData.playerType].status === 'WIN') {
         confetti({
           particleCount: 100,
           spread: 100,
@@ -69,23 +73,25 @@ const GameResultPage = () => {
           isVisibleResult ? 'translate-y-0 opacity-100' : 'translate-y-5 opacity-0',
         )}
       >
-        {gameResultData.gameRoomResultStatus}
+        {gameResult[playerTypeData.playerType].status}
       </h3>
-      {!gameResultData.isForfeitGame && (
+      {!gameResult.isForfeit && (
         <div className="flex items-center justify-center gap-7">
           <div className="flex flex-col items-center justify-center gap-1">
-            <span className="text-lg font-medium">{gameResultData.name}</span>
+            <span className="text-lg font-medium">{gameResult[playerTypeData.playerType].name}</span>
             <span className="text-3xl font-semibold text-primary-700">{animatedScore}</span>
           </div>
           <div className="flex flex-col items-center justify-center gap-1">
-            <span className="text-lg font-medium">{gameResultData.opponentName}</span>
+            <span className="text-lg font-medium">{gameResult[OPPONENT[playerTypeData.playerType]].name}</span>
             <span className="text-3xl font-semibold text-primary-700">{animatedOpponentScore}</span>
           </div>
         </div>
       )}
-      {gameResultData.isForfeitGame && (
+      {gameResult.isForfeit && (
         <span>
-          {gameResultData[gameResultData.gameRoomResultStatus === 'WIN' ? 'opponentName' : 'name']}
+          {gameResult[playerTypeData.playerType].status === 'WIN'
+            ? gameResult[OPPONENT[playerTypeData.playerType]].name
+            : gameResult[playerTypeData.playerType].name}
           님의 기권으로 게임이 종료되었습니다.
         </span>
       )}

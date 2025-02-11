@@ -1,4 +1,4 @@
-import { useGetId } from '@/api/game';
+import { useGetPlayerType } from '@/api/game';
 import ProgressBar from '@/components/common/progressBar';
 import GameBoard from '@/components/game/gameStage/GameBoard';
 import GameScoreBoard from '@/components/game/gameStage/GameScoreBoard';
@@ -12,7 +12,7 @@ const GameStage = () => {
   const { roomId } = useRoomStore();
   const { roomInfo, sendMessage } = useWebSocketStore();
 
-  const { data: idData, isLoading } = useGetId(roomId);
+  const { data: playerTypeData, isLoading } = useGetPlayerType(roomId);
 
   const handleTimeOver = () => {
     sendMessage('app/card/check', {
@@ -26,7 +26,7 @@ const GameStage = () => {
     }
   }, [roomInfo]);
 
-  if (!idData || isLoading) return <>불러오는 중...</>;
+  if (!playerTypeData || isLoading) return <>불러오는 중...</>;
 
   return (
     <div className="flex h-full w-full flex-col gap-3 bg-Main p-4 pt-[106px] sm:pt-[85px] md:p-8 md:pt-[84px]">
@@ -34,10 +34,10 @@ const GameStage = () => {
         <ProgressBar initialTime={60} onTimeOver={handleTimeOver} />
       </div>
       <div className="grid h-full w-full grid-rows-[3fr_1fr] gap-3 md:grid-cols-[2.5fr_1fr] md:grid-rows-1 md:gap-7">
-        <GameBoard playerNumber={idData.playerNumber} problems={roomInfo.problemCardWithoutCardIds} />
+        <GameBoard playerType={playerTypeData.playerType} problems={roomInfo.problemCardWithoutCardIds} />
         <div className="flex flex-col">
           <div className="grid grow grid-cols-2 gap-3 md:grid-cols-1 md:grid-rows-2 md:gap-7">
-            {idData.playerNumber === 1 ? (
+            {playerTypeData.playerType === 'player1P' ? (
               <>
                 <GameScoreBoard player={roomInfo.player2P} />
                 <GameScoreBoard player={roomInfo.player1P} />

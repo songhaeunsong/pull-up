@@ -1,14 +1,14 @@
 import { useState } from 'react';
 import GameCard from './GameCard';
-import { Card } from '@/types/game';
+import { Card, PlayerType } from '@/types/game';
 import { useWebSocketStore } from '@/stores/useWebSocketStore';
 
 interface GameBoardProps {
-  playerNumber: 1 | 2;
+  playerType: PlayerType;
   problems: Card[];
 }
 
-const GameBoard = ({ playerNumber, problems }: GameBoardProps) => {
+const GameBoard = ({ playerType, problems }: GameBoardProps) => {
   const { sendMessage, roomInfo } = useWebSocketStore();
 
   const [selectedCards, setSelectedCards] = useState<number[]>([]);
@@ -18,7 +18,7 @@ const GameBoard = ({ playerNumber, problems }: GameBoardProps) => {
     sendMessage('/app/card/check', {
       checkType: 'SUBMIT',
       roomId: roomInfo.roomId,
-      playerNumber,
+      playerType,
       contents: [problems[cardIndex1].content, problems[cardIndex2].content],
     });
 
