@@ -33,6 +33,8 @@ const GameModals = () => {
   const createRoomTimeout = () => {
     createRoomTimeoutRef.current = setTimeout(() => {
       if (roomStatus !== 'PLAYING') {
+        deleteRoom(roomId);
+
         toast.error('방을 다시 만들어주세요!', {
           position: 'bottom-center',
         });

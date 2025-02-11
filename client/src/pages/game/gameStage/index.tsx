@@ -19,8 +19,9 @@ const GameStage = () => {
   }, [roomId]);
 
   const handleTimeOver = () => {
-    sendMessage('app/card/check', {
+    sendMessage('/app/card/check', {
       checkType: 'TIME_OVER',
+      roomId,
     });
   };
 
