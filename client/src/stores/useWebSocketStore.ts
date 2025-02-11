@@ -54,13 +54,11 @@ export const useWebSocketStore = create<WebSocketState>((set, get) => ({
       heartbeatOutgoing: 4000,
     });
 
-    client.onConnect = () => {
-      console.log('WebSocket: 연결 성공');
-    };
+    // client.onConnect = () => {};
 
-    client.onStompError = (frame) => {
-      console.error('Websocket: STOMP 에러:', frame.headers['message']);
-    };
+    // client.onStompError = (frame) => {
+    //   console.log('Websocket: STOMP 에러:', frame.headers['message']);
+    // };
 
     client.activate();
     set({ client });
@@ -78,7 +76,6 @@ export const useWebSocketStore = create<WebSocketState>((set, get) => ({
     });
 
     if (client) {
-      console.log('WebSocket: 연결 해제');
       client.deactivate();
       set({ client: null, subscriptions: {} });
     }
@@ -90,7 +87,11 @@ export const useWebSocketStore = create<WebSocketState>((set, get) => ({
 
     Object.values(subscriptions).forEach((sub) => sub?.unsubscribe());
 
-    console.log(`WebSocket: ${roomId}에서 ${pageType} 페이지 구독 변경`);
+    set({
+      roomStatus: INITIAL_ROOMSTATUS,
+      roomInfo: INITIAL_ROOMINFO,
+      gameResult: INITIAL_GAMERESULT,
+    });
 
     const newSubscriptions: Record<string, StompSubscription> = {};
 
@@ -122,11 +123,9 @@ export const useWebSocketStore = create<WebSocketState>((set, get) => ({
     const { client } = get();
 
     if (!client || !client.connected) {
-      console.error('Websocket: WebSocket이 아직 연결되지 않았습니다.');
       return;
     }
 
-    console.log('WebSocket: 메시지 전송 중:', destination, payload);
     client.publish({ destination, body: JSON.stringify(payload) });
   },
 }));
