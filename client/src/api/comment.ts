@@ -8,8 +8,8 @@ import { memberStore } from '@/stores/memberStore';
 
 // 댓글 전체 조회
 const getComments = async (interviewAnswerId: number) => {
-  const data = await api.get(`interview/${interviewAnswerId}/comment/all`).json<Comment[]>();
-  return data;
+  const response = await api.get(`interview/${interviewAnswerId}/comment/all`).json<{ comments: Comment[] }>();
+  return response.comments;
 };
 
 export const useGetComments = (interviewAnswerId: number) => {

@@ -5,19 +5,19 @@ import JoinGame from './gameModalComponent/JoinGame';
 import Waiting from './gameModalComponent/waiting/Waiting';
 import { useEffect, useRef, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
-import useWebSocket from '@/hooks/useWebSocket';
 import WaitingAfterCreating from './gameModalComponent/waiting/WaitingAfterCreating';
 import { toast } from 'react-toastify';
 import { useRoomStore } from '@/stores/roomStore';
 import { GetRandomTypeResponse } from '@/types/response/game';
 import WaitingRamdom from './gameModalComponent/waiting/WaitingRandom';
+import { useWebSocketStore } from '@/stores/useWebSocketStore';
 
 const GameModals = () => {
   const navigate = useNavigate();
   const createRoomTimeoutRef = useRef<NodeJS.Timeout | null>(null);
 
   const { roomId, setRoomId } = useRoomStore();
-  const { roomStatus, sendMessage } = useWebSocket();
+  const { roomStatus, sendMessage } = useWebSocketStore();
 
   const postCreateGame = usePostCreateGame();
   const postJoinGame = usePostJoinGame();
@@ -27,7 +27,6 @@ const GameModals = () => {
 
   const [isPlayerReady, setIsPlayerReady] = useState(false);
 
-  const [codeForInviting, setCodeForInviting] = useState('');
   const [codeForJoinning, setCodeForJoinning] = useState('');
   const [isCreateMode, setIsCreateMode] = useState(false);
 
@@ -80,7 +79,6 @@ const GameModals = () => {
 
     const { roomId } = await postCreateGame(selects);
     setRoomId(roomId);
-    setCodeForInviting(roomId);
 
     createRoomTimeout();
   };
@@ -168,11 +166,7 @@ const GameModals = () => {
         <WaitingRamdom handleGameState={handleRandomRoom} />
       </Modal>
       <Modal triggerName="방 생성" triggerColor="primary" onOpenChange={(isOpen: boolean) => handleCloseModal(isOpen)}>
-        {isPlayerReady ? (
-          <WaitingAfterCreating code={codeForInviting} />
-        ) : (
-          <CreateRoom handleGameState={handleCreateRoom} />
-        )}
+        {isPlayerReady ? <WaitingAfterCreating /> : <CreateRoom handleGameState={handleCreateRoom} />}
       </Modal>
       <Modal
         triggerName="코드 입력"

@@ -19,7 +19,6 @@ const RedirectPage = () => {
 
       if (auth && !isAuthLoading) {
         const memberData = await refetch();
-        console.log('memberData', memberData);
 
         if (memberData) {
           // 미가입시

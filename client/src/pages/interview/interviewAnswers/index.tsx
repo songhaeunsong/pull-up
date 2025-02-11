@@ -1,7 +1,7 @@
 import { useCreateInterviewAnswerLike, useGetInterviewAnswers } from '@/api/interview';
 import RouteHeader from '@/components/common/routeheader';
 import InterviewAnswerItem from '@/components/interview/interviewAnswerItem';
-import { memberStore } from '@/stores/memberStore';
+import Page404 from '@/pages/404';
 import { InterviewAnswer } from '@/types/interview';
 import convertDate from '@/utils/convertDate';
 import { useEffect, useState } from 'react';
@@ -10,12 +10,9 @@ import { useNavigate, useParams } from 'react-router-dom';
 const InterviewAnswersPage = () => {
   const navigate = useNavigate();
   const { interviewId } = useParams();
-  const { interviewAnswerId } = memberStore();
-  const { data: getInterviewAnswers, isLoading } = useGetInterviewAnswers(interviewAnswerId);
+  const { data: getInterviewAnswers, isLoading } = useGetInterviewAnswers(Number(interviewId));
   const [interviewAnswersData, setInterviewAnswersData] = useState<InterviewAnswer[]>();
-
-  const [likeId, setLikeId] = useState<number>();
-  const likeMutation = useCreateInterviewAnswerLike(interviewAnswerId, Number(likeId));
+  const likeMutation = useCreateInterviewAnswerLike(Number(interviewId));
 
   useEffect(() => {
     if (!isLoading) {
@@ -24,22 +21,23 @@ const InterviewAnswersPage = () => {
   }, [getInterviewAnswers, isLoading]);
 
   if (!interviewAnswersData) {
-    return null;
+    return <Page404 />;
   }
 
+  // 결과로 돌아가기
   const onBackClick = () => {
-    navigate(`/interview/result/${interviewId}`);
+    navigate(-1);
   };
 
+  // 답변 상세 보기
   const onInterviewAnswerClick = (interviewAnswerId: number) => {
-    navigate(`/interview/result/${interviewId}/answers/${interviewAnswerId}`);
+    navigate(`/interview/${interviewId}/answers/${interviewAnswerId}`);
   };
 
   // 좋아요 토글
   const handleLikeClick = (interviewAnswerId: number) => {
-    setLikeId(interviewAnswerId);
-    console.log(interviewAnswerId);
-    likeMutation.mutate();
+    likeMutation.mutate(interviewAnswerId);
+    console.log('좋아요 호출: ', interviewAnswerId);
   };
 
   return (

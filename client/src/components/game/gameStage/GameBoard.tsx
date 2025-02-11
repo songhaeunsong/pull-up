@@ -1,28 +1,31 @@
 import { useState } from 'react';
 import GameCard from './GameCard';
-import { Card } from '@/types/game';
-import useWebSocket from '@/hooks/useWebSocket';
+import { Card, PlayerType } from '@/types/game';
+import { useWebSocketStore } from '@/stores/useWebSocketStore';
 
 interface GameBoardProps {
-  playerNumber: 1 | 2;
+  playerType: PlayerType;
   problems: Card[];
 }
 
-const GameBoard = ({ playerNumber, problems }: GameBoardProps) => {
-  const { sendMessage, roomInfo } = useWebSocket();
+const GameBoard = ({ playerType, problems }: GameBoardProps) => {
+  const { sendMessage, roomInfo } = useWebSocketStore();
 
   const [selectedCards, setSelectedCards] = useState<number[]>([]);
   const [shake, setShake] = useState(false);
 
   const checkCardPair = (cardIndex1: number, cardIndex2: number) => {
-    sendMessage('/app/card/submit', {
+    sendMessage('/app/card/check', {
+      checkType: 'SUBMIT',
       roomId: roomInfo.roomId,
-      playerId: playerNumber,
+      playerType,
       contents: [problems[cardIndex1].content, problems[cardIndex2].content],
     });
 
-    setShake(true);
-    setTimeout(() => setShake(false), 500);
+    if (!problems[cardIndex1].disabled && !problems[cardIndex2].disabled) {
+      setShake(true);
+      setTimeout(() => setShake(false), 500);
+    }
   };
 
   const handleClickCard = (index: number) => {

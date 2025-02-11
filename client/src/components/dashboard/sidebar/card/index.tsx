@@ -43,9 +43,7 @@ const Card = ({ link, title, data }: CardProps) => {
             <span className="text-xs text-stone-400 lg:text-base">{data.date}</span>
           </div>
           <div className="flex flex-wrap gap-2">
-            {data.subjects.map((subject, id) => (
-              <ExamTag key={id} title={subject} />
-            ))}
+            {data.subjects && data.subjects.map((subject, id) => <ExamTag key={id} title={subject} />)}
           </div>
         </button>
       </Link>
