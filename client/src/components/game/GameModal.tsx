@@ -137,12 +137,6 @@ const GameModals = () => {
   }, [roomId]);
 
   useEffect(() => {
-    if (roomStatus === 'FINISHED') {
-      navigate('/game/result');
-    }
-  }, [roomStatus]);
-
-  useEffect(() => {
     if (roomId && roomStatus === 'PLAYING') {
       if (createRoomTimeoutRef.current) {
         clearTimeout(createRoomTimeoutRef.current);
