@@ -41,7 +41,6 @@ const ExamResultPage = () => {
   if (!examResult) {
     return <div>시험 결과를 불러오는 데 실패했습니다.</div>;
   }
-  // console.log(examResult.examResultDetailDtos);
   const { round, score, examResultDetailDtos } = examResult;
   const infoSections = [
     {

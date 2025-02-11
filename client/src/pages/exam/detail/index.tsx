@@ -4,7 +4,6 @@ import { postExamAnswer, useGetExamDetails } from '@/api/exam';
 import { useExamStore } from '@/stores/examStore';
 import { useShallow } from 'zustand/react/shallow';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
-
 import Timer from '@/components/exam/timer';
 import ExamProblem from '@/components/exam/problem';
 import InfoSection from '@/components/exam/infoSection';
@@ -21,7 +20,7 @@ const ExamDetailPage = () => {
   const answers = useExamStore(useShallow((state) => state.answers));
   const { resetExamState, setAnswer, setSolutionPage, initializeAndSetOptions } = useExamStore();
   const [isInitialized] = useState(false);
-  const { isBlocked, handleProceed, handleCancel } = usePrompt();
+  const { isBlocked, handleProceed, handleCancel, disablePrompt } = usePrompt();
 
   const isAllSolved = useMemo(() => {
     return (examProblems || []).every(
@@ -47,6 +46,7 @@ const ExamDetailPage = () => {
 
   const onSubmit = async () => {
     try {
+      disablePrompt();
       const requestBody = {
         problemAndChosenAnswers: Object.keys(answers).map((problemId) => ({
           problemId: Number(problemId),
@@ -140,7 +140,7 @@ const ExamDetailPage = () => {
                 </InfoSection>
               ))}
             </div>
-            {/* 제출 */}
+            {/* 답안 제출 */}
             <SubmitDialog
               onSubmit={onSubmit}
               isDisabled={!isAllSolved}

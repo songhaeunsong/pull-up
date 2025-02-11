@@ -72,9 +72,6 @@ export const useTogglProblemBookmark = (problemId: number, examId?: number) => {
       }
       toggleBookmarkInStore(problemId);
     },
-    // onSuccess: () => {
-    //   console.log('서버 응답 후 상태:', useExamStore.getState().bookmark);
-    // },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: QUERY_KEYS.PROBLEM_DETAIL(problemId) });
       if (examId) {
