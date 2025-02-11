@@ -18,7 +18,7 @@ const GameBoard = ({ playerNumber, problems }: GameBoardProps) => {
     sendMessage('/app/card/check', {
       checkType: 'SUBMIT',
       roomId: roomInfo.roomId,
-      playerId: playerNumber,
+      playerNumber,
       contents: [problems[cardIndex1].content, problems[cardIndex2].content],
     });
 
