@@ -6,12 +6,10 @@ interface MemberState {
   member: Member | null;
   isLoggedIn: boolean;
   isSolvedToday: boolean;
-  interviewId: number;
   interviewAnswerId: number;
   setMember: (member: Member) => void;
   setIsSolvedToday: (isSolvedToday: boolean) => void;
   setIsLoggedIn: (isLoggedIn: boolean) => void;
-  setInterviewId: (interviewId: number) => void;
   setInterviewAnswerId: (interviewAnswerId: number) => void;
   logoutMember: () => void;
 }
@@ -20,7 +18,6 @@ const initialState = {
   member: null,
   isLoggedIn: false,
   isSolvedToday: false,
-  interviewId: 0,
   interviewAnswerId: 0,
 };
 
@@ -31,7 +28,6 @@ export const memberStore = create<MemberState>()(
       setMember: (member) => set({ member }),
       setIsSolvedToday: (isSolvedToday) => set({ isSolvedToday }),
       setIsLoggedIn: (isLoggedIn) => set({ isLoggedIn }),
-      setInterviewId: (interviewId) => set({ interviewId }),
       setInterviewAnswerId: (interviewAnswerId) => set({ interviewAnswerId }),
       logoutMember: () => {
         set(initialState);
@@ -45,7 +41,6 @@ export const memberStore = create<MemberState>()(
         email: state.member?.email,
         isLoggedIn: state.isLoggedIn,
         isSolvedToday: state.isSolvedToday,
-        interviewId: state.interviewId,
         interviewAnswerId: state.interviewAnswerId,
       }),
     },

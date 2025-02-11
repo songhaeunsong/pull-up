@@ -11,7 +11,7 @@ import Page404 from '../404';
 
 const InterviewPage = () => {
   const { data: member } = useGetMemberInfo();
-  const { setIsSolvedToday, setInterviewId, setInterviewAnswerId } = memberStore();
+  const { setIsSolvedToday, setInterviewAnswerId } = memberStore();
 
   const navigate = useNavigate();
   const [hint, setHint] = useState(false);
@@ -45,7 +45,6 @@ const InterviewPage = () => {
       const data = await createMemberAnswer(interviewData.interviewId, interviewAnswer);
 
       setIsSolvedToday(true);
-      setInterviewId(data.interviewId);
       setInterviewAnswerId(data.interviewAnswerId);
       navigate(`/interview/result/${data.interviewAnswerId}`);
     } catch (error) {
