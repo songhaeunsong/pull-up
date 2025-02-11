@@ -1,23 +1,22 @@
 import { useGetComments } from '@/api/comment';
-import { useCreateInterviewAnswerLike } from '@/api/interview';
+import { useCreateInterviewAnswerLike, useGetInterviewAnswerDetail } from '@/api/interview';
 import RouteHeader from '@/components/common/routeheader';
 import CommentItem from '@/components/interview/commentItem';
 import InputForm from '@/components/interview/inputForm';
 import InterviewAnswerItem from '@/components/interview/interviewAnswerItem';
 import { useComment } from '@/hooks/useComment';
 import { memberStore } from '@/stores/memberStore';
-import { Comment } from '@/types/interview';
+import { Comment, InterviewAnswer } from '@/types/interview';
 import convertDate from '@/utils/convertDate';
 import { useEffect, useState } from 'react';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 
 const InterviewAnswerDetail = () => {
   const { member } = memberStore();
   const navigate = useNavigate();
   const { interviewId, interviewAnswerId } = useParams();
-  const location = useLocation();
-  const interviewAnswerData = location.state?.interviewAnswerData;
-
+  const { data: interviewAnswer, isLoading: isAnswerLoading } = useGetInterviewAnswerDetail(Number(interviewAnswerId));
+  const [interviewAnswerData, setInterviewAnswerData] = useState<InterviewAnswer>();
   const { data: comments, isLoading: isCommentsLoading } = useGetComments(Number(interviewAnswerId));
   const [commentsData, setCommentsData] = useState<Comment[]>();
 
@@ -41,10 +40,13 @@ const InterviewAnswerDetail = () => {
   };
 
   useEffect(() => {
+    if (!isAnswerLoading) {
+      setInterviewAnswerData(interviewAnswer);
+    }
     if (!isCommentsLoading) {
       setCommentsData(comments);
     }
-  }, [comments, isCommentsLoading]);
+  }, [interviewAnswer, isAnswerLoading, comments, isCommentsLoading]);
 
   if (!member || !interviewAnswerData || !commentsData) {
     return null;

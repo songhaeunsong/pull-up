@@ -32,11 +32,7 @@ const InterviewAnswersPage = () => {
   };
 
   const onInterviewAnswerClick = (interviewAnswerId: number) => {
-    const selectedAnswer = interviewAnswersData.find((answer) => answer.interviewAnswerId === interviewAnswerId);
-
-    navigate(`/interview/result/${interviewId}/answers/${interviewAnswerId}`, {
-      state: { interviewAnswerData: selectedAnswer },
-    });
+    navigate(`/interview/result/${interviewId}/answers/${interviewAnswerId}`);
   };
 
   // 좋아요 토글
