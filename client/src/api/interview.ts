@@ -12,7 +12,7 @@ import { queryClient } from '@/main';
 import { GetStreakResponse } from '@/types/response/interview';
 
 const getStreak = async () => {
-  const response = await api.get<GetStreakResponse>('interview/me/streak');
+  const response = await api.get<GetStreakResponse>('member/me/streak');
   const data = await response.json();
 
   return data;
