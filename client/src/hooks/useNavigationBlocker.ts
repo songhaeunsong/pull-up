@@ -45,7 +45,11 @@ const usePrompt = (): UsePromptReturn => {
     blocker.reset?.();
   };
 
-  const disablePrompt = () => setIsEnabled(false);
+  const disablePrompt = () => {
+    setIsEnabled(false);
+    setIsBlocked(false);
+    blocker.reset?.(); // 상태 초기화로 이동 차단 해제
+  };
   const enablePrompt = () => setIsEnabled(true);
 
   return { isBlocked, handleProceed, handleCancel, disablePrompt, enablePrompt };
