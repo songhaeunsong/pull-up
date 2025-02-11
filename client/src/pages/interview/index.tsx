@@ -44,9 +44,9 @@ const InterviewPage = () => {
       const data = await createMemberAnswer(interviewData.interviewId, interviewAnswer);
 
       setIsSolvedToday(true);
-      setInterviewId(data.interviewAnswerId);
+      setInterviewId(data.interviewId);
       setInterviewAnswerId(data.interviewAnswerId);
-      navigate(`/interview/result/${data.interviewId}`);
+      navigate(`/interview/result/${data.interviewAnswerId}`);
     } catch (error) {
       console.error('답변 작성을 실패했습니다.', error);
       toast.error('답변 작성을 실패했습니다.', { position: 'bottom-center' });

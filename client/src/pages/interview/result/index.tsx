@@ -24,7 +24,6 @@ const InterviewResultPage = () => {
   useEffect(() => {
     if (!isResultLoading && result) {
       setResultData(result);
-      console.log(resultData);
     }
 
     if (!isInterviewLoading && interviewList) {
@@ -35,6 +34,8 @@ const InterviewResultPage = () => {
   if (!resultData || !interviewListData) {
     return null;
   }
+
+  console.log('resultData: ', resultData);
 
   const handleMenuClick = () => {
     setIsSideMenuOpen(!isSideMenuOpen);
