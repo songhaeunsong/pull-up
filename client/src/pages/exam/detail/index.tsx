@@ -22,6 +22,7 @@ import InfoSection from '@/components/exam/infoSection';
 import ProblemStatusButton from '@/components/exam/infoSection/problemStatusButton';
 import Icon from '@/components/common/icon';
 import usePrompt from '@/hooks/useNavigationBlocker';
+import NavigationDialog from '@/components/common/navigationDialog';
 
 const ExamDetailPage = () => {
   const navigate = useNavigate();
@@ -174,19 +175,14 @@ const ExamDetailPage = () => {
           </div>
         </aside>
       </div>
-      {/* 커스텀 경고창 */}
-      <AlertDialog open={isBlocked}>
-        <AlertDialogContent>
-          <AlertDialogHeader>
-            <AlertDialogTitle>시험을 중단하시겠습니까?</AlertDialogTitle>
-            <AlertDialogDescription>페이지를 이동할 경우 현재까지의 답안이 자동 제출됩니다.</AlertDialogDescription>
-          </AlertDialogHeader>
-          <AlertDialogFooter>
-            <AlertDialogCancel onClick={handleCancel}>취소하기</AlertDialogCancel>
-            <AlertDialogAction onClick={handleProceed}>나가기</AlertDialogAction>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+      {/* 페이지 이동 경고 모달 */}
+      <NavigationDialog
+        isOpen={isBlocked}
+        onProceed={handleProceed}
+        onCancel={handleCancel}
+        title="시험을 중단하시겠습니까?"
+        description="페이지를 이동할 경우 시험이 무효화되고 선택한 답안이 모두 사라집니다."
+      />
     </div>
   );
 };
