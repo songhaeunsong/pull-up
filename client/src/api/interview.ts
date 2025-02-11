@@ -1,8 +1,7 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
 import api from './instance';
 import {
-  InterviewAnswerDetailResponse,
-  InterviewAnswerListResponse,
+  InterviewAnswer,
   InterviewListResponse,
   InterviewResponse,
   InterviewResultResponse,
@@ -48,7 +47,7 @@ export const createMemberAnswer = async (interviewId: number, answer: string): P
 
 // 결과 조회
 const getInterviewResult = (interviewAnswerId: number): Promise<InterviewResultResponse> => {
-  const data = api.get(`interview/result/${interviewAnswerId}`).json<InterviewResultResponse>();
+  const data = api.get(`interview/${interviewAnswerId}/result`).json<InterviewResultResponse>();
   return data;
 };
 
@@ -62,9 +61,9 @@ export const useGetInterviewResult = (interviewAnswerId: number) => {
 };
 
 // 지난 오늘의 문제 전체 조회
-const getInterviewList = (): Promise<InterviewListResponse[]> => {
-  const data = api.get('interview/me/all').json<InterviewListResponse[]>();
-  return data;
+const getInterviewList = async (): Promise<InterviewListResponse[]> => {
+  const response = await api.get('interview/me/all').json<{ myInterviewAnswers: InterviewListResponse[] }>();
+  return response.myInterviewAnswers;
 };
 
 export const useGetInterviewList = () => {
@@ -75,31 +74,28 @@ export const useGetInterviewList = () => {
 };
 
 // 다른 사람 답변 전체 조회
-const getInterviewAnswerList = (interviewId: number): Promise<InterviewAnswerListResponse[]> => {
-  const data = api.get(`interview/${interviewId}/all`).json<InterviewAnswerListResponse[]>();
+const getInterviewAnswers = (interviewAnswerId: number): Promise<InterviewAnswer[]> => {
+  const data = api.get(`interview/${interviewAnswerId}/all`).json<InterviewAnswer[]>();
   return data;
 };
 
-export const useGetInterviewAnswerList = (interviewId: number) => {
+export const useGetInterviewAnswers = (interviewAnswerId: number) => {
   return useQuery({
-    queryKey: ['interviewAnswerList', interviewId],
-    queryFn: () => getInterviewAnswerList(interviewId),
+    queryKey: ['interviewAnswers', interviewAnswerId],
+    queryFn: () => getInterviewAnswers(interviewAnswerId),
   });
 };
 
-// 다른 사람 답변 상세 조회
-const getInterviewAnswerDetail = (
-  interviewId: number,
-  interviewAnswerId: number,
-): Promise<InterviewAnswerDetailResponse> => {
-  const data = api.get(`interview/${interviewId}/${interviewAnswerId}`).json<InterviewAnswerDetailResponse>();
+// 다른 사람 답변 단건 조회
+const getInterviewAnswerDetail = (interviewAnswerId: number) => {
+  const data = api.get(`interview/${interviewAnswerId}`).json<InterviewAnswer>();
   return data;
 };
 
-export const useGetInterviewAnswerDetail = (interviewId: number, interviewAnswerId: number) => {
+export const useGetInterviewAnswerDetail = (interviewAnswerId: number) => {
   return useQuery({
     queryKey: ['interviewAnswerDetail', interviewAnswerId],
-    queryFn: () => getInterviewAnswerDetail(interviewId, interviewAnswerId),
+    queryFn: () => getInterviewAnswerDetail(interviewAnswerId),
   });
 };
 
@@ -114,15 +110,15 @@ export const useCreateInterviewAnswerLike = (interviewId: number, interviewAnswe
     mutationFn: () => createInterviewAnswerLike(interviewAnswerId),
     onMutate: async () => {
       await Promise.all([
-        queryClient.cancelQueries({ queryKey: ['interviewAnswerList', interviewId] }),
+        queryClient.cancelQueries({ queryKey: ['interviewAnswers', interviewId] }),
         queryClient.cancelQueries({ queryKey: ['interviewAnswerDetail', interviewAnswerId] }),
       ]);
 
-      const previousListData = queryClient.getQueryData(['interviewAnswerList', interviewId]);
+      const previousListData = queryClient.getQueryData(['interviewAnswers', interviewId]);
       const previousDetailData = queryClient.getQueryData(['interviewAnswerDetail', interviewAnswerId]);
 
       if (previousListData) {
-        queryClient.setQueryData(['interviewAnswerList', interviewId], (old: InterviewAnswerListResponse[]) =>
+        queryClient.setQueryData(['interviewAnswers', interviewId], (old: InterviewAnswer[]) =>
           old?.map((answer) =>
             answer.interviewAnswerId === interviewAnswerId
               ? {
@@ -136,21 +132,18 @@ export const useCreateInterviewAnswerLike = (interviewId: number, interviewAnswe
       }
 
       if (previousDetailData) {
-        queryClient.setQueryData(
-          ['interviewAnswerDetail', interviewAnswerId],
-          (old: InterviewAnswerDetailResponse) => ({
-            ...old,
-            isLiked: !old.isLiked,
-            likeCount: old.isLiked ? old.likeCount - 1 : old.likeCount + 1,
-          }),
-        );
+        queryClient.setQueryData(['interviewAnswerDetail', interviewAnswerId], (old: InterviewAnswer) => ({
+          ...old,
+          isLiked: !old.isLiked,
+          likeCount: old.isLiked ? old.likeCount - 1 : old.likeCount + 1,
+        }));
       }
 
       return { previousListData, previousDetailData };
     },
     onError: (err, _, context) => {
       if (context?.previousListData) {
-        queryClient.setQueryData(['interviewAnswerList', interviewId], context.previousListData);
+        queryClient.setQueryData(['interviewAnswers', interviewId], context.previousListData);
       }
       if (context?.previousDetailData) {
         queryClient.setQueryData(['interviewAnswerDetail', interviewAnswerId], context.previousDetailData);
@@ -158,7 +151,7 @@ export const useCreateInterviewAnswerLike = (interviewId: number, interviewAnswe
       console.error('좋아요 요청을 실패했습니다.', err);
     },
     onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ['interviewAnswerList', interviewId] });
+      queryClient.invalidateQueries({ queryKey: ['interviewAnswers', interviewId] });
       queryClient.invalidateQueries({ queryKey: ['interviewAnswerDetail', interviewAnswerId] });
     },
   });

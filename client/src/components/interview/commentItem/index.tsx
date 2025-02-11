@@ -27,11 +27,11 @@ const CommentItem = ({
     <div className="flex w-full flex-col gap-2 py-2 md:gap-4">
       <div className="flex flex-col gap-2 px-2 md:gap-4">
         <div className="flex justify-between">
-          <div className="text-lg font-medium text-primary-500 md:text-xl">{comment.otherMemberName}</div>
+          <div className="text-lg font-medium text-primary-500 md:text-xl">{comment.writer}</div>
           {userEmail === comment.email &&
             (!updated ? (
               <div className="flex gap-2 text-primary-400 md:text-lg">
-                <button onClick={() => handleUpdate(comment.comment, comment.commentId)}>수정</button>|
+                <button onClick={() => handleUpdate(comment.content, comment.commentId)}>수정</button>|
                 <button onClick={() => handleDelete(comment.commentId)}>삭제</button>
               </div>
             ) : (
@@ -45,7 +45,7 @@ const CommentItem = ({
         <textarea
           id="comment"
           disabled={!updated}
-          placeholder={comment.comment}
+          placeholder={comment.content}
           value={value}
           onChange={(e) => onChange(e, comment.commentId)}
           className={`resize-none rounded-lg text-lg text-black outline-none placeholder:text-black focus:border focus:outline-none md:text-xl ${

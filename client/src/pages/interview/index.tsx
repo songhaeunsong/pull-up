@@ -6,20 +6,17 @@ import { memberStore } from '@/stores/memberStore';
 import { InterviewResponse } from '@/types/interview';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 const InterviewPage = () => {
   const { data: member } = useGetMemberInfo();
-  const { setIsSolvedToday, setInterviewId, setInteverviewAnswerId } = memberStore();
+  const { setIsSolvedToday, setInterviewId, setInterviewAnswerId } = memberStore();
 
   const navigate = useNavigate();
   const [hint, setHint] = useState(false);
   const [interviewAnswer, setInterviewAnswer] = useState(''); // 답변
   const { data: interview } = useGetInterview();
-  const [interviewData, setInterviewData] = useState<InterviewResponse>({
-    interviewId: 1,
-    question: 'Checked Exception과 Unchecked Exception의 차이는 ?',
-    keywords: ['Java', 'Exception'],
-  });
+  const [interviewData, setInterviewData] = useState<InterviewResponse>();
 
   useEffect(() => {
     if (interview) {
@@ -39,17 +36,22 @@ const InterviewPage = () => {
 
   const onSubmit = async () => {
     if (!interviewAnswer) {
-      alert('답안을 입력하세요.');
+      toast.error('답변을 입력해주세요.', { position: 'bottom-center' });
       return;
     }
 
-    const data = await createMemberAnswer(interviewData.interviewId, interviewAnswer);
-    setIsSolvedToday(true);
-    setInterviewId(data.interviewAnswerId);
-    setInteverviewAnswerId(data.interviewAnswerId);
-    navigate(`/interview/result/${data.interviewAnswerId}`);
+    try {
+      const data = await createMemberAnswer(interviewData.interviewId, interviewAnswer);
 
-    console.log('제출 답안: ', interviewAnswer);
+      setIsSolvedToday(true);
+      setInterviewId(data.interviewAnswerId);
+      setInterviewAnswerId(data.interviewAnswerId);
+      navigate(`/interview/result/${data.interviewId}`);
+    } catch (error) {
+      console.error('답변 작성을 실패했습니다.', error);
+      toast.error('답변 작성을 실패했습니다.', { position: 'bottom-center' });
+    }
+
     setInterviewAnswer('');
   };
 

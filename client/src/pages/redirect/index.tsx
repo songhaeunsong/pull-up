@@ -8,7 +8,7 @@ const RedirectPage = () => {
   const navigate = useNavigate();
   const { data: auth, isLoading: isAuthLoading } = useAuthInfo();
   const { refetch } = useGetMemberInfo();
-  const { setMember, setIsSolvedToday, setIsLoggedIn, setInterviewId, setInteverviewAnswerId } = memberStore();
+  const { setMember, setIsSolvedToday, setIsLoggedIn, setInterviewId, setInterviewAnswerId } = memberStore();
 
   useEffect(() => {
     const handleRedirect = async () => {
@@ -19,6 +19,7 @@ const RedirectPage = () => {
 
       if (auth && !isAuthLoading) {
         const memberData = await refetch();
+        console.log('memberData', memberData);
 
         if (memberData) {
           // 미가입시
@@ -40,7 +41,7 @@ const RedirectPage = () => {
           setIsLoggedIn(true);
           setIsSolvedToday(auth.isSolvedToday);
           setInterviewId(auth.interviewId);
-          setInteverviewAnswerId(auth.interviewAnswerId);
+          setInterviewAnswerId(auth.interviewAnswerId);
           navigate(auth.isSolvedToday ? `/interview/result/${auth.interviewId}` : '/interview');
         }
       }

@@ -8,9 +8,9 @@ interface useCommentProps {
 export const useComment = ({ interviewAnswerId }: useCommentProps) => {
   // 댓글 작성
   const [inputValue, setInputValue] = useState('');
-  const createCommentMutation = useCreateComment(interviewAnswerId, {
+  const createCommentMutation = useCreateComment({
     interviewAnswerId: interviewAnswerId,
-    comment: inputValue,
+    content: inputValue,
   });
 
   const onChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
