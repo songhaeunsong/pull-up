@@ -22,16 +22,14 @@ const Card = ({ link, title, data }: CardProps) => {
   return (
     <div className="flex w-full flex-col gap-2 pb-2">
       <nav>
-        <div className="flex items-center justify-between">
-          <span className="text-md ml-2 font-bold text-stone-900 lg:text-lg">{title}</span>
-          <Link to={link}>
-            {isMobile || isTabletMd ? (
-              <Icon id="list" size={20} aria-label={`${title}로 이동`} />
-            ) : (
-              <Icon id="list" size={30} aria-label={`${title}로 이동`} />
-            )}
-          </Link>
-        </div>
+        <Link to={link} className="flex items-center justify-between px-2 py-1">
+          <span className="text-md font-bold text-stone-900 lg:text-lg">{title}</span>
+          {isMobile || isTabletMd ? (
+            <Icon id="list" size={20} aria-label={`${title}로 이동`} />
+          ) : (
+            <Icon id="list" size={30} aria-label={`${title}로 이동`} />
+          )}
+        </Link>
       </nav>
 
       <Link to={generatedLink} className="flex w-full flex-col items-center">
