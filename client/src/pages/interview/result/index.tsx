@@ -24,11 +24,11 @@ const InterviewResultPage = () => {
   useEffect(() => {
     if (!isResultLoading && result) {
       setResultData(result);
+      console.log(resultData);
     }
 
     if (!isInterviewLoading && interviewList) {
       setInterviewListData(interviewList);
-      console.log(interviewListData);
     }
   }, [result, interviewList, isResultLoading, isInterviewLoading]);
 

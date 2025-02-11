@@ -74,9 +74,9 @@ export const useGetInterviewList = () => {
 };
 
 // 다른 사람 답변 전체 조회
-const getInterviewAnswers = (interviewId: number): Promise<InterviewAnswer[]> => {
-  const data = api.get(`interview/${interviewId}/all`).json<InterviewAnswer[]>();
-  return data;
+const getInterviewAnswers = async (interviewId: number): Promise<InterviewAnswer[]> => {
+  const response = await api.get(`interview/${interviewId}/all`).json<{ interviewAnswers: InterviewAnswer[] }>();
+  return response.interviewAnswers;
 };
 
 export const useGetInterviewAnswers = (interviewId: number) => {
