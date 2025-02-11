@@ -16,9 +16,9 @@ interface ReviewListProps {
 
 const ReviewList = ({ data, searchValue, isProblem = true, onSearchChange }: ReviewListProps) => {
   return (
-    <article className="flex flex-col gap-8 rounded-xl bg-white px-8 py-8">
+    <article className="flex flex-col gap-4 rounded-xl bg-white p-4 md:gap-8 md:p-8">
       <SearchBar value={searchValue} onChange={onSearchChange} />
-      <div className="flex flex-col gap-5">
+      <div className="flex flex-col gap-4">
         {data.map((data) => (
           <ReviewCard
             isProblem={isProblem}

@@ -31,7 +31,7 @@ const ReviewCard = ({ id, title, subtitle, tags, isProblem }: ReviewCardProps) =
         </div>
         <Icon id="list" size={32} />
       </div>
-      <div className="flex gap-2">{renderTags()}</div>
+      <div className="flex flex-wrap gap-2">{renderTags()}</div>
     </Link>
   );
 };
