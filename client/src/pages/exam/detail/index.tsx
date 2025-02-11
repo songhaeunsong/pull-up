@@ -1,21 +1,10 @@
-import { cn } from '@/lib/utils';
 import { useEffect, useState, useMemo } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { postExamAnswer, useGetExamDetails } from '@/api/exam';
 import { useExamStore } from '@/stores/examStore';
 import { useShallow } from 'zustand/react/shallow';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from '@/components/ui/alert-dialog';
+
 import Timer from '@/components/exam/timer';
 import ExamProblem from '@/components/exam/problem';
 import InfoSection from '@/components/exam/infoSection';
@@ -23,6 +12,7 @@ import ProblemStatusButton from '@/components/exam/infoSection/problemStatusButt
 import Icon from '@/components/common/icon';
 import usePrompt from '@/hooks/useNavigationBlocker';
 import NavigationDialog from '@/components/common/navigationDialog';
+import SubmitDialog from '@/components/exam/submitDialog';
 
 const ExamDetailPage = () => {
   const navigate = useNavigate();
@@ -151,27 +141,12 @@ const ExamDetailPage = () => {
               ))}
             </div>
             {/* 제출 */}
-            <AlertDialog>
-              <AlertDialogTrigger
-                className={cn(
-                  isAllSolved ? 'bg-primary-600 text-white hover:bg-primary-700' : 'bg-gray-200 text-gray-500',
-                  'mb-4 w-full rounded-xl py-4 text-lg font-semibold xl:py-5 xl:text-xl',
-                )}
-                disabled={!isAllSolved}
-              >
-                제출하기
-              </AlertDialogTrigger>
-              <AlertDialogContent>
-                <AlertDialogHeader>
-                  <AlertDialogTitle>정말 시험을 제출하시겠습니까?</AlertDialogTitle>
-                  <AlertDialogDescription>제출 후에는 더 이상 답안을 수정할 수 없습니다.</AlertDialogDescription>
-                </AlertDialogHeader>
-                <AlertDialogFooter>
-                  <AlertDialogCancel>취소하기</AlertDialogCancel>
-                  <AlertDialogAction onClick={onSubmit}>제출하기</AlertDialogAction>
-                </AlertDialogFooter>
-              </AlertDialogContent>
-            </AlertDialog>
+            <SubmitDialog
+              onSubmit={onSubmit}
+              isDisabled={!isAllSolved}
+              title="정말 시험을 제출하시겠습니까?"
+              description="제출 후에는 더 이상 답안을 수정할 수 없습니다."
+            />
           </div>
         </aside>
       </div>
