@@ -9,9 +9,10 @@ import { useGetPlayerType } from '@/api/game';
 import { useWebSocketStore } from '@/stores/useWebSocketStore';
 
 const GameResultPage = () => {
-  const navigate = useNavigate();
   const { setRoomId, roomId } = useRoomStore();
-  const { gameResult } = useWebSocketStore();
+  const { updateSubscription, gameResult } = useWebSocketStore();
+
+  const navigate = useNavigate();
 
   const { data: playerTypeData, isPending, isError } = useGetPlayerType(roomId);
 
@@ -19,13 +20,19 @@ const GameResultPage = () => {
   const [animatedOpponentScore, setAnimatedOpponentScore] = useState(0);
   const [isVisibleResult, setIsVisibleResult] = useState(false);
 
+  useEffect(() => {
+    if (roomId) updateSubscription(roomId, 'result');
+  }, [roomId]);
+
   const handleGoBack = () => {
     setRoomId('');
     navigate('/game');
   };
 
+  useEffect(() => {}, [updateSubscription]);
+
   useEffect(() => {
-    if (isPending || isError || !gameResult) return;
+    if (isPending || isError) return;
 
     const animateValue = (start: number, end: number, interval: number, setter: (value: number) => void) => {
       let currentValue = start;
@@ -49,7 +56,6 @@ const GameResultPage = () => {
   }, [gameResult]);
 
   useEffect(() => {
-    if (!gameResult) return;
     if (isPending || isError || !gameResult) return;
 
     if (isVisibleResult) {

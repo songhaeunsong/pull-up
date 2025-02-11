@@ -8,11 +8,15 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const GameStage = () => {
-  const navigate = useNavigate();
   const { roomId } = useRoomStore();
-  const { roomInfo, sendMessage } = useWebSocketStore();
+  const { updateSubscription, roomInfo, sendMessage } = useWebSocketStore();
+  const navigate = useNavigate();
 
-  const { data: playerTypeData, isLoading } = useGetPlayerType(roomId);
+  const { data: playerTypeData, isPending } = useGetPlayerType(roomId);
+
+  useEffect(() => {
+    if (roomId) updateSubscription(roomId, 'status');
+  }, [roomId]);
 
   const handleTimeOver = () => {
     sendMessage('app/card/check', {
@@ -26,7 +30,7 @@ const GameStage = () => {
     }
   }, [roomInfo]);
 
-  if (!playerTypeData || isLoading) return <>불러오는 중...</>;
+  if (!playerTypeData || isPending) return <>불러오는 중...</>;
 
   return (
     <div className="flex h-full w-full flex-col gap-3 bg-Main p-4 pt-[106px] sm:pt-[85px] md:p-8 md:pt-[84px]">
