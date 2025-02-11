@@ -43,10 +43,9 @@ const InterviewAnswerDetail = () => {
     }
     if (!isCommentsLoading && comments) {
       setCommentsData(comments);
+      console.log('댓글 목록: ', comments);
     }
   }, [interviewAnswer, isAnswerLoading, comments, isCommentsLoading]);
-
-  console.log('멤버 데이터: ', member);
 
   // 다른 사람 답변 목록으로 돌아가기
   const onBackClick = () => {
@@ -56,7 +55,7 @@ const InterviewAnswerDetail = () => {
   // 좋아요 토글
   const handleLikeClick = () => {
     likeMutation.mutate(Number(interviewAnswerId));
-    console.log('좋아요 호출: ', interviewAnswerId);
+    console.log('좋아요: ', interviewAnswer?.isLiked);
   };
 
   if (!member || !interviewAnswerData || !commentsData) {
@@ -87,21 +86,25 @@ const InterviewAnswerDetail = () => {
           onKeyDown={onKeyDown}
         />
         <div>
-          {commentsData.map((comment, index) => (
-            <div key={index}>
-              <CommentItem
-                userEmail={member.email}
-                comment={comment}
-                handleDelete={handleCommentDelete}
-                handleUpdate={handleCommentUpdate}
-                onCancelClick={onCancelClick}
-                onChange={onCommentChange}
-                onConfirmClick={onConfirmClick}
-                value={updatedComment?.id === comment.commentId ? updatedComment?.content : comment.content}
-                updated={updatedComment?.id === comment.commentId}
-              />
-            </div>
-          ))}
+          {commentsData && commentsData.length > 0 ? (
+            commentsData.map((comment, index) => (
+              <div key={index}>
+                <CommentItem
+                  userEmail={member.email}
+                  comment={comment}
+                  handleDelete={handleCommentDelete}
+                  handleUpdate={handleCommentUpdate}
+                  onCancelClick={onCancelClick}
+                  onChange={onCommentChange}
+                  onConfirmClick={onConfirmClick}
+                  value={updatedComment?.id === comment.commentId ? updatedComment?.content : comment.content}
+                  updated={updatedComment?.id === comment.commentId}
+                />
+              </div>
+            ))
+          ) : (
+            <div>댓글 목록이 없습니다.</div>
+          )}
         </div>
       </div>
     </div>

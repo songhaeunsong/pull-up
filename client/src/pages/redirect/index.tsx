@@ -41,7 +41,7 @@ const RedirectPage = () => {
           setIsSolvedToday(auth.isSolvedToday);
           setInterviewId(auth.interviewId);
           setInterviewAnswerId(auth.interviewAnswerId);
-          navigate(auth.isSolvedToday ? `/interview/result/${auth.interviewId}` : '/interview');
+          navigate(auth.isSolvedToday ? `/interview/result/${auth.interviewAnswerId}` : '/interview');
         }
       }
     };
