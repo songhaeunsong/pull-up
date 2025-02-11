@@ -9,15 +9,24 @@ interface Modalprops {
   triggerColor: 'primary' | 'secondary' | 'gray' | 'transparent';
   children: ReactNode;
   onOpenChange?: (isOpen: boolean) => void;
+  isOutsideClickable: boolean;
 }
 
-const Modal = ({ triggerName, triggerColor, children, onOpenChange }: Modalprops) => {
+const Modal = ({ triggerName, triggerColor, children, onOpenChange, isOutsideClickable }: Modalprops) => {
+  const handlePointerDownOutside = (event: Event) => {
+    if (isOutsideClickable) return;
+    event.preventDefault();
+  };
+
   return (
     <Dialog onOpenChange={onOpenChange}>
       <DialogTrigger asChild>
         <Button variant={triggerColor}>{triggerName}</Button>
       </DialogTrigger>
-      <DialogContent className="max-w-[300px] bg-white sm:max-w-[425px]">
+      <DialogContent
+        className="max-w-[300px] bg-white sm:max-w-[425px]"
+        onPointerDownOutside={handlePointerDownOutside}
+      >
         <DialogTitle></DialogTitle>
         <DialogDescription className="hidden"></DialogDescription>
         <div className="flex w-full flex-col items-center text-sm">{children}</div>
