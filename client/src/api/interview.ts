@@ -87,9 +87,9 @@ export const useGetInterviewAnswers = (interviewId: number) => {
 };
 
 // 다른 사람 답변 단건 조회
-const getInterviewAnswerDetail = (interviewAnswerId: number) => {
-  const data = api.get(`interview/${interviewAnswerId}`).json<InterviewAnswer>();
-  return data;
+const getInterviewAnswerDetail = async (interviewAnswerId: number) => {
+  const response = await api.get(`interview/${interviewAnswerId}`).json<{ interviewAnswer: InterviewAnswer }>();
+  return response.interviewAnswer;
 };
 
 export const useGetInterviewAnswerDetail = (interviewAnswerId: number) => {
@@ -105,10 +105,10 @@ const createInterviewAnswerLike = async (interviewAnswerId: number): Promise<Lik
   return data;
 };
 
-export const useCreateInterviewAnswerLike = (interviewId: number, interviewAnswerId: number) => {
+export const useCreateInterviewAnswerLike = (interviewId: number) => {
   return useMutation({
-    mutationFn: () => createInterviewAnswerLike(interviewAnswerId),
-    onMutate: async () => {
+    mutationFn: (interviewAnswerId: number) => createInterviewAnswerLike(interviewAnswerId),
+    onMutate: async (interviewAnswerId) => {
       await Promise.all([
         queryClient.cancelQueries({ queryKey: ['interviewAnswers', interviewId] }),
         queryClient.cancelQueries({ queryKey: ['interviewAnswerDetail', interviewAnswerId] }),
@@ -146,13 +146,13 @@ export const useCreateInterviewAnswerLike = (interviewId: number, interviewAnswe
         queryClient.setQueryData(['interviewAnswers', interviewId], context.previousListData);
       }
       if (context?.previousDetailData) {
-        queryClient.setQueryData(['interviewAnswerDetail', interviewAnswerId], context.previousDetailData);
+        queryClient.setQueryData(['interviewAnswerDetail'], context.previousDetailData);
       }
       console.error('좋아요 요청을 실패했습니다.', err);
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ['interviewAnswers', interviewId] });
-      queryClient.invalidateQueries({ queryKey: ['interviewAnswerDetail', interviewAnswerId] });
+      queryClient.invalidateQueries({ queryKey: ['interviewAnswerDetail'] });
     },
   });
 };

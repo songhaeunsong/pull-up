@@ -35,7 +35,7 @@ const InterviewResultPage = () => {
     return null;
   }
 
-  console.log('resultData: ', resultData);
+  console.log('결과 데이터: ', resultData);
 
   const handleMenuClick = () => {
     setIsSideMenuOpen(!isSideMenuOpen);

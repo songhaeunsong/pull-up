@@ -34,16 +34,13 @@ const InterviewAnswerDetail = () => {
     handleCommentDelete,
   } = useComment({ interviewAnswerId: Number(interviewAnswerId) });
 
-  const likeMutation = useCreateInterviewAnswerLike(Number(interviewId), Number(interviewAnswerId));
-  const handleLikeClick = () => {
-    likeMutation.mutate();
-  };
+  const likeMutation = useCreateInterviewAnswerLike(Number(interviewId));
 
   useEffect(() => {
-    if (!isAnswerLoading) {
+    if (!isAnswerLoading && interviewAnswer) {
       setInterviewAnswerData(interviewAnswer);
     }
-    if (!isCommentsLoading) {
+    if (!isCommentsLoading && comments) {
       setCommentsData(comments);
     }
   }, [interviewAnswer, isAnswerLoading, comments, isCommentsLoading]);
@@ -52,9 +49,18 @@ const InterviewAnswerDetail = () => {
     return null;
   }
 
+  console.log('상세 데이터: ', interviewAnswerData);
+  console.log('댓글 데이터: ', commentsData);
+
   // 다른 사람 답변 목록으로 돌아가기
   const onBackClick = () => {
     navigate(-1);
+  };
+
+  // 좋아요 토글
+  const handleLikeClick = () => {
+    likeMutation.mutate(Number(interviewAnswerId));
+    console.log('좋아요 호출: ', interviewAnswerId);
   };
 
   return (

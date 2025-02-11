@@ -11,9 +11,7 @@ const InterviewAnswersPage = () => {
   const { interviewId } = useParams();
   const { data: getInterviewAnswers, isLoading } = useGetInterviewAnswers(Number(interviewId));
   const [interviewAnswersData, setInterviewAnswersData] = useState<InterviewAnswer[]>();
-
-  const [likeId, setLikeId] = useState<number>();
-  const likeMutation = useCreateInterviewAnswerLike(Number(interviewId), Number(likeId));
+  const likeMutation = useCreateInterviewAnswerLike(Number(interviewId));
 
   useEffect(() => {
     if (!isLoading) {
@@ -37,9 +35,8 @@ const InterviewAnswersPage = () => {
 
   // 좋아요 토글
   const handleLikeClick = (interviewAnswerId: number) => {
-    setLikeId(interviewAnswerId);
-    console.log(interviewAnswerId);
-    likeMutation.mutate();
+    likeMutation.mutate(interviewAnswerId);
+    console.log('좋아요 호출: ', interviewAnswerId);
   };
 
   return (

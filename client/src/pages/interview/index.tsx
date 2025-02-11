@@ -42,6 +42,7 @@ const InterviewPage = () => {
 
     try {
       const data = await createMemberAnswer(interviewData.interviewId, interviewAnswer);
+      console.log('답변 제출: ', data);
 
       setIsSolvedToday(true);
       setInterviewId(data.interviewId);
