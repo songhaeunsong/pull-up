@@ -57,7 +57,7 @@ const GameResultPage = () => {
     };
 
     animateValue(0, gameResult[playerTypeData.playerType].score, 200, setAnimatedScore);
-    animateValue(0, gameResult[playerTypeData.playerType].score, 200, setAnimatedOpponentScore);
+    animateValue(0, gameResult[OPPONENT[playerTypeData.playerType]].score, 200, setAnimatedOpponentScore);
   }, [gameResult]);
 
   useEffect(() => {
