@@ -11,6 +11,7 @@ import { useRoomStore } from '@/stores/roomStore';
 import { GetRandomTypeResponse } from '@/types/response/game';
 import WaitingRamdom from './gameModalComponent/waiting/WaitingRandom';
 import { useWebSocketStore } from '@/stores/useWebSocketStore';
+import { FormFormEvent } from '@/types/event';
 
 const GameModals = () => {
   const navigate = useNavigate();
@@ -58,6 +59,7 @@ const GameModals = () => {
         clearTimeout(createRoomTimeoutRef.current);
       }
 
+      setCodeForJoinning('');
       setIsPlayerReady(false);
     }
   };
@@ -85,7 +87,9 @@ const GameModals = () => {
     createRoomTimeout();
   };
 
-  const handleJoinRoom = async () => {
+  const handleJoinRoom = async (e: FormFormEvent) => {
+    e.preventDefault();
+
     setIsPlayerReady(true);
 
     const { isReady } = await postJoinGame(codeForJoinning);
