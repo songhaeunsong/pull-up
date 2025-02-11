@@ -14,8 +14,15 @@ const getStoredRoomId = () => {
 
 export const useRoomStore = create<RoomState>((set) => ({
   roomId: getStoredRoomId(),
+
   setRoomId: (id) => {
-    sessionStorage.setItem('roomId', id);
+    if (!id.length) {
+      sessionStorage.removeItem('roomId');
+      set({ roomId: '' });
+      return;
+    }
+
     set({ roomId: id });
+    sessionStorage.setItem('roomId', id);
   },
 }));

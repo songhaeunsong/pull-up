@@ -1,14 +1,16 @@
 import { create } from 'zustand';
 import { Client, StompSubscription } from '@stomp/stompjs';
-import { RoomStatus, StompRoomInfo } from '@/types/game';
+import { RoomStatus, StompGameResult, StompRoomInfo } from '@/types/game';
 import { useRoomStore } from '@/stores/roomStore';
 
 interface WebSocketState {
   client: Client | null;
   roomStatus: RoomStatus;
   roomInfo: StompRoomInfo;
+  gameResult: StompGameResult;
   statusSubscription: StompSubscription | null;
   roomSubscription: StompSubscription | null;
+  gameResultSubscription: StompSubscription | null;
   connectWebSocket: () => void;
   disconnectWebSocket: () => void;
   updateSubscription: (roomId: string) => void;
@@ -25,8 +27,23 @@ export const useWebSocketStore = create<WebSocketState>((set, get) => ({
     player2P: { memberId: 0, name: '', score: 0 },
     problemCardWithoutCardIds: [],
   },
+  gameResult: {
+    isDraw: true,
+    isForfeit: false,
+    player1P: {
+      name: '',
+      score: 0,
+      status: 'DRAW',
+    },
+    player2P: {
+      name: '',
+      score: 0,
+      status: 'DRAW',
+    },
+  },
   statusSubscription: null,
   roomSubscription: null,
+  gameResultSubscription: null,
 
   connectWebSocket: () => {
     if (get().client) return;
@@ -52,13 +69,16 @@ export const useWebSocketStore = create<WebSocketState>((set, get) => ({
   },
 
   disconnectWebSocket: () => {
-    const { client, statusSubscription, roomSubscription } = get();
+    const { client, statusSubscription, roomSubscription, gameResultSubscription } = get();
 
     if (statusSubscription) {
       statusSubscription.unsubscribe();
     }
     if (roomSubscription) {
       roomSubscription.unsubscribe();
+    }
+    if (gameResultSubscription) {
+      gameResultSubscription.unsubscribe();
     }
 
     if (client) {
@@ -69,25 +89,36 @@ export const useWebSocketStore = create<WebSocketState>((set, get) => ({
   },
 
   updateSubscription: (roomId: string) => {
-    const { client, statusSubscription, roomSubscription } = get();
+    const { client, statusSubscription, roomSubscription, gameResultSubscription } = get();
     if (!client || !client.connected) return;
 
     statusSubscription?.unsubscribe();
     roomSubscription?.unsubscribe();
+    gameResultSubscription?.unsubscribe();
 
     console.log(`WebSocket: ${roomId} 구독 변경`);
 
     const statusSub = client.subscribe(`/topic/game/${roomId}/status`, (message) => {
+      // SendTo: /app/game/${roomId}/status
       const { status } = JSON.parse(message.body);
       set({ roomStatus: status });
     });
 
     const roomSub = client.subscribe(`/topic/game/${roomId}`, (message) => {
+      // SendTo: /app/game/{roomId}
+
       const { roomId, gameRoomStatus, player1P, player2P, problemCardWithoutCardIds } = JSON.parse(message.body);
       set({ roomInfo: { roomId, gameRoomStatus, player1P, player2P, problemCardWithoutCardIds } });
     });
 
-    set({ statusSubscription: statusSub, roomSubscription: roomSub });
+    const resultSub = client.subscribe(`/topic/game/${roomId}/result`, (message) => {
+      // SendTo: /app/game/{roomId}/result
+
+      const { isDraw, isForfeit, player1P, player2P } = JSON.parse(message.body);
+      set({ gameResult: { isDraw, isForfeit, player1P, player2P } });
+    });
+
+    set({ statusSubscription: statusSub, roomSubscription: roomSub, gameResultSubscription: resultSub });
   },
 
   sendMessage: (destination, payload) => {
