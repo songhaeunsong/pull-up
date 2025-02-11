@@ -27,7 +27,6 @@ const GameModals = () => {
 
   const [isPlayerReady, setIsPlayerReady] = useState(false);
 
-  const [codeForInviting, setCodeForInviting] = useState('');
   const [codeForJoinning, setCodeForJoinning] = useState('');
   const [isCreateMode, setIsCreateMode] = useState(false);
 
@@ -80,7 +79,6 @@ const GameModals = () => {
 
     const { roomId } = await postCreateGame(selects);
     setRoomId(roomId);
-    setCodeForInviting(roomId);
 
     createRoomTimeout();
   };
@@ -168,11 +166,7 @@ const GameModals = () => {
         <WaitingRamdom handleGameState={handleRandomRoom} />
       </Modal>
       <Modal triggerName="방 생성" triggerColor="primary" onOpenChange={(isOpen: boolean) => handleCloseModal(isOpen)}>
-        {isPlayerReady ? (
-          <WaitingAfterCreating code={codeForInviting} />
-        ) : (
-          <CreateRoom handleGameState={handleCreateRoom} />
-        )}
+        {isPlayerReady ? <WaitingAfterCreating /> : <CreateRoom handleGameState={handleCreateRoom} />}
       </Modal>
       <Modal
         triggerName="코드 입력"
