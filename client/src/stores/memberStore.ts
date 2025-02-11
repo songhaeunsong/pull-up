@@ -38,7 +38,7 @@ export const memberStore = create<MemberState>()(
       name: 'member-storage',
       storage: createJSONStorage(() => sessionStorage),
       partialize: (state) => ({
-        email: state.member?.email ? { email: state.member.email } : null,
+        member: state.member?.email ? { email: state.member.email } : null,
         isLoggedIn: state.isLoggedIn,
         isSolvedToday: state.isSolvedToday,
         interviewAnswerId: state.interviewAnswerId,
