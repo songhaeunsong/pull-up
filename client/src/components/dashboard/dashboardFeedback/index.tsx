@@ -9,7 +9,6 @@ const DashboardFeedback = () => {
   const navigate = useNavigate();
   const { isSolvedToday, interviewId, interviewAnswerId } = memberStore();
   const { data: result, error } = useGetInterviewResult(interviewId);
-  console.log(result);
 
   const [resultData, setResultData] = useState<InterviewResultResponse>({
     interviewId: 1,
@@ -31,7 +30,6 @@ const DashboardFeedback = () => {
       setResultData(result);
     }
   }, [isSolvedToday, result]);
-  console.log(isSolvedToday);
 
   return (
     <div className="relative flex flex-col gap-3 lg:flex-row">
