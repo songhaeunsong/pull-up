@@ -33,6 +33,8 @@ const GameModals = () => {
   const createRoomTimeout = () => {
     createRoomTimeoutRef.current = setTimeout(() => {
       if (roomStatus !== 'PLAYING') {
+        deleteRoom(roomId);
+
         toast.error('방을 다시 만들어주세요!', {
           position: 'bottom-center',
         });
@@ -141,7 +143,7 @@ const GameModals = () => {
   }, [roomStatus]);
 
   useEffect(() => {
-    if (roomStatus === 'PLAYING') {
+    if (roomId && roomStatus === 'PLAYING') {
       if (createRoomTimeoutRef.current) {
         clearTimeout(createRoomTimeoutRef.current);
       }
@@ -162,16 +164,23 @@ const GameModals = () => {
         triggerName="랜덤 매칭"
         triggerColor="primary"
         onOpenChange={(isOpen: boolean) => handleCloseModal(isOpen)}
+        isOutsideClickable={true}
       >
         <WaitingRamdom handleGameState={handleRandomRoom} />
       </Modal>
-      <Modal triggerName="방 생성" triggerColor="primary" onOpenChange={(isOpen: boolean) => handleCloseModal(isOpen)}>
+      <Modal
+        triggerName="방 생성"
+        triggerColor="primary"
+        onOpenChange={(isOpen: boolean) => handleCloseModal(isOpen)}
+        isOutsideClickable={false}
+      >
         {isPlayerReady ? <WaitingAfterCreating /> : <CreateRoom handleGameState={handleCreateRoom} />}
       </Modal>
       <Modal
         triggerName="코드 입력"
         triggerColor="primary"
         onOpenChange={(isOpen: boolean) => handleCloseModal(isOpen)}
+        isOutsideClickable={true}
       >
         {isPlayerReady ? (
           <Waiting text="입장 중..." />

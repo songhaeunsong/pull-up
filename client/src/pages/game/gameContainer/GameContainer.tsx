@@ -13,7 +13,7 @@ const GameContainer = () => {
         <div className="flex flex-col items-center gap-6">
           <h3 className="text-5xl font-extrabold">
             카드게임으로
-            {isMobile && <br />}
+            {isMobile ? <br /> : ' '}
             공부하기
           </h3>
           <GameModals />
