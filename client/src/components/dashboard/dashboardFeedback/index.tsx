@@ -1,7 +1,7 @@
 import { useGetInterviewResult } from '@/api/interview';
 import Icon from '@/components/common/icon';
 import { memberStore } from '@/stores/memberStore';
-import { InterviewResultResponse } from '@/types/interview';
+import { InterviewResultResponse } from '@/types/response/interview';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 

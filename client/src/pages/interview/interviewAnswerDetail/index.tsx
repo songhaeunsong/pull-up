@@ -7,7 +7,8 @@ import InterviewAnswerItem from '@/components/interview/interviewAnswerItem';
 import { useComment } from '@/hooks/useComment';
 import Page404 from '@/pages/404';
 import { memberStore } from '@/stores/memberStore';
-import { Comment, InterviewAnswer } from '@/types/interview';
+import { Comment } from '@/types/comment';
+import { InterviewAnswer } from '@/types/interview';
 import convertDate from '@/utils/convertDate';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -53,7 +54,7 @@ const InterviewAnswerDetail = () => {
 
   // 좋아요 토글
   const handleLikeClick = () => {
-    likeMutation.mutate(Number(interviewAnswerId));
+    likeMutation(Number(interviewAnswerId));
     console.log('좋아요: ', interviewAnswer?.isLiked);
   };
 

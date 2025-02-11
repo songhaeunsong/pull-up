@@ -115,7 +115,7 @@ const createInterviewAnswerLike = async (interviewAnswerId: number): Promise<Lik
 };
 
 export const useCreateInterviewAnswerLike = (interviewId: number) => {
-  return useMutation({
+  const { mutate } = useMutation({
     mutationFn: (interviewAnswerId: number) => createInterviewAnswerLike(interviewAnswerId),
     onMutate: async (interviewAnswerId) => {
       await Promise.all([
@@ -164,4 +164,6 @@ export const useCreateInterviewAnswerLike = (interviewId: number) => {
       queryClient.invalidateQueries({ queryKey: ['interviewAnswerDetail', interviewAnswerId] });
     },
   });
+
+  return mutate;
 };

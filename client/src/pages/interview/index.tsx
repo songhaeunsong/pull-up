@@ -3,11 +3,11 @@ import { useGetMemberInfo } from '@/api/member';
 import InputForm from '@/components/interview/inputForm';
 import InterviewCard from '@/components/interview/interviewCard';
 import { memberStore } from '@/stores/memberStore';
-import { InterviewResponse } from '@/types/interview';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 import Page404 from '../404';
+import { InterviewResponse } from '@/types/response/interview';
 
 const InterviewPage = () => {
   const { data: member } = useGetMemberInfo();
