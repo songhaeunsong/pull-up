@@ -1,15 +1,15 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
 import api from './instance';
+import { InterviewAnswer } from '@/types/interview';
+import { LikeResponse } from '@/types/common';
+import { queryClient } from '@/main';
 import {
-  InterviewAnswer,
+  GetStreakResponse,
   InterviewListResponse,
   InterviewResponse,
   InterviewResultResponse,
-  MemberAnswerRequest,
-} from '@/types/interview';
-import { LikeResponse } from '@/types/common';
-import { queryClient } from '@/main';
-import { GetStreakResponse } from '@/types/response/interview';
+} from '@/types/response/interview';
+import { MemberAnswerRequest } from '@/types/request/interview';
 
 const getStreak = async () => {
   const response = await api.get<GetStreakResponse>('interview/me/streak');

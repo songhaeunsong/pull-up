@@ -1,10 +1,12 @@
 import { queryClient } from '@/main';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import api from './instance';
-import { Comment, CommentCreateRequest, CommentUpdateRequest, InterviewAnswer } from '@/types/interview';
 import { CreateResponse } from '@/types/common';
 import { now } from 'lodash';
 import { memberStore } from '@/stores/memberStore';
+import { CommentCreateRequest, CommentUpdateRequest } from '@/types/request/comment';
+import { InterviewAnswer } from '@/types/interview';
+import { Comment } from '@/types/comment';
 
 // 댓글 전체 조회
 const getComments = async (interviewAnswerId: number) => {
