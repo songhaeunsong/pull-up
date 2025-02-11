@@ -23,11 +23,14 @@ function useSideBarCard(limit: number = 10) {
   }
 
   // examData 가공
-  const recentExamList = examAll?.getExamResponses?.slice(0, 1).map((item) => ({
-    id: item.examId,
-    content: item.examName,
-    subjects: convertSubject(item.subjects),
-  })) ?? [{ id: 0, content: '최근 푼 모의고사 기록이 없습니다.', subjects: [] }];
+  const recentExamList =
+    Array.isArray(examAll?.getExamResponses) && examAll.getExamResponses.length > 0
+      ? examAll.getExamResponses.slice(0, 1).map((item) => ({
+          id: item.examId,
+          content: item.examName,
+          subjects: convertSubject(item.subjects),
+        }))
+      : [{ id: 0, content: '최근 푼 모의고사 기록이 없습니다.', subjects: [] }];
 
   const wrongProblemList = getProcessedProblemList(recentWrongProblems?.recentWrongQuestionDtos);
   const archiveProblemList = getProcessedProblemList(archivedProblems?.bookmarkedProblemDtos);

@@ -1,26 +1,17 @@
-import { cn } from '@/lib/utils';
 import { useEffect, useState, useMemo } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { postExamAnswer, useGetExamDetails } from '@/api/exam';
 import { useExamStore } from '@/stores/examStore';
 import { useShallow } from 'zustand/react/shallow';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-  AlertDialogTrigger,
-} from '@/components/ui/alert-dialog';
 import Timer from '@/components/exam/timer';
 import ExamProblem from '@/components/exam/problem';
 import InfoSection from '@/components/exam/infoSection';
 import ProblemStatusButton from '@/components/exam/infoSection/problemStatusButton';
 import Icon from '@/components/common/icon';
+import usePrompt from '@/hooks/useNavigationBlocker';
+import NavigationDialog from '@/components/common/navigationDialog';
+import SubmitDialog from '@/components/exam/submitDialog';
 
 const ExamDetailPage = () => {
   const navigate = useNavigate();
@@ -28,7 +19,9 @@ const ExamDetailPage = () => {
   const { data: examProblems } = useGetExamDetails(Number(examId));
   const answers = useExamStore(useShallow((state) => state.answers));
   const { resetExamState, setAnswer, setSolutionPage, initializeAndSetOptions } = useExamStore();
-  const [isInitialized, setIsInitialized] = useState(false);
+  const [isInitialized] = useState(false);
+  const { isBlocked, handleProceed, handleCancel, disablePrompt } = usePrompt();
+
   const isAllSolved = useMemo(() => {
     return (examProblems || []).every(
       (problem) => answers[problem.problemId] && answers[problem.problemId].trim() !== '',
@@ -53,6 +46,7 @@ const ExamDetailPage = () => {
 
   const onSubmit = async () => {
     try {
+      disablePrompt();
       const requestBody = {
         problemAndChosenAnswers: Object.keys(answers).map((problemId) => ({
           problemId: Number(problemId),
@@ -60,7 +54,6 @@ const ExamDetailPage = () => {
         })),
       };
       await postExamAnswer(Number(examId), requestBody);
-
       navigate(`/exam/${examId}/result`);
     } catch (error) {
       console.error('답안 제출 실패:', error);
@@ -147,31 +140,24 @@ const ExamDetailPage = () => {
                 </InfoSection>
               ))}
             </div>
-            {/* 제출 */}
-            <AlertDialog>
-              <AlertDialogTrigger
-                className={cn(
-                  isAllSolved ? 'bg-primary-600 text-white hover:bg-primary-700' : 'bg-gray-200 text-gray-500',
-                  'mb-4 w-full rounded-xl py-4 text-lg font-semibold xl:py-5 xl:text-xl',
-                )}
-                disabled={!isAllSolved}
-              >
-                제출하기
-              </AlertDialogTrigger>
-              <AlertDialogContent>
-                <AlertDialogHeader>
-                  <AlertDialogTitle>정말 시험을 제출하시겠습니까?</AlertDialogTitle>
-                  <AlertDialogDescription>제출 후에는 더 이상 답안을 수정할 수 없습니다.</AlertDialogDescription>
-                </AlertDialogHeader>
-                <AlertDialogFooter>
-                  <AlertDialogCancel>취소하기</AlertDialogCancel>
-                  <AlertDialogAction onClick={onSubmit}>제출하기</AlertDialogAction>
-                </AlertDialogFooter>
-              </AlertDialogContent>
-            </AlertDialog>
+            {/* 답안 제출 */}
+            <SubmitDialog
+              onSubmit={onSubmit}
+              isDisabled={!isAllSolved}
+              title="정말 시험을 제출하시겠습니까?"
+              description="제출 후에는 더 이상 답안을 수정할 수 없습니다."
+            />
           </div>
         </aside>
       </div>
+      {/* 페이지 이동 경고 모달 */}
+      <NavigationDialog
+        isOpen={isBlocked}
+        onProceed={handleProceed}
+        onCancel={handleCancel}
+        title="시험을 중단하시겠습니까?"
+        description="페이지를 이동할 경우 시험이 무효화되고 선택한 답안이 모두 사라집니다."
+      />
     </div>
   );
 };
