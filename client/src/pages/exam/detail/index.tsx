@@ -20,7 +20,7 @@ const ExamDetailPage = () => {
   const answers = useExamStore(useShallow((state) => state.answers));
   const { resetExamState, setAnswer, setSolutionPage, initializeAndSetOptions } = useExamStore();
   const [isInitialized] = useState(false);
-  const { isBlocked, handleProceed, handleCancel, disablePrompt } = usePrompt();
+  const { isBlocked, handleProceed, handleCancel, setException } = usePrompt();
 
   const isAllSolved = useMemo(() => {
     return (examProblems || []).every(
@@ -46,7 +46,6 @@ const ExamDetailPage = () => {
 
   const onSubmit = async () => {
     try {
-      disablePrompt();
       const requestBody = {
         problemAndChosenAnswers: Object.keys(answers).map((problemId) => ({
           problemId: Number(problemId),
@@ -54,6 +53,7 @@ const ExamDetailPage = () => {
         })),
       };
       await postExamAnswer(Number(examId), requestBody);
+      setException();
       navigate(`/exam/${examId}/result`);
     } catch (error) {
       console.error('답안 제출 실패:', error);

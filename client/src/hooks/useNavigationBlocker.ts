@@ -5,8 +5,7 @@ interface UsePromptReturn {
   isBlocked: boolean;
   handleProceed: () => void;
   handleCancel: () => void;
-  disablePrompt: () => void;
-  enablePrompt: () => void;
+  setException: () => void; // 예외 처리를 위한 함수 추가
 }
 
 const usePrompt = (): UsePromptReturn => {
@@ -14,18 +13,17 @@ const usePrompt = (): UsePromptReturn => {
     return currentLocation.pathname !== nextLocation.pathname;
   });
 
-  const [isEnabled, setIsEnabled] = useState(true);
   const [isBlocked, setIsBlocked] = useState(false);
   const [nextNavigation, setNextNavigation] = useState<(() => void) | null>(null);
+  const [allowNavigation, setAllowNavigation] = useState(false); // 이동 예외 상태 추가
 
   useEffect(() => {
     const handleBeforeUnload = (event: BeforeUnloadEvent) => {
-      if (!isEnabled) return;
       event.preventDefault();
     };
     window.addEventListener('beforeunload', handleBeforeUnload);
 
-    if (isEnabled && blocker.state === 'blocked') {
+    if (blocker.state === 'blocked' && !allowNavigation) {
       setIsBlocked(true);
       setNextNavigation(() => blocker.proceed);
     }
@@ -33,7 +31,7 @@ const usePrompt = (): UsePromptReturn => {
     return () => {
       window.removeEventListener('beforeunload', handleBeforeUnload);
     };
-  }, [blocker, isEnabled]);
+  }, [blocker, allowNavigation]);
 
   const handleProceed = () => {
     setIsBlocked(false);
@@ -45,14 +43,13 @@ const usePrompt = (): UsePromptReturn => {
     blocker.reset?.();
   };
 
-  const disablePrompt = () => {
-    setIsEnabled(false);
-    setIsBlocked(false);
-    blocker.reset?.(); // 상태 초기화로 이동 차단 해제
+  // 페이지 이동 예외를 설정하는 함수
+  const setException = () => {
+    setAllowNavigation(true);
+    blocker.proceed?.(); // 페이지 이동을 허용하고 즉시 이동 수행
   };
-  const enablePrompt = () => setIsEnabled(true);
 
-  return { isBlocked, handleProceed, handleCancel, disablePrompt, enablePrompt };
+  return { isBlocked, handleProceed, handleCancel, setException };
 };
 
 export default usePrompt;
