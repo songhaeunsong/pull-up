@@ -14,12 +14,14 @@ const GameStage = () => {
 
   const { data: idData, isLoading } = useGetId(roomId);
 
+  const handleTimeOver = () => {
+    sendMessage('app/card/check', {
+      checkType: 'TIME_OVER',
+    });
+  };
+
   useEffect(() => {
     if (roomInfo.gameRoomStatus === 'FINISHED') {
-      sendMessage('app/card/check', {
-        checkType: 'TIME_OVER',
-      });
-
       navigate('/game/result');
     }
   }, [roomInfo]);
@@ -29,7 +31,7 @@ const GameStage = () => {
   return (
     <div className="flex h-full w-full flex-col gap-3 bg-Main p-4 pt-[106px] sm:pt-[85px] md:p-8 md:pt-[84px]">
       <div className="flex items-center gap-3 md:gap-6">
-        <ProgressBar initialTime={60} />
+        <ProgressBar initialTime={60} onTimeOver={handleTimeOver} />
       </div>
       <div className="grid h-full w-full grid-rows-[3fr_1fr] gap-3 md:grid-cols-[2.5fr_1fr] md:grid-rows-1 md:gap-7">
         <GameBoard playerNumber={idData.playerNumber} problems={roomInfo.problemCardWithoutCardIds} />

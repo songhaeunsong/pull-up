@@ -3,12 +3,11 @@ import useTimer from '@/hooks/useTimer';
 
 interface progressBar {
   initialTime: number;
+  onTimeOver: () => void;
 }
 
-const ProgressBar = ({ initialTime }: progressBar) => {
-  const handleTimeOver = () => {};
-
-  const { timeLeft } = useTimer(initialTime, handleTimeOver);
+const ProgressBar = ({ initialTime, onTimeOver }: progressBar) => {
+  const { timeLeft } = useTimer(initialTime, onTimeOver);
 
   return <Progress value={(timeLeft / 3) * 5} className="w-full" />;
 };
