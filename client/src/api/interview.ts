@@ -74,15 +74,15 @@ export const useGetInterviewList = () => {
 };
 
 // 다른 사람 답변 전체 조회
-const getInterviewAnswers = (interviewAnswerId: number): Promise<InterviewAnswer[]> => {
-  const data = api.get(`interview/${interviewAnswerId}/all`).json<InterviewAnswer[]>();
+const getInterviewAnswers = (interviewId: number): Promise<InterviewAnswer[]> => {
+  const data = api.get(`interview/${interviewId}/all`).json<InterviewAnswer[]>();
   return data;
 };
 
-export const useGetInterviewAnswers = (interviewAnswerId: number) => {
+export const useGetInterviewAnswers = (interviewId: number) => {
   return useQuery({
-    queryKey: ['interviewAnswers', interviewAnswerId],
-    queryFn: () => getInterviewAnswers(interviewAnswerId),
+    queryKey: ['interviewAnswers', interviewId],
+    queryFn: () => getInterviewAnswers(interviewId),
   });
 };
 

@@ -4,20 +4,19 @@ import SideMenu from '@/components/interview/sideMenu';
 import InterviewFeedback from '@/components/interview/interviewFeedback';
 import { InterviewListResponse, InterviewResultResponse } from '@/types/interview';
 import { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@radix-ui/react-tabs';
 import InterviewMyAnswer from '@/components/interview/myAnswer';
 import convertDate from '@/utils/convertDate';
 import Icon from '@/components/common/icon';
-import { memberStore } from '@/stores/memberStore';
 
 const InterviewResultPage = () => {
   const navigate = useNavigate();
-  const { interviewAnswerId } = memberStore();
+  const { interviewAnswerId } = useParams();
   const [isSideMenuOpen, setIsSideMenuOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const { data: result, isLoading: isResultLoading } = useGetInterviewResult(interviewAnswerId);
+  const { data: result, isLoading: isResultLoading } = useGetInterviewResult(Number(interviewAnswerId));
   const [resultData, setResultData] = useState<InterviewResultResponse>();
   const { data: interviewList, isLoading: isInterviewLoading } = useGetInterviewList();
   const [interviewListData, setInterviewListData] = useState<InterviewListResponse[]>();
@@ -41,12 +40,14 @@ const InterviewResultPage = () => {
     setIsSideMenuOpen(!isSideMenuOpen);
   };
 
+  // 다른 사람 답변 보기
   const onButtonClick = () => {
-    navigate(`/interview/result/${resultData.interviewId}/answers`);
+    navigate(`/interview/${resultData.interviewId}/answers`);
   };
 
-  const onInterviewClick = (interviewId: number) => {
-    navigate(`/interview/result/${interviewId}`);
+  // 지난 문제 보기
+  const onInterviewClick = (interviewAnswerId: number) => {
+    navigate(`/interview/result/${interviewAnswerId}`);
   };
 
   const formatDate = convertDate(resultData.createdAt).split('-');

@@ -52,8 +52,9 @@ const InterviewAnswerDetail = () => {
     return null;
   }
 
+  // 다른 사람 답변 목록으로 돌아가기
   const onBackClick = () => {
-    navigate(`/interview/result/${interviewId}/answers`);
+    navigate(-1);
   };
 
   return (
