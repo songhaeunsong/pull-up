@@ -30,8 +30,7 @@ const ExamDetailPage = () => {
   const answers = useExamStore(useShallow((state) => state.answers));
   const { resetExamState, setAnswer, setSolutionPage, initializeAndSetOptions } = useExamStore();
   const [isInitialized] = useState(false);
-  const [showWarning, setShowWarning] = useState(true);
-  usePrompt();
+  const { isBlocked, handleProceed, handleCancel } = usePrompt();
 
   const isAllSolved = useMemo(() => {
     return (examProblems || []).every(
@@ -64,7 +63,6 @@ const ExamDetailPage = () => {
         })),
       };
       await postExamAnswer(Number(examId), requestBody);
-
       navigate(`/exam/${examId}/result`);
     } catch (error) {
       console.error('답안 제출 실패:', error);
@@ -176,6 +174,19 @@ const ExamDetailPage = () => {
           </div>
         </aside>
       </div>
+      {/* 커스텀 경고창 */}
+      <AlertDialog open={isBlocked}>
+        <AlertDialogContent>
+          <AlertDialogHeader>
+            <AlertDialogTitle>시험을 중단하시겠습니까?</AlertDialogTitle>
+            <AlertDialogDescription>페이지를 이동할 경우 현재까지의 답안이 자동 제출됩니다.</AlertDialogDescription>
+          </AlertDialogHeader>
+          <AlertDialogFooter>
+            <AlertDialogCancel onClick={handleCancel}>취소하기</AlertDialogCancel>
+            <AlertDialogAction onClick={handleProceed}>나가기</AlertDialogAction>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
     </div>
   );
 };

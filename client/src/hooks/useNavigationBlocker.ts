@@ -1,33 +1,47 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { useBlocker } from 'react-router-dom';
 
-const usePrompt = () => {
+interface UsePromptReturn {
+  isBlocked: boolean;
+  handleProceed: () => void;
+  handleCancel: () => void;
+}
+
+const usePrompt = (): UsePromptReturn => {
   const blocker = useBlocker(({ currentLocation, nextLocation }) => {
     return currentLocation.pathname !== nextLocation.pathname;
   });
 
+  const [isBlocked, setIsBlocked] = useState(false);
+  const [nextNavigation, setNextNavigation] = useState<(() => void) | null>(null);
+
   useEffect(() => {
-    // 새로고침이나 브라우저 종료 시 경고창 표시
     const handleBeforeUnload = (event: BeforeUnloadEvent) => {
       event.preventDefault();
     };
-
     window.addEventListener('beforeunload', handleBeforeUnload);
 
-    // 리액트 라우터 경로 이동 감지
     if (blocker.state === 'blocked') {
-      if (window.confirm('정말로 이동하시겠습니까?')) {
-        blocker.proceed();
-      } else {
-        blocker.reset();
-      }
+      setIsBlocked(true);
+      setNextNavigation(() => blocker.proceed);
     }
 
     return () => {
-      // 컴포넌트가 언마운트될 때 이벤트 제거
       window.removeEventListener('beforeunload', handleBeforeUnload);
     };
-  }, [blocker, blocker.state]);
+  }, [blocker]);
+
+  const handleProceed = () => {
+    setIsBlocked(false);
+    nextNavigation?.();
+  };
+
+  const handleCancel = () => {
+    setIsBlocked(false);
+    blocker.reset?.();
+  };
+
+  return { isBlocked, handleProceed, handleCancel };
 };
 
 export default usePrompt;
