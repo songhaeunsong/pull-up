@@ -1,3 +1,5 @@
 import { Streak } from '../chart';
 
-export type GetStreakResponse = Streak[];
+export interface GetStreakResponse {
+  dailySolvedHistories: Streak[];
+}

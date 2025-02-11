@@ -1,23 +1,34 @@
 import SubjectSelector from '@/components/common/csConditionSelector/subjectSelector';
 import { SUBJECT_OPTIONS } from '@/components/common/csConditionSelector/subjectSelector/SubjectOptions';
 import { Button } from '@/components/ui/button';
-import { useState } from 'react';
+import { FormFormEvent } from '@/types/event';
+import { Dispatch, SetStateAction } from 'react';
+import { SUBJECT_KEY } from '@/constants/game';
+import { Subject } from '@/types/member';
+import { SubjectSelect } from '@/types/game';
 
 interface CreateRoomProps {
-  handleGameState: () => void;
+  handleGameState: (event: FormFormEvent) => void;
+  selectedSubjects: SubjectSelect;
+  setSelectedSubjects: Dispatch<SetStateAction<SubjectSelect>>;
 }
 
-const CreateRoom = ({ handleGameState }: CreateRoomProps) => {
-  const [selectedSubjectIds, setSelectedSubjectIds] = useState<string[]>([]);
-  const isDisabled = selectedSubjectIds.length === 0;
+const CreateRoom = ({ handleGameState, selectedSubjects, setSelectedSubjects }: CreateRoomProps) => {
+  const isDisabled = Object.values(selectedSubjects).filter((value) => value).length < 2;
 
   const handleSubjectClick = (id: string) => {
-    setSelectedSubjectIds((prev) => (prev.includes(id) ? prev.filter((subjectId) => subjectId !== id) : [...prev, id]));
-    console.log('selectedSubjectIds', selectedSubjectIds);
+    setSelectedSubjects((prev: SubjectSelect) => {
+      const key = SUBJECT_KEY[id as Subject];
+
+      return {
+        ...prev,
+        [key]: !prev[key],
+      };
+    });
   };
 
   return (
-    <div className="flex w-full flex-col gap-8 px-10 py-4">
+    <form onSubmit={(event: FormFormEvent) => handleGameState(event)} className="flex w-full flex-col gap-8 px-10 py-4">
       <div className="flex flex-col justify-between gap-3">
         {SUBJECT_OPTIONS.map((subject) => (
           <SubjectSelector
@@ -25,18 +36,18 @@ const CreateRoom = ({ handleGameState }: CreateRoomProps) => {
             id={subject.id}
             name={subject.name}
             icon={subject.icon}
-            isSelected={selectedSubjectIds.includes(subject.id)}
+            isSelected={selectedSubjects[SUBJECT_KEY[subject.id]]}
             onClick={handleSubjectClick}
           />
         ))}
       </div>
       <div className="flex w-full flex-col gap-2">
         <span className="text-center">링크 생성 후, 친구에게 전달해주세요!</span>
-        <Button disabled={isDisabled} onClick={handleGameState}>
+        <Button type="submit" disabled={isDisabled}>
           코드 생성
         </Button>
       </div>
-    </div>
+    </form>
   );
 };
 
