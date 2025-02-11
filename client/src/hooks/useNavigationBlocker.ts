@@ -1,52 +1,33 @@
-import { useContext, useEffect, useState } from 'react';
-import { UNSAFE_NavigationContext as NavigationContext } from 'react-router-dom';
+import { useEffect } from 'react';
+import { useBlocker } from 'react-router-dom';
 
-function useConfirmExit(message: string, when: boolean) {
-  const { navigator } = useContext(NavigationContext);
-  const [isModalOpen, setModalOpen] = useState(false);
-  const [nextNavigation, setNextNavigation] = useState<Parameters<typeof navigator.push> | null>(null);
-
-  useEffect(() => {
-    if (!when) return;
-
-    const originalPush = navigator.push;
-
-    navigator.push = (...args: Parameters<typeof originalPush>) => {
-      setNextNavigation(args);
-      setModalOpen(true);
-    };
-
-    return () => {
-      navigator.push = originalPush;
-    };
-  }, [navigator, when]);
-
-  const handleConfirm = () => {
-    if (nextNavigation) {
-      navigator.push(...nextNavigation);
-    }
-    setModalOpen(false);
-  };
-
-  const handleCancel = () => {
-    setNextNavigation(null);
-    setModalOpen(false);
-  };
-
-  return { isModalOpen, handleConfirm, handleCancel, message };
-}
-
-export function usePrompt(message: string, when = true) {
-  const { isModalOpen, handleConfirm, handleCancel } = useConfirmExit(message, when);
+const usePrompt = () => {
+  const blocker = useBlocker(({ currentLocation, nextLocation }) => {
+    return currentLocation.pathname !== nextLocation.pathname;
+  });
 
   useEffect(() => {
-    if (when) {
-      window.onbeforeunload = () => message;
-    }
-    return () => {
-      window.onbeforeunload = null;
+    // 새로고침이나 브라우저 종료 시 경고창 표시
+    const handleBeforeUnload = (event: BeforeUnloadEvent) => {
+      event.preventDefault();
     };
-  }, [message, when]);
 
-  return { isModalOpen, handleConfirm, handleCancel, message };
-}
+    window.addEventListener('beforeunload', handleBeforeUnload);
+
+    // 리액트 라우터 경로 이동 감지
+    if (blocker.state === 'blocked') {
+      if (window.confirm('정말로 이동하시겠습니까?')) {
+        blocker.proceed();
+      } else {
+        blocker.reset();
+      }
+    }
+
+    return () => {
+      // 컴포넌트가 언마운트될 때 이벤트 제거
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, [blocker, blocker.state]);
+};
+
+export default usePrompt;

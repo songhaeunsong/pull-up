@@ -21,6 +21,7 @@ import ExamProblem from '@/components/exam/problem';
 import InfoSection from '@/components/exam/infoSection';
 import ProblemStatusButton from '@/components/exam/infoSection/problemStatusButton';
 import Icon from '@/components/common/icon';
+import usePrompt from '@/hooks/useNavigationBlocker';
 
 const ExamDetailPage = () => {
   const navigate = useNavigate();
@@ -28,7 +29,9 @@ const ExamDetailPage = () => {
   const { data: examProblems } = useGetExamDetails(Number(examId));
   const answers = useExamStore(useShallow((state) => state.answers));
   const { resetExamState, setAnswer, setSolutionPage, initializeAndSetOptions } = useExamStore();
-  const [isInitialized, setIsInitialized] = useState(false);
+  const [isInitialized] = useState(false);
+  const [showWarning, setShowWarning] = useState(true);
+  usePrompt();
 
   const isAllSolved = useMemo(() => {
     return (examProblems || []).every(
