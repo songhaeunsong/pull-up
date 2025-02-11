@@ -5,17 +5,17 @@ interface UsePromptReturn {
   isBlocked: boolean;
   handleProceed: () => void;
   handleCancel: () => void;
-  setException: () => void; // 예외 처리를 위한 함수 추가
+  setException: () => void; // 페이지 이동 예외 설정 함수
 }
 
 const usePrompt = (): UsePromptReturn => {
   const blocker = useBlocker(({ currentLocation, nextLocation }) => {
+    // 페이지 경로가 달라지는 경우에만 페이지 이동 차단
     return currentLocation.pathname !== nextLocation.pathname;
   });
 
   const [isBlocked, setIsBlocked] = useState(false);
-  const [nextNavigation, setNextNavigation] = useState<(() => void) | null>(null);
-  const [allowNavigation, setAllowNavigation] = useState(false); // 이동 예외 상태 추가
+  const [allowNavigation, setAllowNavigation] = useState(false);
 
   useEffect(() => {
     const handleBeforeUnload = (event: BeforeUnloadEvent) => {
@@ -23,9 +23,13 @@ const usePrompt = (): UsePromptReturn => {
     };
     window.addEventListener('beforeunload', handleBeforeUnload);
 
-    if (blocker.state === 'blocked' && !allowNavigation) {
-      setIsBlocked(true);
-      setNextNavigation(() => blocker.proceed);
+    if (blocker.state === 'blocked') {
+      if (allowNavigation) {
+        // 예외가 설정된 경우 즉시 이동 허용
+        blocker.proceed();
+      } else {
+        setIsBlocked(true);
+      }
     }
 
     return () => {
@@ -35,18 +39,16 @@ const usePrompt = (): UsePromptReturn => {
 
   const handleProceed = () => {
     setIsBlocked(false);
-    nextNavigation?.();
+    blocker.proceed?.(); // 사용자가 경고 모달에서 이동을 허용한 경우
   };
 
   const handleCancel = () => {
     setIsBlocked(false);
-    blocker.reset?.();
+    blocker.reset?.(); // 사용자가 경고 모달에서 이동을 취소한 경우
   };
 
-  // 페이지 이동 예외를 설정하는 함수
   const setException = () => {
-    setAllowNavigation(true);
-    blocker.proceed?.(); // 페이지 이동을 허용하고 즉시 이동 수행
+    setAllowNavigation(true); // 페이지 이동 예외 설정
   };
 
   return { isBlocked, handleProceed, handleCancel, setException };
