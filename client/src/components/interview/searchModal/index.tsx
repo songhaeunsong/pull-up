@@ -2,6 +2,10 @@ import Icon from '@/components/common/icon';
 import SearchBar from '@/components/common/searchbar';
 import { useState } from 'react';
 import MenuItem from '../sideMenu/menuitem';
+import { InterviewListResponse } from '@/types/response/interview';
+import { getInterviewListByKeyword } from '@/api/interview';
+import debounce from '@/utils/debounce';
+import { toast } from 'react-toastify';
 
 interface SearchModalProps {
   onClose: () => void;
@@ -9,25 +13,29 @@ interface SearchModalProps {
 }
 
 const SearchModal = ({ onClose, onInterviewClick }: SearchModalProps) => {
+  const [searchList, setSearchList] = useState<InterviewListResponse[]>();
   const [value, setValue] = useState('');
 
-  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setValue(e.target.value);
-  };
+  const debounceSearch = debounce(async (searchValue: string) => {
+    try {
+      if (searchValue.trim().length > 0) {
+        const data = await getInterviewListByKeyword(searchValue);
+        setSearchList(data);
+      } else {
+        setSearchList([]);
+      }
+    } catch (error) {
+      console.error('검색을 실패했습니다.', error);
+      setSearchList([]);
+      toast.error('검색을 실패했습니다.', { position: 'bottom-center' });
+    }
+  }, 300);
 
-  // 더미데이터
-  const dummyData = [
-    {
-      interviewId: 1,
-      interviewAnswerId: 1,
-      question: 'OOP의 5가지 설계 원칙 (SOLID)이란 무엇인가요?',
-    },
-    {
-      interviewId: 2,
-      interviewAnswerId: 2,
-      question: 'Checked Exception과 Unchecked Exception의 차이는 ?',
-    },
-  ];
+  const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const searchValue = e.target.value;
+    setValue(searchValue);
+    debounceSearch(searchValue);
+  };
 
   return (
     <div className="fixed inset-0 z-40 flex items-start justify-center bg-black/50 pt-[200px]">
@@ -41,9 +49,13 @@ const SearchModal = ({ onClose, onInterviewClick }: SearchModalProps) => {
         <div className="flex min-h-0 w-full flex-1 flex-col gap-3">
           <div className="flex-none text-lg font-semibold">오늘의 질문</div>
           <div className="flex flex-1 flex-col gap-2 overflow-y-auto">
-            {dummyData.map((item, id) => (
-              <MenuItem key={id} title={item.question} onInterviewClick={() => onInterviewClick(item.interviewId)} />
-            ))}
+            {searchList && searchList.length > 0 ? (
+              searchList.map((item, id) => (
+                <MenuItem key={id} title={item.question} onInterviewClick={() => onInterviewClick(item.interviewId)} />
+              ))
+            ) : (
+              <div>검색 결과가 없습니다.</div>
+            )}
           </div>
         </div>
       </div>

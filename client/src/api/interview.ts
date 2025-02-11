@@ -1,15 +1,15 @@
 import { useMutation, useQuery } from '@tanstack/react-query';
 import api from './instance';
+import { InterviewAnswer } from '@/types/interview';
+import { LikeResponse } from '@/types/common';
+import { queryClient } from '@/main';
 import {
-  InterviewAnswer,
+  GetStreakResponse,
   InterviewListResponse,
   InterviewResponse,
   InterviewResultResponse,
-  MemberAnswerRequest,
-} from '@/types/interview';
-import { LikeResponse } from '@/types/common';
-import { queryClient } from '@/main';
-import { GetStreakResponse } from '@/types/response/interview';
+} from '@/types/response/interview';
+import { MemberAnswerRequest } from '@/types/request/interview';
 
 const getStreak = async () => {
   const response = await api.get<GetStreakResponse>('member/me/streak');
@@ -73,6 +73,15 @@ export const useGetInterviewList = () => {
   });
 };
 
+// 지난 오늘의 문제 검색 조회
+export const getInterviewListByKeyword = async (keyword: string): Promise<InterviewListResponse[]> => {
+  const response = await api
+    .get(`interview?keyword=${keyword}`)
+    .json<{ searchedInterviewQuestions: InterviewListResponse[] }>();
+
+  return response.searchedInterviewQuestions;
+};
+
 // 다른 사람 답변 전체 조회
 const getInterviewAnswers = async (interviewId: number): Promise<InterviewAnswer[]> => {
   const response = await api.get(`interview/${interviewId}/all`).json<{ interviewAnswers: InterviewAnswer[] }>();
@@ -106,7 +115,7 @@ const createInterviewAnswerLike = async (interviewAnswerId: number): Promise<Lik
 };
 
 export const useCreateInterviewAnswerLike = (interviewId: number) => {
-  return useMutation({
+  const { mutate } = useMutation({
     mutationFn: (interviewAnswerId: number) => createInterviewAnswerLike(interviewAnswerId),
     onMutate: async (interviewAnswerId) => {
       await Promise.all([
@@ -155,4 +164,6 @@ export const useCreateInterviewAnswerLike = (interviewId: number) => {
       queryClient.invalidateQueries({ queryKey: ['interviewAnswerDetail', interviewAnswerId] });
     },
   });
+
+  return mutate;
 };

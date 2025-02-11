@@ -9,7 +9,7 @@ interface Modalprops {
   triggerColor: 'primary' | 'secondary' | 'gray' | 'transparent';
   children: ReactNode;
   onOpenChange?: (isOpen: boolean) => void;
-  isOutsideClickable: boolean;
+  isOutsideClickable?: boolean;
 }
 
 const Modal = ({ triggerName, triggerColor, children, onOpenChange, isOutsideClickable }: Modalprops) => {

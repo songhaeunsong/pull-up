@@ -7,7 +7,8 @@ import InterviewAnswerItem from '@/components/interview/interviewAnswerItem';
 import { useComment } from '@/hooks/useComment';
 import Page404 from '@/pages/404';
 import { memberStore } from '@/stores/memberStore';
-import { Comment, InterviewAnswer } from '@/types/interview';
+import { Comment } from '@/types/comment';
+import { InterviewAnswer } from '@/types/interview';
 import convertDate from '@/utils/convertDate';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -43,7 +44,6 @@ const InterviewAnswerDetail = () => {
     }
     if (!isCommentsLoading && comments) {
       setCommentsData(comments);
-      console.log('댓글 목록: ', comments);
     }
   }, [interviewAnswer, isAnswerLoading, comments, isCommentsLoading]);
 
@@ -54,11 +54,10 @@ const InterviewAnswerDetail = () => {
 
   // 좋아요 토글
   const handleLikeClick = () => {
-    likeMutation.mutate(Number(interviewAnswerId));
+    likeMutation(Number(interviewAnswerId));
     console.log('좋아요: ', interviewAnswer?.isLiked);
   };
 
-  console.log('멤버 데이터: ', member?.email);
   if (!member || !interviewAnswerData || !commentsData) {
     return <Page404 />;
   }

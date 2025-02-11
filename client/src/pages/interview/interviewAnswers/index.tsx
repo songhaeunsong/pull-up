@@ -36,7 +36,7 @@ const InterviewAnswersPage = () => {
 
   // 좋아요 토글
   const handleLikeClick = (interviewAnswerId: number) => {
-    likeMutation.mutate(interviewAnswerId);
+    likeMutation(interviewAnswerId);
     console.log('좋아요 호출: ', interviewAnswerId);
   };
 

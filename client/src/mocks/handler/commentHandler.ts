@@ -1,11 +1,11 @@
-import { CommentRequest } from '@/types/interview';
+import { CommentCreateRequest } from '@/types/request/comment';
 import { http, HttpResponse } from 'msw';
 
 // 댓글 작성
 export const commentHandler = [
   http.post('http://localhost:8080/api/v1/interview/:interviewAnswerId/comment', async ({ params, request }) => {
     const { intvewrAnswerId } = params;
-    const { comment } = (await request.json()) as { comment: CommentRequest };
+    const { comment } = (await request.json()) as { comment: CommentCreateRequest };
 
     if (intvewrAnswerId && comment) {
       return HttpResponse.json(

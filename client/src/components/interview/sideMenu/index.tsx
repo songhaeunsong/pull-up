@@ -1,6 +1,6 @@
 import Icon from '@/components/common/icon';
-import { InterviewListResponse } from '@/types/interview';
 import MenuItem from './menuitem';
+import { InterviewListResponse } from '@/types/response/interview';
 
 interface SideMenuProps {
   isOpen: boolean;

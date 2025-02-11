@@ -2,7 +2,6 @@ import { useGetInterviewList, useGetInterviewResult } from '@/api/interview';
 import SearchModal from '@/components/interview/searchModal';
 import SideMenu from '@/components/interview/sideMenu';
 import InterviewFeedback from '@/components/interview/interviewFeedback';
-import { InterviewListResponse, InterviewResultResponse } from '@/types/interview';
 import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@radix-ui/react-tabs';
@@ -10,6 +9,7 @@ import InterviewMyAnswer from '@/components/interview/myAnswer';
 import convertDate from '@/utils/convertDate';
 import Icon from '@/components/common/icon';
 import Page404 from '@/pages/404';
+import { InterviewListResponse, InterviewResultResponse } from '@/types/response/interview';
 
 const InterviewResultPage = () => {
   const navigate = useNavigate();
