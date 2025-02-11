@@ -1,19 +1,16 @@
 import { create } from 'zustand';
 import { Client, StompSubscription } from '@stomp/stompjs';
 import { RoomStatus, StompGameResult, StompRoomInfo } from '@/types/game';
-import { useRoomStore } from '@/stores/roomStore';
 
 interface WebSocketState {
   client: Client | null;
   roomStatus: RoomStatus;
   roomInfo: StompRoomInfo;
   gameResult: StompGameResult;
-  statusSubscription: StompSubscription | null;
-  roomSubscription: StompSubscription | null;
-  gameResultSubscription: StompSubscription | null;
+  subscriptions: Record<string, StompSubscription | null>;
   connectWebSocket: () => void;
   disconnectWebSocket: () => void;
-  updateSubscription: (roomId: string) => void;
+  updateSubscription: (roomId: string, pageType: 'status' | 'game' | 'result') => void;
   sendMessage: (destination: string, payload?: unknown) => void;
 }
 
@@ -41,9 +38,7 @@ export const useWebSocketStore = create<WebSocketState>((set, get) => ({
       status: 'DRAW',
     },
   },
-  statusSubscription: null,
-  roomSubscription: null,
-  gameResultSubscription: null,
+  subscriptions: {},
 
   connectWebSocket: () => {
     if (get().client) return;
@@ -57,7 +52,6 @@ export const useWebSocketStore = create<WebSocketState>((set, get) => ({
 
     client.onConnect = () => {
       console.log('WebSocket: 연결 성공');
-      get().updateSubscription(useRoomStore.getState().roomId);
     };
 
     client.onStompError = (frame) => {
@@ -69,56 +63,49 @@ export const useWebSocketStore = create<WebSocketState>((set, get) => ({
   },
 
   disconnectWebSocket: () => {
-    const { client, statusSubscription, roomSubscription, gameResultSubscription } = get();
+    const { client, subscriptions } = get();
 
-    if (statusSubscription) {
-      statusSubscription.unsubscribe();
-    }
-    if (roomSubscription) {
-      roomSubscription.unsubscribe();
-    }
-    if (gameResultSubscription) {
-      gameResultSubscription.unsubscribe();
-    }
+    Object.values(subscriptions).forEach((sub) => sub?.unsubscribe());
 
     if (client) {
       console.log('WebSocket: 연결 해제');
       client.deactivate();
-      set({ client: null });
+      set({ client: null, subscriptions: {} });
     }
   },
 
-  updateSubscription: (roomId: string) => {
-    const { client, statusSubscription, roomSubscription, gameResultSubscription } = get();
+  updateSubscription: (roomId: string, pageType: 'status' | 'game' | 'result') => {
+    const { client, subscriptions } = get();
     if (!client || !client.connected) return;
 
-    statusSubscription?.unsubscribe();
-    roomSubscription?.unsubscribe();
-    gameResultSubscription?.unsubscribe();
+    Object.values(subscriptions).forEach((sub) => sub?.unsubscribe());
 
-    console.log(`WebSocket: ${roomId} 구독 변경`);
+    console.log(`WebSocket: ${roomId}에서 ${pageType} 페이지 구독 변경`);
 
-    const statusSub = client.subscribe(`/topic/game/${roomId}/status`, (message) => {
-      // SendTo: /app/game/${roomId}/status
-      const { status } = JSON.parse(message.body);
-      set({ roomStatus: status });
-    });
+    const newSubscriptions: Record<string, StompSubscription> = {};
 
-    const roomSub = client.subscribe(`/topic/game/${roomId}`, (message) => {
-      // SendTo: /app/game/{roomId}
+    if (pageType === 'status') {
+      newSubscriptions['status'] = client.subscribe(`/topic/game/${roomId}/status`, (message) => {
+        const { status } = JSON.parse(message.body);
+        set({ roomStatus: status });
+      });
+    }
 
-      const { roomId, gameRoomStatus, player1P, player2P, problemCardWithoutCardIds } = JSON.parse(message.body);
-      set({ roomInfo: { roomId, gameRoomStatus, player1P, player2P, problemCardWithoutCardIds } });
-    });
+    if (pageType === 'game') {
+      newSubscriptions['room'] = client.subscribe(`/topic/game/${roomId}`, (message) => {
+        const { roomId, gameRoomStatus, player1P, player2P, problemCardWithoutCardIds } = JSON.parse(message.body);
+        set({ roomInfo: { roomId, gameRoomStatus, player1P, player2P, problemCardWithoutCardIds } });
+      });
+    }
 
-    const resultSub = client.subscribe(`/topic/game/${roomId}/result`, (message) => {
-      // SendTo: /app/game/{roomId}/result
+    if (pageType === 'result') {
+      newSubscriptions['result'] = client.subscribe(`/topic/game/${roomId}/result`, (message) => {
+        const { isDraw, isForfeit, player1P, player2P } = JSON.parse(message.body);
+        set({ gameResult: { isDraw, isForfeit, player1P, player2P } });
+      });
+    }
 
-      const { isDraw, isForfeit, player1P, player2P } = JSON.parse(message.body);
-      set({ gameResult: { isDraw, isForfeit, player1P, player2P } });
-    });
-
-    set({ statusSubscription: statusSub, roomSubscription: roomSub, gameResultSubscription: resultSub });
+    set({ subscriptions: newSubscriptions });
   },
 
   sendMessage: (destination, payload) => {
