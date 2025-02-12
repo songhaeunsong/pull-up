@@ -30,8 +30,8 @@ export const memberStore = create<MemberState>()(
       setIsLoggedIn: (isLoggedIn) => set({ isLoggedIn }),
       setInterviewAnswerId: (interviewAnswerId) => set({ interviewAnswerId }),
       logoutMember: () => {
-        sessionStorage.removeItem('member-storage');
         set(initialState);
+        sessionStorage.removeItem('member-storage');
       },
     }),
     {
