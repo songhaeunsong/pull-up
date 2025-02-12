@@ -15,7 +15,12 @@ const MainLayout = () => {
   const { isLoggedIn } = memberStore();
 
   useEffect(() => {
-    if (location.pathname !== '/' && location.pathname !== '/signin' && !isLoggedIn) {
+    if (
+      location.pathname !== '/' &&
+      location.pathname !== '/signin' &&
+      location.pathname !== '/redirect' &&
+      !isLoggedIn
+    ) {
       toast.error('로그인이 필요합니다.', { position: 'bottom-center' });
       navigate('/signin');
       return;

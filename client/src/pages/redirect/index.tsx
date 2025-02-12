@@ -1,23 +1,26 @@
-import { useAuthInfo } from '@/api/auth';
+import { login } from '@/api/auth';
 import { useGetMemberInfo } from '@/api/member';
+import { queryClient } from '@/main';
 import { memberStore } from '@/stores/memberStore';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const RedirectPage = () => {
   const navigate = useNavigate();
-  const { data: auth, isLoading: isAuthLoading } = useAuthInfo();
   const { refetch } = useGetMemberInfo();
   const { setMember, setIsSolvedToday, setIsLoggedIn, setInterviewAnswerId } = memberStore();
 
   useEffect(() => {
     const handleRedirect = async () => {
-      if (!isAuthLoading && !auth) {
+      const auth = await queryClient.fetchQuery({
+        queryKey: ['auth'],
+        queryFn: login,
+      });
+
+      if (!auth) {
         navigate('/signin');
         return;
-      }
-
-      if (auth && !isAuthLoading) {
+      } else {
         const memberData = await refetch();
 
         if (memberData) {
@@ -46,7 +49,7 @@ const RedirectPage = () => {
     };
 
     handleRedirect();
-  }, [auth, isAuthLoading]);
+  }, [navigate]);
 
   return null;
 };
