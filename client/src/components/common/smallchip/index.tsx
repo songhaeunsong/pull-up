@@ -3,7 +3,7 @@ import { CSSProperties } from 'react';
 interface SmallChipProps {
   title: string;
   color: string;
-  style: CSSProperties;
+  style?: CSSProperties;
 }
 
 const SmallChip = ({ title, color, style }: SmallChipProps) => {
