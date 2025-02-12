@@ -15,7 +15,6 @@ export const login = async () => {
     AuthStore.setAccessToken(accessToken);
   }
 
-  console.log('로그인 api: ', data);
   return data;
 };
 

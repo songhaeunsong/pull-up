@@ -10,25 +10,18 @@ const RedirectPage = () => {
   const { refetch } = useGetMemberInfo();
   const { setMember, setIsSolvedToday, setIsLoggedIn, setInterviewAnswerId } = memberStore();
 
-  queryClient.getQueryData(['auth']);
-
   useEffect(() => {
     const handleRedirect = async () => {
-      console.log('리다이렉트');
-
       const auth = await queryClient.fetchQuery({
         queryKey: ['auth'],
         queryFn: login,
       });
 
       if (!auth) {
-        console.log('유저 정보 없음');
         navigate('/signin');
         return;
       } else {
-        console.log('멤버 정보 요청');
         const memberData = await refetch();
-        console.log('멤버 정보 요청 성공');
 
         if (memberData) {
           // 미가입시
@@ -44,8 +37,6 @@ const RedirectPage = () => {
             navigate('/signup');
             return;
           }
-
-          console.log('로그인 완료');
 
           // 유저 정보 저장
           setMember(memberData);
