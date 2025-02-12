@@ -12,19 +12,23 @@ const GameStage = () => {
   const { updateSubscription, roomInfo, sendMessage } = useWebSocketStore();
   const navigate = useNavigate();
 
-  const { data: playerTypeData, isPending } = useGetPlayerType(roomId);
+  const { data: playerTypeData, isPending, isError } = useGetPlayerType(roomId);
 
   useEffect(() => {
+    if (isPending || isError) return;
+
     if (roomId) {
       updateSubscription(roomId, 'game');
       sendMessage('/app/card/check', {
         checkType: 'INIT',
         roomId,
+        playerType: playerTypeData.playerType,
       });
     }
-  }, [roomId]);
+  }, [roomId, playerTypeData]);
 
   const handleTimeOver = () => {
+    console.log('time over');
     sendMessage('/app/card/check', {
       checkType: 'TIME_OVER',
       roomId,
