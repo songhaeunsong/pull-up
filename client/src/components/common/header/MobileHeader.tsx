@@ -11,9 +11,10 @@ interface HeaderItem {
 
 const MobileHeader = () => {
   const location = useLocation();
-  const { member, isLoggedIn, logoutMember, isSolvedToday, interviewAnswerId } = memberStore();
+  const { isLoggedIn, logoutMember, isSolvedToday, interviewAnswerId } = memberStore();
 
   const headerItems: HeaderItem[] = [
+    { label: '오늘의문제', path: !isSolvedToday ? '/interview' : `/interview/result/${interviewAnswerId}` },
     { label: '시험모드', path: '/exam' },
     { label: '게임모드', path: '/game' },
     { label: '대시보드', path: '/dashboard' },
@@ -36,17 +37,7 @@ const MobileHeader = () => {
     >
       <div className="flex w-full items-center justify-between">
         <div className="text-2xl font-bold">
-          <Link
-            to={
-              !isLoggedIn || !member?.email
-                ? '/'
-                : !isSolvedToday
-                  ? '/interview'
-                  : `/interview/result/${interviewAnswerId}`
-            }
-          >
-            Pull Up!
-          </Link>
+          <Link to="/">Pull Up!</Link>
         </div>
         <Link
           key={loginItem.path}

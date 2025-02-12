@@ -11,9 +11,10 @@ interface HeaderItem {
 
 const Header = () => {
   const location = useLocation();
-  const { member, isLoggedIn, logoutMember, isSolvedToday, interviewAnswerId } = memberStore();
+  const { isLoggedIn, logoutMember, isSolvedToday, interviewAnswerId } = memberStore();
 
   const headerItems: HeaderItem[] = [
+    { label: '오늘의문제', path: !isSolvedToday ? '/interview' : `/interview/result/${interviewAnswerId}` },
     { label: '시험모드', path: '/exam' },
     { label: '게임모드', path: '/game' },
     { label: '대시보드', path: '/dashboard' },
@@ -35,18 +36,7 @@ const Header = () => {
       )}
     >
       <div className="text-3xl font-bold">
-        {/* 로그인이면 로고->오늘의 문제, 비로그인이면 로고->메인인 */}
-        <Link
-          to={
-            !isLoggedIn || !member?.email
-              ? '/'
-              : !isSolvedToday
-                ? '/interview'
-                : `/interview/result/${interviewAnswerId}`
-          }
-        >
-          Pull Up!
-        </Link>
+        <Link to="/">Pull Up!</Link>
       </div>
 
       <nav className="flex space-x-6">

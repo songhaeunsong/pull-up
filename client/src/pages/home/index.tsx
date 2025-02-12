@@ -7,7 +7,7 @@ import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const HomePage = () => {
-  const { isLoggedIn, isSolvedToday, interviewAnswerId, member } = memberStore.getState();
+  const { isLoggedIn, isSolvedToday, interviewAnswerId, member } = memberStore();
   const navigate = useNavigate();
 
   const setupNotification = async () => {
@@ -86,7 +86,11 @@ const HomePage = () => {
               </span>
             </div>
           </div>
-          <SubmitButton text="알림 받으러 가기" color="secondary" onClick={onClick} />
+          <SubmitButton
+            text={!isLoggedIn ? '알림 받으러 가기' : !isSolvedToday ? '오늘의 문제 풀러 가기' : '오늘의 문제 결과 보기'}
+            color="secondary"
+            onClick={onClick}
+          />
         </div>
         {/* 우측 컨테이너 */}
         <img
