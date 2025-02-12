@@ -5,34 +5,25 @@ import { useQuery } from '@tanstack/react-query';
 import { AuthStore } from '@/utils/authService';
 import { queryClient } from '@/main';
 
+// 로그인
 const login = async () => {
-  try {
-    console.log('로그인 요청 시작');
-    const response = await api.post('auth/signin');
-    console.log('서버 응답:', response);
+  const response = await api.post('auth/signin');
+  const data = await response.json<AuthResponseType>();
 
-    const data = await response.json<AuthResponseType>();
-    console.log('파싱된 데이터:', data);
-
-    const accessToken = response.headers.get('Authorization');
-    console.log('추출된 토큰:', accessToken);
-
-    if (accessToken) {
-      AuthStore.setAccessToken(accessToken);
-    }
-
-    return data;
-  } catch (error) {
-    console.error('로그인 중 에러 발생:', error);
-    throw error; // useQuery가 에러를 감지할 수 있도록 다시 throw
+  // accessToken 추출
+  const accessToken = response.headers.get('Authorization');
+  if (accessToken) {
+    AuthStore.setAccessToken(accessToken);
   }
+
+  console.log('로그인 api: ', data);
+  return data;
 };
 
 export const useAuthInfo = () => {
   return useQuery({
     queryKey: ['auth'],
     queryFn: login,
-    retry: false, // 실패시 재시도하지 않도록 설정
   });
 };
 
@@ -41,6 +32,9 @@ export const reissue = async () => {
   try {
     const { accessToken } = await api.post('auth/reissue').json<{ accessToken: string }>();
     AuthStore.setAccessToken(accessToken);
+
+    console.log('토큰 업데이트');
+    await queryClient.invalidateQueries({ queryKey: ['auth'] });
   } catch (error) {
     console.error('토큰 재발급 실패: ', error);
   }
