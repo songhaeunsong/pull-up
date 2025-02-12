@@ -49,7 +49,7 @@ const RedirectPage = () => {
     };
 
     handleRedirect();
-  }, [navigate, refetch, setInterviewAnswerId, setIsLoggedIn, setIsSolvedToday, setMember]);
+  }, [navigate]);
 
   return null;
 };
