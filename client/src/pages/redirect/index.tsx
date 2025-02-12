@@ -13,6 +13,7 @@ const RedirectPage = () => {
   useEffect(() => {
     const handleRedirect = async () => {
       console.log('리다이렉트');
+      console.log('현재 상태:', { isAuthLoading, auth });
       if (!isAuthLoading && !auth) {
         console.log('유저 정보 없음');
         navigate('/signin');
