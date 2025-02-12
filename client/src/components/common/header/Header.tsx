@@ -23,8 +23,9 @@ const Header = () => {
   const handleAuthClick = async () => {
     if (isLoggedIn) {
       await logout();
-      logoutMember();
       AuthStore.clearAccessToken();
+      logoutMember();
+      console.log('로그인 상태: ', isLoggedIn);
     }
   };
 

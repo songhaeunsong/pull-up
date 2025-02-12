@@ -23,8 +23,8 @@ const MobileHeader = () => {
   const handleAuthClick = async () => {
     if (isLoggedIn) {
       await logout();
-      logoutMember();
       AuthStore.clearAccessToken();
+      logoutMember();
     }
   };
 
