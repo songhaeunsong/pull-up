@@ -1,12 +1,14 @@
 import { useAuthInfo } from '@/api/auth';
 import { useGetMemberInfo } from '@/api/member';
 import { memberStore } from '@/stores/memberStore';
-import { useEffect } from 'react';
+import { AuthResponseType } from '@/types/auth';
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const RedirectPage = () => {
   const navigate = useNavigate();
-  const { data: auth, isLoading: isAuthLoading, isSuccess } = useAuthInfo();
+  const { data: auth, isLoading: isAuthLoading } = useAuthInfo();
+  const [authData, setAuthData] = useState<AuthResponseType>();
   const { refetch } = useGetMemberInfo();
   const { setMember, setIsSolvedToday, setIsLoggedIn, setInterviewAnswerId } = memberStore();
 
@@ -14,21 +16,23 @@ const RedirectPage = () => {
     const handleRedirect = async () => {
       console.log('리다이렉트');
       console.log('현재 상태:', { isAuthLoading, auth });
-      if (isSuccess) {
-        if (!isAuthLoading && !auth) {
+
+      if (!isAuthLoading) {
+        setAuthData(auth);
+        console.log('setAuthData: ', authData);
+
+        if (!authData) {
           console.log('유저 정보 없음');
           navigate('/signin');
           return;
-        }
-
-        if (!isAuthLoading && auth) {
+        } else {
           console.log('멤버 정보 요청');
           const memberData = await refetch();
           console.log('멤버 정보 요청 성공');
 
           if (memberData) {
             // 미가입시
-            if (!auth.isSignedUp) {
+            if (!authData.isSignedUp) {
               setIsLoggedIn(true);
               navigate('/signup');
               return;
@@ -46,16 +50,16 @@ const RedirectPage = () => {
             // 유저 정보 저장
             setMember(memberData);
             setIsLoggedIn(true);
-            setIsSolvedToday(auth.isSolvedToday);
-            setInterviewAnswerId(auth.interviewAnswerId);
-            navigate(auth.isSolvedToday ? `/interview/result/${auth.interviewAnswerId}` : '/interview');
+            setIsSolvedToday(authData.isSolvedToday);
+            setInterviewAnswerId(authData.interviewAnswerId);
+            navigate(authData.isSolvedToday ? `/interview/result/${authData.interviewAnswerId}` : '/interview');
           }
         }
       }
     };
 
     handleRedirect();
-  }, [isSuccess]);
+  }, [auth, isAuthLoading]);
 
   return null;
 };
