@@ -11,6 +11,13 @@ const RedirectPage = () => {
   const { setMember, setIsSolvedToday, setIsLoggedIn, setInterviewAnswerId } = memberStore();
 
   useEffect(() => {
+    if (isAuthLoading) return;
+    if (!auth) {
+      console.log('조회 후 유저 정보 없음');
+      navigate('/signin');
+      return;
+    }
+
     const handleRedirect = async () => {
       console.log('리다이렉트');
       console.log('현재 상태:', { isAuthLoading, auth });
