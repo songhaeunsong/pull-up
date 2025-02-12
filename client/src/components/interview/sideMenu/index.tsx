@@ -26,7 +26,7 @@ const SideMenu = ({ isOpen, interviewList, handleMenuClick, handleSearchClick, o
             <Icon id="search" />
           </button>
         </div>
-        <div className="flex w-full flex-col gap-2">
+        <div className="flex min-h-0 w-full flex-col gap-2 overflow-y-auto pb-10">
           {interviewList && interviewList.length > 0 ? (
             interviewList.map((item, id) => (
               <MenuItem

@@ -4,8 +4,7 @@ import { useState } from 'react';
 import MenuItem from '../sideMenu/menuitem';
 import { InterviewListResponse } from '@/types/response/interview';
 import { getInterviewListByKeyword } from '@/api/interview';
-import debounce from '@/utils/debounce';
-import { toast } from 'react-toastify';
+import { debounce } from 'lodash';
 
 interface SearchModalProps {
   onClose: () => void;
@@ -16,25 +15,19 @@ const SearchModal = ({ onClose, onInterviewClick }: SearchModalProps) => {
   const [searchList, setSearchList] = useState<InterviewListResponse[]>();
   const [value, setValue] = useState('');
 
-  const debounceSearch = debounce(async (searchValue: string) => {
-    try {
-      if (searchValue.trim().length > 0) {
-        const data = await getInterviewListByKeyword(searchValue);
-        setSearchList(data);
-      } else {
-        setSearchList([]);
-      }
-    } catch (error) {
-      console.error('검색을 실패했습니다.', error);
+  const handleSearch = debounce(async (searchValue: string) => {
+    if (searchValue.trim().length > 0) {
+      const data = await getInterviewListByKeyword(searchValue);
+      setSearchList(data);
+    } else {
       setSearchList([]);
-      toast.error('검색을 실패했습니다.', { position: 'bottom-center' });
     }
   }, 300);
 
   const onChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const searchValue = e.target.value;
     setValue(searchValue);
-    debounceSearch(searchValue);
+    handleSearch(searchValue);
   };
 
   return (

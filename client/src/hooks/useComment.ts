@@ -1,4 +1,5 @@
 import { useCreateComment, useDeleteComment, useUpdateComment } from '@/api/comment';
+import { debounce } from 'lodash';
 import { useState } from 'react';
 import { toast } from 'react-toastify';
 
@@ -15,11 +16,11 @@ export const useComment = ({ interviewAnswerId }: useCommentProps) => {
     setInputValue(e.target.value);
   };
 
-  const onSubmit = async () => {
+  const onSubmit = debounce(async () => {
     if (!inputValue.trim()) return;
     createComment({ interviewAnswerId, content: inputValue });
     setInputValue('');
-  };
+  }, 300);
 
   const onKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === 'Enter' && !e.shiftKey) {
