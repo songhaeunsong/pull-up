@@ -48,7 +48,7 @@ const CommentItem = ({
           placeholder="댓글을 입력하세요."
           value={value}
           onChange={(e) => onChange(e, comment.commentId)}
-          className={`resize-none rounded-lg text-lg text-black outline-none placeholder:text-stone-700 focus:border focus:outline-none md:text-xl ${
+          className={`resize-none rounded-lg bg-transparent text-lg text-black outline-none placeholder:text-stone-700 focus:border focus:outline-none md:text-xl ${
             userEmail === comment.email && updated ? 'border border-primary-300 p-3' : ''
           } `}
         />
