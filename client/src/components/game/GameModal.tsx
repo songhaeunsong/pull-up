@@ -31,6 +31,7 @@ const GameModals = () => {
 
   const postCreateGame = usePostCreateGame();
   const postJoinGame = usePostJoinGame();
+
   const deleteRoom = useDeleteRoom();
 
   const postCreateGameRandom = usePostCreateRoomRandom();
@@ -47,13 +48,13 @@ const GameModals = () => {
       if (roomStatus !== 'PLAYING') {
         deleteRoom(roomId);
 
-        toast.error('방을 다시 만들어주세요!', {
-          position: 'bottom-center',
-        });
-
         setIsCreateMode(false);
         setRoomId('');
         setIsPlayerReady(false);
+
+        toast.error('방을 다시 만들어주세요!', {
+          position: 'bottom-center',
+        });
       }
     }, 1000 * 60);
   };
@@ -97,20 +98,20 @@ const GameModals = () => {
 
     setIsPlayerReady(true);
 
-    const { isReady } = await postJoinGame(codeForJoinning);
-
-    if (!isReady) {
+    try {
+      const { isReady } = await postJoinGame(codeForJoinning);
+      if (isReady) {
+        setRoomId(codeForJoinning);
+      }
+    } catch {
       toast.error('코드와 일치하는 방이 없습니다.', {
         position: 'bottom-center',
       });
 
       setIsPlayerReady(false);
+    } finally {
       setCodeForJoinning('');
-      return;
     }
-
-    setRoomId(codeForJoinning);
-    setCodeForJoinning('');
   };
 
   const handleRandomRoom = async ({ randomMatchType, roomId: randomRoomId }: GetRandomTypeResponse) => {
