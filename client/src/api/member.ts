@@ -57,6 +57,6 @@ export const useUpdateInterestSubjects = (subjects: Subject[]) => {
 
 // 디바이스 토큰 등록
 export const registerDeviceToken = async (token: string) => {
-  const data = await api.post('member/device-token', { json: { token: token } }).json<number>();
+  const data = await api.post('member/device-token', { json: { deviceToken: token } }).json<number>();
   return data;
 };
