@@ -2,6 +2,7 @@ import { useGetMemberInfo } from '@/api/member';
 import SideBar from '@/components/dashboard/sidebar';
 import MobileTopBar from '@/components/dashboard/sidebar/MobileTopBar';
 import useResponsive from '@/hooks/useResponsive';
+import { memberStore } from '@/stores/memberStore';
 import { useEffect } from 'react';
 import { Outlet, useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -10,9 +11,10 @@ const DashBoardLayout = () => {
   const { isMobile, isTabletMd } = useResponsive();
   const navigate = useNavigate();
   const { data: member, isLoading } = useGetMemberInfo();
+  const { isLoggedIn } = memberStore();
 
   useEffect(() => {
-    if (!isLoading && !member) {
+    if (!isLoading && !isLoggedIn) {
       toast.error('로그인이 필요합니다.', { position: 'bottom-center' });
       navigate('/signin');
       return;
