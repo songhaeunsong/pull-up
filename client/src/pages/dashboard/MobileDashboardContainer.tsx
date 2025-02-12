@@ -32,7 +32,7 @@ const MobileDashboardContainer = () => {
       <TabsContent value="today" className="w-full">
         <div className="flex min-h-[300px] flex-col rounded-2xl bg-white p-5">
           <ChartContainer>
-            <div className="flex items-center justify-center">
+            <div className="flex w-full items-center justify-center">
               <DashboardFeedback />
             </div>
           </ChartContainer>
