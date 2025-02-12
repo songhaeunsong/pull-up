@@ -1,65 +1,67 @@
-import { useAuthInfo } from '@/api/auth';
-import { useGetMemberInfo } from '@/api/member';
+import { login } from '@/api/auth';
+import { getMember } from '@/api/member';
+import { queryClient } from '@/main';
 import { memberStore } from '@/stores/memberStore';
-import { AuthResponseType } from '@/types/auth';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 const RedirectPage = () => {
   const navigate = useNavigate();
-  const { data: auth, isLoading: isAuthLoading } = useAuthInfo();
-  const [authData, setAuthData] = useState<AuthResponseType>();
-  const { refetch } = useGetMemberInfo();
   const { setMember, setIsSolvedToday, setIsLoggedIn, setInterviewAnswerId } = memberStore();
+
+  queryClient.getQueryData(['auth']);
 
   useEffect(() => {
     const handleRedirect = async () => {
       console.log('리다이렉트');
-      console.log('현재 상태:', { isAuthLoading, auth });
 
-      if (!isAuthLoading) {
-        setAuthData(auth);
-        console.log('setAuthData: ', authData);
+      const auth = await queryClient.fetchQuery({
+        queryKey: ['auth'],
+        queryFn: () => login(),
+      });
 
-        if (!authData) {
-          console.log('유저 정보 없음');
-          navigate('/signin');
-          return;
-        } else {
-          console.log('멤버 정보 요청');
-          const memberData = await refetch();
-          console.log('멤버 정보 요청 성공');
+      console.log('유저 정보: ', auth);
+      if (!auth) {
+        console.log('유저 정보 없음');
+        navigate('/signin');
+        return;
+      } else {
+        console.log('멤버 정보 요청');
+        const member = await queryClient.fetchQuery({
+          queryKey: ['member'],
+          queryFn: () => getMember(),
+        });
+        console.log('멤버 정보 요청 성공');
 
-          if (memberData) {
-            // 미가입시
-            if (!authData.isSignedUp) {
-              setIsLoggedIn(true);
-              navigate('/signup');
-              return;
-            }
-
-            // 관심과목 미선택시
-            if (!memberData.interestSubjects) {
-              setIsLoggedIn(true);
-              navigate('/signup');
-              return;
-            }
-
-            console.log('로그인 완료');
-
-            // 유저 정보 저장
-            setMember(memberData);
+        if (member) {
+          // 미가입시
+          if (!auth.isSignedUp) {
             setIsLoggedIn(true);
-            setIsSolvedToday(authData.isSolvedToday);
-            setInterviewAnswerId(authData.interviewAnswerId);
-            navigate(authData.isSolvedToday ? `/interview/result/${authData.interviewAnswerId}` : '/interview');
+            navigate('/signup');
+            return;
           }
+
+          // 관심과목 미선택시
+          if (!member.interestSubjects) {
+            setIsLoggedIn(true);
+            navigate('/signup');
+            return;
+          }
+
+          console.log('로그인 완료');
+
+          // 유저 정보 저장
+          setMember(member);
+          setIsLoggedIn(true);
+          setIsSolvedToday(auth.isSolvedToday);
+          setInterviewAnswerId(auth.interviewAnswerId);
+          navigate(auth.isSolvedToday ? `/interview/result/${auth.interviewAnswerId}` : '/interview');
         }
       }
     };
 
     handleRedirect();
-  }, [auth, isAuthLoading]);
+  }, [navigate, setInterviewAnswerId, setIsLoggedIn, setIsSolvedToday, setMember]);
 
   return null;
 };

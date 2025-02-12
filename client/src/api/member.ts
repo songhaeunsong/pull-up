@@ -1,25 +1,12 @@
 import { Member, Subject } from '@/types/member';
 import api from './instance';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import { queryClient } from '@/main';
-import { useAuthInfo } from './auth';
 
-const getMember = async () => {
+export const getMember = async () => {
   const response = await api.get<Member>('member/me');
   const data = await response.json();
   return data;
-};
-
-export const useGetMemberInfo = () => {
-  const { data: auth } = useAuthInfo();
-  return {
-    ...useQuery({
-      queryKey: ['member'],
-      queryFn: () => getMember(),
-      enabled: !!auth,
-    }),
-    refetch: () => queryClient.fetchQuery<Member>({ queryKey: ['member'] }),
-  };
 };
 
 // 선호 과목 수정

@@ -1,12 +1,11 @@
 import { AuthResponseType } from '@/types/auth';
 import api from './instance';
 import { Subject } from '@/types/member';
-import { useQuery } from '@tanstack/react-query';
 import { AuthStore } from '@/utils/authService';
 import { queryClient } from '@/main';
 
 // 로그인
-const login = async () => {
+export const login = async () => {
   const response = await api.post('auth/signin');
   const data = await response.json<AuthResponseType>();
 
@@ -18,13 +17,6 @@ const login = async () => {
 
   console.log('로그인 api: ', data);
   return data;
-};
-
-export const useAuthInfo = () => {
-  return useQuery({
-    queryKey: ['auth'],
-    queryFn: login,
-  });
 };
 
 // 토큰 재발급
