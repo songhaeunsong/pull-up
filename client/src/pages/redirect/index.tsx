@@ -1,5 +1,5 @@
 import { login } from '@/api/auth';
-import { getMember } from '@/api/member';
+import { useGetMemberInfo } from '@/api/member';
 import { queryClient } from '@/main';
 import { memberStore } from '@/stores/memberStore';
 import { useEffect } from 'react';
@@ -7,6 +7,7 @@ import { useNavigate } from 'react-router-dom';
 
 const RedirectPage = () => {
   const navigate = useNavigate();
+  const { refetch } = useGetMemberInfo();
   const { setMember, setIsSolvedToday, setIsLoggedIn, setInterviewAnswerId } = memberStore();
 
   queryClient.getQueryData(['auth']);
@@ -20,20 +21,16 @@ const RedirectPage = () => {
         queryFn: () => login(),
       });
 
-      console.log('유저 정보: ', auth);
       if (!auth) {
         console.log('유저 정보 없음');
         navigate('/signin');
         return;
       } else {
         console.log('멤버 정보 요청');
-        const member = await queryClient.fetchQuery({
-          queryKey: ['member'],
-          queryFn: () => getMember(),
-        });
+        const memberData = await refetch();
         console.log('멤버 정보 요청 성공');
 
-        if (member) {
+        if (memberData) {
           // 미가입시
           if (!auth.isSignedUp) {
             setIsLoggedIn(true);
@@ -42,7 +39,7 @@ const RedirectPage = () => {
           }
 
           // 관심과목 미선택시
-          if (!member.interestSubjects) {
+          if (!memberData.interestSubjects) {
             setIsLoggedIn(true);
             navigate('/signup');
             return;
@@ -51,7 +48,7 @@ const RedirectPage = () => {
           console.log('로그인 완료');
 
           // 유저 정보 저장
-          setMember(member);
+          setMember(memberData);
           setIsLoggedIn(true);
           setIsSolvedToday(auth.isSolvedToday);
           setInterviewAnswerId(auth.interviewAnswerId);
@@ -61,7 +58,7 @@ const RedirectPage = () => {
     };
 
     handleRedirect();
-  }, [navigate, setInterviewAnswerId, setIsLoggedIn, setIsSolvedToday, setMember]);
+  }, [navigate, refetch, setInterviewAnswerId, setIsLoggedIn, setIsSolvedToday, setMember]);
 
   return null;
 };
