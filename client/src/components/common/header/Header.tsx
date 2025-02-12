@@ -11,7 +11,7 @@ interface HeaderItem {
 
 const Header = () => {
   const location = useLocation();
-  const { member, isLoggedIn, logoutMember, isSolvedToday, interviewAnswerId } = memberStore.getState();
+  const { member, isLoggedIn, logoutMember, isSolvedToday, interviewAnswerId } = memberStore();
 
   const headerItems: HeaderItem[] = [
     { label: '시험모드', path: '/exam' },
@@ -23,8 +23,8 @@ const Header = () => {
   const handleAuthClick = async () => {
     if (isLoggedIn) {
       await logout();
-      logoutMember();
       AuthStore.clearAccessToken();
+      logoutMember();
     }
   };
 
