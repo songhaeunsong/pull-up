@@ -19,7 +19,7 @@ const RedirectPage = () => {
         return;
       }
 
-      if (auth && !isAuthLoading) {
+      if (!isAuthLoading && auth) {
         console.log('멤버 정보 요청');
         const memberData = await refetch();
         console.log('멤버 정보 요청 성공');
