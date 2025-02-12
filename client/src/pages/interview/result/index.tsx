@@ -48,6 +48,7 @@ const InterviewResultPage = () => {
   // 지난 문제 보기
   const onInterviewClick = (interviewAnswerId: number) => {
     navigate(`/interview/result/${interviewAnswerId}`);
+    setIsModalOpen(false);
   };
 
   const formatDate = convertDate(resultData.createdAt).split('-');

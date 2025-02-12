@@ -41,7 +41,6 @@ const InterviewAnswerDetail = () => {
   useEffect(() => {
     if (!isAnswerLoading && interviewAnswer) {
       setInterviewAnswerData(interviewAnswer);
-      console.log('상세 데이터: ', interviewAnswer);
     }
     if (!isCommentsLoading && comments) {
       setCommentsData(comments);

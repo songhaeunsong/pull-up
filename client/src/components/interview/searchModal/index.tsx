@@ -51,7 +51,11 @@ const SearchModal = ({ onClose, onInterviewClick }: SearchModalProps) => {
           <div className="flex flex-1 flex-col gap-2 overflow-y-auto">
             {searchList && searchList.length > 0 ? (
               searchList.map((item, id) => (
-                <MenuItem key={id} title={item.question} onInterviewClick={() => onInterviewClick(item.interviewId)} />
+                <MenuItem
+                  key={id}
+                  title={item.question}
+                  onInterviewClick={() => onInterviewClick(item.interviewAnswerId)}
+                />
               ))
             ) : (
               <div>검색 결과가 없습니다.</div>

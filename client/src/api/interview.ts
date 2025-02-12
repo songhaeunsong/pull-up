@@ -76,7 +76,7 @@ export const useGetInterviewList = () => {
 // 지난 오늘의 문제 검색 조회
 export const getInterviewListByKeyword = async (keyword: string): Promise<InterviewListResponse[]> => {
   const response = await api
-    .get(`interview?keyword=${keyword}`)
+    .get(`interview/search?keyword=${keyword}`)
     .json<{ searchedInterviewQuestions: InterviewListResponse[] }>();
 
   return response.searchedInterviewQuestions;
