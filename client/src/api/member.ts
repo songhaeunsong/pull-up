@@ -2,6 +2,7 @@ import { Member, Subject } from '@/types/member';
 import api from './instance';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { queryClient } from '@/main';
+import { AuthStore } from '@/utils/authService';
 
 const getMember = async () => {
   const response = await api.get<Member>('member/me');
@@ -10,12 +11,18 @@ const getMember = async () => {
 };
 
 export const useGetMemberInfo = () => {
+  const auth = AuthStore.getAccessToken();
   return {
     ...useQuery({
       queryKey: ['member'],
-      queryFn: () => getMember(),
+      queryFn: getMember,
+      enabled: !!auth,
     }),
-    refetch: () => queryClient.fetchQuery<Member>({ queryKey: ['member'] }),
+    refetch: () =>
+      queryClient.fetchQuery<Member>({
+        queryKey: ['member'],
+        queryFn: getMember,
+      }),
   };
 };
 
