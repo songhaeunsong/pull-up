@@ -24,33 +24,43 @@ export const updateInterestSubjects = async (subjects: Subject[]) => {
   const response = await api.patch('member/interest-subject', {
     json: { subjectNames: subjects },
   });
-  return response.status;
+  if (!response.ok) {
+    throw new Error('관심 과목 수정 실패');
+  }
+  // PATCH 요청 성공 후 최신 멤버 데이터 가져오기
+  return getMember();
 };
 
-export const useUpdateInterestSubjects = (subjects: Subject[]) => {
+export const useUpdateInterestSubjects = () => {
   return useMutation({
-    mutationFn: () => updateInterestSubjects(subjects),
-    onMutate: async () => {
+    mutationFn: (subjects: Subject[]) => updateInterestSubjects(subjects),
+
+    onMutate: async (subjects) => {
       await queryClient.cancelQueries({ queryKey: ['member'] });
       const previousData = queryClient.getQueryData<Member | null>(['member']);
-      console.log('previousData', previousData);
+
       if (previousData) {
         queryClient.setQueryData<Member>(['member'], {
           ...previousData,
-          interestSubjects: subjects,
+          interestSubjects: subjects, // Optimistic UI 반영
         });
       }
-
       return { previousData };
     },
     onError: (err, _, context) => {
+      console.error('관심 과목 수정 실패', err);
       if (context?.previousData) {
-        console.log('관심 과목 수정에 실패했습니다.', err);
         queryClient.setQueryData(['member'], context.previousData);
       }
     },
+
+    onSuccess: (updatedMember) => {
+      // 최신 데이터를 UI에 반영
+      queryClient.setQueryData(['member'], updatedMember);
+    },
+
     onSettled: () => {
-      queryClient.invalidateQueries({ queryKey: ['member'] });
+      queryClient.invalidateQueries({ queryKey: ['member'] }); // 최신 데이터 강제 요청
     },
   });
 };
