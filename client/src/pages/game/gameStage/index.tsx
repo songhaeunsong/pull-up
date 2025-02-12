@@ -18,12 +18,15 @@ const GameStage = () => {
     if (isPending || isError) return;
 
     if (roomId) {
+      console.log('구독, ', playerTypeData.playerType);
       updateSubscription(roomId, 'game');
-      sendMessage('/app/card/check', {
-        checkType: 'INIT',
-        roomId,
-        playerType: playerTypeData.playerType,
-      });
+      setTimeout(() => {
+        sendMessage('/app/card/check', {
+          checkType: 'INIT',
+          roomId,
+          playerType: playerTypeData.playerType,
+        });
+      }, 800);
     }
   }, [roomId, playerTypeData]);
 
