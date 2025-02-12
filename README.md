@@ -67,12 +67,26 @@
 - Swagger (API 문서화)
 - WebSocket (실시간 게임 기능)
 
+## 참고 문서
+- [Swagger](https://api.pull-up.store/swagger-ui/index.html#/)
+- [API 명세서](https://www.notion.so/API-b7ddbb24655743cab9d0d5634dfbd140?pvs=4)
+- [Notion](https://www.notion.so/5959-175e845cbd3e80ceb587f58323950c94?pvs=4)
+
 <br/>
 
 ## 시스템 아키텍처
    <div align="center" class="flex">
     <img src="/uploads/9c84d6bd7814561ae9ed6792eabd66ed/image.png" width="600" />
 </div>
+
+<br/>
+
+
+## 📅 **개발 일정**
+
+- **1주차:** 프로젝트 기획 및 요구사항 정의  
+- **2~5주차:** 화면 디자인 및 기능 개발 (모의고사, 게임, 대시보드)  
+- **6~7주차:** 테스트 및 디버깅, 최종 배포  
 
 <br/>
 
@@ -113,10 +127,5 @@
 
 
 
-## 📅 **개발 일정**
-
-- **1주차:** 프로젝트 기획 및 요구사항 정의  
-- **2~5주차:** 화면 디자인 및 기능 개발 (모의고사, 게임, 대시보드)  
-- **6~7주차:** 테스트 및 디버깅, 최종 배포  
 
 
