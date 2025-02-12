@@ -1,6 +1,6 @@
 import { Member, Subject } from '@/types/member';
 import api from './instance';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation, useSuspenseQuery } from '@tanstack/react-query';
 import { queryClient } from '@/main';
 
 const getMember = async () => {
@@ -11,7 +11,7 @@ const getMember = async () => {
 
 export const useGetMemberInfo = () => {
   return {
-    ...useQuery({
+    ...useSuspenseQuery({
       queryKey: ['member'],
       queryFn: () => getMember(),
     }),

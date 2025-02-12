@@ -4,19 +4,19 @@ import MobileTopBar from '@/components/dashboard/sidebar/MobileTopBar';
 import useResponsive from '@/hooks/useResponsive';
 import Page404 from '@/pages/404';
 import { Member } from '@/types/member';
-import { useEffect, useState } from 'react';
+import { Suspense, useEffect, useState } from 'react';
 import { Outlet } from 'react-router-dom';
 
 const DashBoardLayout = () => {
   const { isMobile, isTabletMd } = useResponsive();
-  const { data: member, isLoading } = useGetMemberInfo();
+  const { data: member } = useGetMemberInfo();
   const [memberData, setMemberData] = useState<Member>();
 
   useEffect(() => {
-    if (!isLoading && member) {
+    if (member) {
       setMemberData(member);
     }
-  }, [member, isLoading]);
+  }, [member]);
 
   if (!memberData) {
     return <Page404 />;
@@ -39,12 +39,14 @@ const DashBoardLayout = () => {
           <main className="flex h-full flex-1 overflow-y-auto">
             <Outlet />
           </main>
-          <SideBar
-            image={member?.profileImageUrl ?? ''}
-            name={member?.name ?? ''}
-            email={member?.email ?? ''}
-            subjects={member?.interestSubjects ?? []}
-          />
+          <Suspense fallback={<div>사이드바 로딩 중...</div>}>
+            <SideBar
+              image={member?.profileImageUrl ?? ''}
+              name={member?.name ?? ''}
+              email={member?.email ?? ''}
+              subjects={member?.interestSubjects ?? []}
+            />
+          </Suspense>
         </div>
       )}
     </div>
