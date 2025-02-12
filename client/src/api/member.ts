@@ -15,10 +15,14 @@ export const useGetMemberInfo = () => {
   return {
     ...useQuery({
       queryKey: ['member'],
-      queryFn: () => getMember(),
+      queryFn: getMember,
       enabled: !!auth,
     }),
-    refetch: () => queryClient.fetchQuery<Member>({ queryKey: ['member'] }),
+    refetch: () =>
+      queryClient.fetchQuery<Member>({
+        queryKey: ['member'],
+        queryFn: getMember,
+      }),
   };
 };
 

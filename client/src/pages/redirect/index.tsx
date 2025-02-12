@@ -18,7 +18,7 @@ const RedirectPage = () => {
 
       const auth = await queryClient.fetchQuery({
         queryKey: ['auth'],
-        queryFn: () => login(),
+        queryFn: login,
       });
 
       if (!auth) {
