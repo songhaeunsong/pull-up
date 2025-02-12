@@ -11,13 +11,7 @@ interface HeaderItem {
 
 const MobileHeader = () => {
   const location = useLocation();
-  const { member, isLoggedIn, logoutMember, isSolvedToday, interviewAnswerId } = memberStore((state) => ({
-    member: state.member,
-    isLoggedIn: state.isLoggedIn,
-    logoutMember: state.logoutMember,
-    isSolvedToday: state.isSolvedToday,
-    interviewAnswerId: state.interviewAnswerId,
-  }));
+  const { member, isLoggedIn, logoutMember, isSolvedToday, interviewAnswerId } = memberStore();
 
   const headerItems: HeaderItem[] = [
     { label: '시험모드', path: '/exam' },
