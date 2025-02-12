@@ -15,7 +15,13 @@ const GameStage = () => {
   const { data: playerTypeData, isPending } = useGetPlayerType(roomId);
 
   useEffect(() => {
-    if (roomId) updateSubscription(roomId, 'game');
+    if (roomId) {
+      updateSubscription(roomId, 'game');
+      sendMessage('/app/card/check', {
+        checkType: 'INIT',
+        roomId,
+      });
+    }
   }, [roomId]);
 
   const handleTimeOver = () => {
