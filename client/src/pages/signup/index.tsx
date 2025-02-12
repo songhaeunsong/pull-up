@@ -7,15 +7,14 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 const SignUpPage = () => {
-  const { refetch } = useGetMemberInfo();
+  const { data: member } = useGetMemberInfo();
   const { setMember } = memberStore();
-
   const navigate = useNavigate();
+
   const onConfirmSignUp = async (selectedSubjects: Subject[]) => {
     try {
       await signup(selectedSubjects);
 
-      const member = await refetch();
       if (!member) {
         toast.error('사용자 정보가 없습니다.', {
           position: 'bottom-center',
