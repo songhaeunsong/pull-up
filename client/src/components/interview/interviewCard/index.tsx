@@ -20,7 +20,7 @@ const InterviewCard = ({ title, keywords, onHintClick, hint }: InterviewCardProp
       >
         {/* 앞면 - 문제 */}
         <div className="absolute h-full w-full" style={{ backfaceVisibility: 'hidden' }}>
-          <div className="flex h-full w-full flex-col items-center justify-start rounded-xl bg-white px-6 py-4 shadow-md">
+          <div className="flex h-full w-full flex-col items-center justify-start rounded-xl bg-white px-6 py-4 shadow-sm">
             <div className="flex w-full justify-end">
               <button
                 className="rounded-lg bg-stone-950 px-4 py-2 text-sm font-extrabold text-white transition-colors duration-200"
@@ -44,7 +44,7 @@ const InterviewCard = ({ title, keywords, onHintClick, hint }: InterviewCardProp
             transform: 'rotateY(180deg)',
           }}
         >
-          <div className="flex h-full w-full flex-col items-center justify-start rounded-xl bg-white px-6 py-4 shadow-md">
+          <div className="flex h-full w-full flex-col items-center justify-start rounded-xl bg-white px-6 py-4 shadow-sm">
             <div className="flex w-full justify-end">
               <button
                 className="rounded-lg bg-stone-950 px-2 py-1 text-xs font-extrabold text-white transition-colors duration-200 md:px-4 md:py-2 md:text-sm"
