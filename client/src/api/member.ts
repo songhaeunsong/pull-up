@@ -18,6 +18,7 @@ export const useGetMemberInfo = () => {
       queryFn: () => getMember(),
       enabled: !!auth,
     }),
+    refetch: () => queryClient.fetchQuery<Member>({ queryKey: ['member'] }),
   };
 };
 

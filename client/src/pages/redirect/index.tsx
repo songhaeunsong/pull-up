@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 const RedirectPage = () => {
   const navigate = useNavigate();
   const { data: auth, isLoading: isAuthLoading } = useAuthInfo();
-  const { data: member, isLoading: isMemberLoading } = useGetMemberInfo();
+  const { refetch } = useGetMemberInfo();
   const { setMember, setIsSolvedToday, setIsLoggedIn, setInterviewAnswerId } = memberStore();
 
   useEffect(() => {
@@ -20,9 +20,12 @@ const RedirectPage = () => {
         return;
       }
 
-      if (auth && !isMemberLoading) {
+      if (!isAuthLoading && auth) {
         console.log('멤버 정보 요청');
-        if (member) {
+        const memberData = await refetch();
+        console.log('멤버 정보 요청 성공');
+
+        if (memberData) {
           // 미가입시
           if (!auth.isSignedUp) {
             setIsLoggedIn(true);
@@ -31,7 +34,7 @@ const RedirectPage = () => {
           }
 
           // 관심과목 미선택시
-          if (!member.interestSubjects) {
+          if (!memberData.interestSubjects) {
             setIsLoggedIn(true);
             navigate('/signup');
             return;
@@ -40,7 +43,7 @@ const RedirectPage = () => {
           console.log('로그인 완료');
 
           // 유저 정보 저장
-          setMember(member);
+          setMember(memberData);
           setIsLoggedIn(true);
           setIsSolvedToday(auth.isSolvedToday);
           setInterviewAnswerId(auth.interviewAnswerId);
@@ -50,7 +53,7 @@ const RedirectPage = () => {
     };
 
     handleRedirect();
-  }, [auth, isAuthLoading, member, isMemberLoading]);
+  }, [auth, isAuthLoading]);
 
   return null;
 };
