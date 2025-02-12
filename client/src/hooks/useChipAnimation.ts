@@ -11,7 +11,7 @@ export const useChipAnimation = () => {
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentStyles((prev) => [prev[2], prev[0], prev[1]]);
-    }, 1500);
+    }, 2000);
     return () => clearInterval(timer);
   }, []);
 

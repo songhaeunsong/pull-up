@@ -14,7 +14,7 @@ const Header = () => {
   const { isLoggedIn, logoutMember, isSolvedToday, interviewAnswerId } = memberStore();
 
   const headerItems: HeaderItem[] = [
-    { label: '오늘의문제', path: !isSolvedToday ? '/interview' : `/interview/result/${interviewAnswerId}` },
+    { label: '오늘의 문제', path: !isSolvedToday ? '/interview' : `/interview/result/${interviewAnswerId}` },
     { label: '시험모드', path: '/exam' },
     { label: '게임모드', path: '/game' },
     { label: '대시보드', path: '/dashboard' },

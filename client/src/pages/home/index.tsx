@@ -44,8 +44,15 @@ const HomePage = () => {
     }
   };
 
+  // 애니메이션 적용
   const { styles, currentStyles } = useChipAnimation();
-  const titles = ['오늘의 질문', '모의고사', '학습 게임'];
+  const activeIndex = currentStyles.findIndex((style) => style === 1); // 활성화 인덱스
+  const titles = ['오늘의 문제', '모의고사', '학습 게임'];
+  const contents = [
+    ['매일 새로운 CS 문제', 'AI 분석과 다양한 답안 비교'],
+    ['랜덤 모의고사로 실력 점검', '틀린 문제 아카이브로 복습'],
+    ['1대1 CS 카드게임 대결', '친구와 함께 재미있게 학습'],
+  ];
 
   return (
     <div
@@ -68,13 +75,25 @@ const HomePage = () => {
                 <SmallChip
                   key={title}
                   title={title}
-                  color={`${styles[currentStyles[index]]} transition-all duration-500`}
+                  color={`${styles[currentStyles[index]]} transition-all `}
+                  style={{ transitionDuration: '2000ms' }}
                 />
               ))}
             </div>
-            <div className="flex flex-col items-center text-2xl font-bold md:items-start md:text-3xl lg:text-4xl xl:text-5xl">
-              <span>나의 기술 스택과 실력</span>
-              <span>맞춤으로 준비하는 면접</span>
+            <div className="flex flex-col items-center text-center text-2xl font-bold md:w-[510px] md:items-start md:text-left md:text-3xl lg:text-4xl xl:text-5xl">
+              {contents.map((group, index) => (
+                <div
+                  key={index}
+                  className={`flex flex-col transition-all ${
+                    index === activeIndex ? 'opacity-100' : 'absolute opacity-0'
+                  }`}
+                  style={{ transitionDuration: '1500ms', transitionDelay: index === activeIndex ? '500ms' : '0ms' }}
+                >
+                  {group.map((text, i) => (
+                    <span key={i}>{text}</span>
+                  ))}
+                </div>
+              ))}
             </div>
             <div className="flex flex-col gap-2">
               <div className="flex flex-col items-center text-xl font-semibold md:items-start md:text-2xl">
