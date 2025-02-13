@@ -89,9 +89,11 @@ const HomePage = () => {
                   }`}
                   style={{ transitionDuration: '1500ms', transitionDelay: index === activeIndex ? '500ms' : '0ms' }}
                 >
-                  {group.map((text, i) => (
-                    <span key={i}>{text}</span>
-                  ))}
+                  <div className="flex flex-col space-y-2">
+                    {group.map((text, i) => (
+                      <span key={i}>{text}</span>
+                    ))}
+                  </div>
                 </div>
               ))}
             </div>
