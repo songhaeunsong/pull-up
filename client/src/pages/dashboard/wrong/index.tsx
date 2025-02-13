@@ -1,11 +1,12 @@
-import { Suspense, useState } from 'react';
+import { lazy, Suspense, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import RouteHeader from '@/components/common/routeheader';
-import ReviewList from '@/components/dashboard/reviewList';
+//import ReviewList from '@/components/dashboard/reviewList';
 import { useGetWrongProblemAll } from '@/api/problem';
 import convertDate from '@/utils/convertDate';
 import { convertSubject } from '@/utils/convertSubject';
-import ReviewCardSkeleton from '@/components/dashboard/reviewCard/reviewCardSkeleton';
+import ReviewListSkeleton from '@/components/dashboard/reviewList/reviewListSkeleton';
+const ReviewList = lazy(() => import('@/components/dashboard/reviewList'));
 
 const Wrong = () => {
   const navigate = useNavigate();
@@ -31,15 +32,7 @@ const Wrong = () => {
   return (
     <section className="flex w-full flex-col gap-3">
       <RouteHeader prev="마이페이지" title="내가 틀린 문제" onBackClick={onHandleBack} />
-      <Suspense
-        fallback={
-          <div className="flex flex-col gap-4">
-            {Array.from({ length: 5 }).map((_, index) => (
-              <ReviewCardSkeleton key={index} />
-            ))}
-          </div>
-        }
-      >
+      <Suspense fallback={<ReviewListSkeleton />}>
         <ReviewList searchValue={searchValue} onSearchChange={handleSearchChange} data={wrongProblemDtos} />
       </Suspense>
     </section>
