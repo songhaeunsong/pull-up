@@ -26,7 +26,7 @@ const SignUpPage = () => {
       // 유저 정보 저장
       setMember(member);
 
-      navigate('/interview');
+      navigate('/');
     } catch (error) {
       console.error('회원가입 실패: ', error);
       toast.error('회원가입을 실패했습니다', {
