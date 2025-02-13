@@ -1,4 +1,4 @@
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
 import api from './instance';
 import { Exam, ExamCreateRequest, ExamDetailsResponse, ExamResultRequest, ExamResultResponse } from '@/types/exam';
 import { GetCorrectRateResponse, GetExamAllResponse, GetScoreResponse } from '@/types/response/exam';
@@ -91,7 +91,7 @@ export const getExamResult = (examId: number) => {
 };
 
 export const useGetExamResult = (examId: number) => {
-  return useQuery({
+  return useSuspenseQuery({
     queryKey: ['examResult', examId],
     queryFn: () => getExamResult(examId),
     refetchOnMount: false,
