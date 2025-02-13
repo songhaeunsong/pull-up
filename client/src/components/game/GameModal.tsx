@@ -43,13 +43,12 @@ const GameModals = () => {
   const [isCreateMode, setIsCreateMode] = useState(false);
   const [selectedSubjects, setSelectedSubjects] = useState<SubjectSelect>(INITIAL_SELECT);
 
-  const createRoomTimeout = () => {
+  const createRoomTimeout = (roomId: string) => {
     createRoomTimeoutRef.current = setTimeout(() => {
       if (roomStatus !== 'PLAYING') {
         deleteRoom(roomId);
 
         setIsCreateMode(false);
-        setRoomId('');
         setIsPlayerReady(false);
 
         toast.error('방을 다시 만들어주세요!', {
@@ -63,7 +62,6 @@ const GameModals = () => {
     if (!isOpen) {
       if (roomId && isCreateMode) {
         deleteRoom(roomId);
-        setRoomId('');
         setIsCreateMode(false);
       }
 
@@ -90,7 +88,7 @@ const GameModals = () => {
     const { roomId } = await postCreateGame(selectedSubjects);
     setRoomId(roomId);
 
-    createRoomTimeout();
+    createRoomTimeout(roomId);
   };
 
   const handleJoinRoom = async (event: FormFormEvent) => {
