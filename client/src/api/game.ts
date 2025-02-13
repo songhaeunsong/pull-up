@@ -76,8 +76,10 @@ const getPlayerType = async (roomId: string) => {
 
 export const useGetPlayerType = (roomId: string) =>
   useQuery({
-    queryKey: ['myPlayerNumber'],
+    queryKey: ['myPlayerType'],
     queryFn: () => getPlayerType(roomId),
+    staleTime: Infinity,
+    gcTime: 30000,
   });
 
 const getRandomType = async () => {
