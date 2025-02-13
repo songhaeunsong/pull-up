@@ -1,7 +1,6 @@
 import { logout, reissue } from '@/api/auth';
 import api from '@/api/instance';
 import { API_RETRY_COUNT } from '@/constants/auth';
-import { ErrorResponseType } from '@/types/response/error';
 import { BeforeRetryHook } from 'ky';
 
 const AUTH_TOKEN_KEY = 'auth_access_token';
@@ -41,11 +40,11 @@ export const setTokenHeader = (request: Request) => {
 
 // 토큰 재발급
 export const handleRefreshToken: BeforeRetryHook = async ({ error, retryCount }) => {
-  console.log('토큰 에러: ', error);
-  const customError = error as unknown as ErrorResponseType;
+  console.log('에러 메시지: ', error.message);
+  console.log('에러 네임: ', error.name);
+  console.log('에러 스택: ', error.stack);
 
-  console.log('커스텀 에러: ', customError);
-  if (customError.errorMessage === '[ACCESS_TOKEN] 만료된 Token 입니다.') {
+  if (error.name === '401') {
     console.log('토큰 만료');
 
     if (retryCount === API_RETRY_COUNT - 1) {
