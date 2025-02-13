@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 const SignUpPage = () => {
-  const { setMember } = memberStore();
+  const { setMember, setIsLoggedIn, setInterviewAnswerId, setIsSolvedToday } = memberStore();
 
   const navigate = useNavigate();
   const onConfirmSignUp = async (selectedSubjects: Subject[]) => {
@@ -28,6 +28,11 @@ const SignUpPage = () => {
         });
         return;
       }
+
+      // 로그인 정보 저장
+      setIsLoggedIn(true);
+      setIsSolvedToday(auth.isSolvedToday);
+      setInterviewAnswerId(auth.interviewAnswerId);
 
       // 사용자 정보 저장
       setMember(member);
