@@ -52,5 +52,6 @@ export const handleRefreshToken: BeforeRetryHook = async ({ error, retryCount })
     return api.stop;
   }
 
+  console.log('reissue');
   await reissue();
 };
