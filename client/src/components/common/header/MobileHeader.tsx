@@ -12,6 +12,8 @@ interface HeaderItem {
 const MobileHeader = () => {
   const location = useLocation();
   const { isLoggedIn, logoutMember, isSolvedToday, interviewAnswerId } = memberStore();
+  const isExamInProgress = /^\/exam\/\d+$/.test(location.pathname);
+  const isGameInProgress = /^\/game\/(?!$).+$/.test(location.pathname);
 
   const headerItems: HeaderItem[] = [
     { label: '오늘의 문제', path: !isSolvedToday ? '/interview' : `/interview/result/${interviewAnswerId}` },
@@ -22,7 +24,13 @@ const MobileHeader = () => {
   const loginItem: HeaderItem = { label: isLoggedIn ? '로그아웃' : '로그인', path: isLoggedIn ? '/' : '/signin' };
 
   const handleAuthClick = async () => {
+    //console.log('로그아웃 클릭');
     if (isLoggedIn) {
+      if (isExamInProgress || isGameInProgress) {
+        //console.log('시험 / 게임 페이지 로그아웃 차단.');
+        return;
+      }
+      //console.log('로그아웃 시도');
       await logout();
       AuthStore.clearAccessToken();
       logoutMember();

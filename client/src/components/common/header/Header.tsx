@@ -11,6 +11,9 @@ interface HeaderItem {
 
 const Header = () => {
   const location = useLocation();
+  const isExamInProgress = /^\/exam\/\d+$/.test(location.pathname);
+  const isGameInProgress = /^\/game\/(?!$).+$/.test(location.pathname);
+
   const { isLoggedIn, logoutMember, isSolvedToday, interviewAnswerId } = memberStore();
 
   const headerItems: HeaderItem[] = [
@@ -22,7 +25,13 @@ const Header = () => {
   ];
 
   const handleAuthClick = async () => {
+    //console.log('로그아웃 클릭');
     if (isLoggedIn) {
+      if (isExamInProgress || isGameInProgress) {
+        //console.log('시험 / 게임 페이지 로그아웃 차단.');
+        return;
+      }
+      //console.log('로그아웃 시도');
       await logout();
       AuthStore.clearAccessToken();
       logoutMember();
