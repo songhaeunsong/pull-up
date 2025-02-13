@@ -1,6 +1,7 @@
 import { logout } from '@/api/auth';
 import { cn } from '@/lib/utils';
 import { memberStore } from '@/stores/memberStore';
+import { AuthStore } from '@/utils/authService';
 import { Link, useLocation } from 'react-router-dom';
 
 interface HeaderItem {
@@ -10,7 +11,7 @@ interface HeaderItem {
 
 const Header = () => {
   const location = useLocation();
-  const { isLoggedIn, isSolvedToday, interviewAnswerId } = memberStore();
+  const { isLoggedIn, logoutMember, isSolvedToday, interviewAnswerId } = memberStore();
 
   const headerItems: HeaderItem[] = [
     { label: '오늘의 문제', path: !isSolvedToday ? '/interview' : `/interview/result/${interviewAnswerId}` },
@@ -23,6 +24,8 @@ const Header = () => {
   const handleAuthClick = async () => {
     if (isLoggedIn) {
       await logout();
+      AuthStore.clearAccessToken();
+      logoutMember();
     }
   };
 
