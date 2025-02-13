@@ -13,7 +13,11 @@ const instance = ky.create({
 const api = instance.extend({
   hooks: {
     beforeRequest: [setTokenHeader],
-    beforeError: [handleRefreshToken],
+    beforeRetry: [handleRefreshToken],
+  },
+  retry: {
+    limit: 1,
+    statusCodes: [401],
   },
 });
 

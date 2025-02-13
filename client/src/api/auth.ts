@@ -3,6 +3,7 @@ import api from './instance';
 import { Subject } from '@/types/member';
 import { AuthStore } from '@/utils/authService';
 import { queryClient } from '@/main';
+import { memberStore } from '@/stores/memberStore';
 
 // 로그인
 export const login = async () => {
@@ -33,8 +34,12 @@ export const reissue = async () => {
 
 // 로그아웃
 export const logout = async () => {
+  const { logoutMember } = memberStore();
+
   await api.post('auth/logout');
   queryClient.setQueryData(['member'], null);
+  AuthStore.clearAccessToken();
+  logoutMember();
 };
 
 // 회원가입
