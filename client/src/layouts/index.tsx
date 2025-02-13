@@ -25,7 +25,7 @@ const MainLayout = () => {
       navigate('/signin');
       return;
     }
-  }, [isLoggedIn, location.pathname]);
+  }, [location.pathname]);
 
   return (
     <div className={cn(SM_STYLE, BASIC_STYLE)}>
