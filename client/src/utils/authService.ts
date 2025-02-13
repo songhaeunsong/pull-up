@@ -28,6 +28,7 @@ export const AuthStore = (() => {
 
 // 헤더에 토큰 주입
 export const setTokenHeader = (request: Request) => {
+  console.log('토큰 주입');
   const token = AuthStore.getAccessToken();
   const isLogin = request.url.includes('/auth/signin'); // 로그인은 헤더에 토큰 주입 안함
 
