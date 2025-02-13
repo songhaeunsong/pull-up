@@ -65,7 +65,7 @@ const ExamDetailPage = () => {
       id: 'timeLeft',
       title: '남은 시간',
       icon: 'time',
-      content: <Timer initialTime={1500} onTimeOver={onSubmit} />,
+      content: <Timer initialTime={900} onTimeOver={onSubmit} />,
     },
     {
       id: 'problemStatus',
