@@ -1,5 +1,6 @@
 import ky from 'ky';
 import { setTokenHeader, handleRefreshToken } from '@/utils/authService';
+import { API_RETRY_COUNT } from '@/constants/auth';
 
 const instance = ky.create({
   prefixUrl: import.meta.env.VITE_BASE_URL,
@@ -12,11 +13,10 @@ const instance = ky.create({
 const api = instance.extend({
   timeout: 10 * 1000,
   retry: {
-    limit: 4,
+    limit: API_RETRY_COUNT,
     statusCodes: [401],
     methods: ['get', 'post', 'put', 'delete', 'patch'],
     backoffLimit: 3 * 1000,
-    maxRetryAfter: 180_000, // retry-after 헤더의 최대 대기 시간도 설정
   },
 
   hooks: {
