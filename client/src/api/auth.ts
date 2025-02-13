@@ -35,9 +35,7 @@ export const reissue = async () => {
 // 로그아웃
 export const logout = async () => {
   const { logoutMember } = memberStore();
-
   await api.post('auth/logout');
-  queryClient.setQueryData(['member'], null);
   AuthStore.clearAccessToken();
   logoutMember();
 };
