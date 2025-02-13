@@ -22,12 +22,22 @@ const GameBoard = ({ playerType, problems }: GameBoardProps) => {
       contents: [problems[cardIndex1].content, problems[cardIndex2].content],
     });
 
-    if (!problems[cardIndex1].disabled && !problems[cardIndex2].disabled) {
+    setTimeout(() => {
       setShake(true);
-    }
+    }, 100);
+
+    setTimeout(() => {
+      setShake(false);
+      setSelectedCards([]);
+    }, 300);
   };
 
   const handleClickCard = (index: number) => {
+    if (selectedCards.length === 1 && problems[selectedCards[0]].disabled) {
+      setSelectedCards([index]);
+      return;
+    }
+
     if (selectedCards.includes(index)) {
       setSelectedCards(selectedCards.filter((i) => i !== index));
       return;
@@ -39,15 +49,6 @@ const GameBoard = ({ playerType, problems }: GameBoardProps) => {
 
     if (selectedCards.length === 1) {
       checkCardPair(selectedCards[0], index);
-
-      setTimeout(() => {
-        setShake(true);
-      }, 100);
-
-      setTimeout(() => {
-        setShake(false);
-        setSelectedCards([]);
-      }, 400);
     }
   };
 
