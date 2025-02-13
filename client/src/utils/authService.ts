@@ -39,9 +39,8 @@ export const setTokenHeader = (request: Request) => {
 };
 
 // 토큰 재발급
-export const handleRefreshToken: BeforeRetryHook = async ({ error, retryCount }) => {
-  console.log('토큰 에러: ', error);
-  console.log('에러메시지: ', error.message);
+export const handleRefreshToken: BeforeRetryHook = async ({ error, retryCount, options }) => {
+  console.log('토큰 에러: ', options);
   if (error.message === '[ACCESS_TOKEN] 만료된 Token 입니다.') {
     console.log('토큰 만료');
 
