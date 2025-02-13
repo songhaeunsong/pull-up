@@ -10,6 +10,7 @@ import {
   PostJoinGameResponse,
 } from '@/types/response/game';
 import { useRoomStore } from '@/stores/roomStore';
+import { toast } from 'react-toastify';
 
 const getWinningRate = async () => {
   const response = await api.get<WinningRate>('game/me/winning-rate');
@@ -52,7 +53,12 @@ export const usePostJoinGame = () => {
 
   const { mutateAsync } = useMutation({
     mutationFn: (roomId: string) => postJoinGame(roomId),
-    onSuccess: () => {},
+    onError: (error) => {
+      toast.error(error.message || '다시 시도해주세요!', {
+        position: 'bottom-center',
+      });
+      throw new Error();
+    },
   });
 
   return mutateAsync;
