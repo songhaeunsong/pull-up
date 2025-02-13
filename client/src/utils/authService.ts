@@ -42,7 +42,7 @@ export const handleRefreshToken: BeforeRetryHook = async ({ error, retryCount })
   if (error.message === '[ACCESS_TOKEN] 만료된 Token 입니다.') {
     console.log('토큰 만료');
 
-    if (retryCount > 1) {
+    if (retryCount === 3) {
       await logout();
       return api.stop;
     }

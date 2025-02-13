@@ -10,6 +10,11 @@ const instance = ky.create({
 });
 
 const api = instance.extend({
+  retry: {
+    limit: 4,
+    statusCodes: [401],
+    backoffLimit: 3 * 1000,
+  },
   hooks: {
     beforeRequest: [setTokenHeader],
     beforeRetry: [
@@ -19,10 +24,6 @@ const api = instance.extend({
         await handleRefreshToken(options);
       },
     ],
-  },
-  retry: {
-    limit: 5,
-    statusCodes: [401],
   },
 });
 
