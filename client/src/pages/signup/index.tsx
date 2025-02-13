@@ -1,4 +1,4 @@
-import { signup } from '@/api/auth';
+import { login, signup } from '@/api/auth';
 import { getMember } from '@/api/member';
 import CsConditionSelector from '@/components/common/csConditionSelector';
 import { queryClient } from '@/main';
@@ -13,6 +13,11 @@ const SignUpPage = () => {
   const navigate = useNavigate();
   const onConfirmSignUp = async (selectedSubjects: Subject[]) => {
     try {
+      const auth = await queryClient.fetchQuery({
+        queryKey: ['auth'],
+        queryFn: login,
+      });
+
       // 회원가입 완료
       await signup(selectedSubjects);
 
@@ -33,9 +38,6 @@ const SignUpPage = () => {
       setIsLoggedIn(true);
       setIsSolvedToday(auth.isSolvedToday);
       setInterviewAnswerId(auth.interviewAnswerId);
-
-      // 사용자 정보 저장
-      setMember(member);
 
       navigate('/');
     } catch (error) {
