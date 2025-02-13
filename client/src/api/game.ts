@@ -32,8 +32,6 @@ const postCreateGame = async (selects: SubjectSelect) => {
 };
 
 export const usePostCreateGame = () => {
-  // const queryClient = useQueryClient();
-
   const { mutateAsync } = useMutation({
     mutationFn: (selects: SubjectSelect) => postCreateGame(selects),
     onSuccess: () => {},
@@ -49,8 +47,6 @@ const postJoinGame = async (roomId: string) => {
 };
 
 export const usePostJoinGame = () => {
-  // const queryClient = useQueryClient();
-
   const { mutateAsync } = useMutation({
     mutationFn: (roomId: string) => postJoinGame(roomId),
     onError: (error) => {
@@ -67,8 +63,13 @@ export const usePostJoinGame = () => {
 const deleteRoom = (roomId: string) => api.delete(`game/room/${roomId}`);
 
 export const useDeleteRoom = () => {
+  const { setRoomId } = useRoomStore();
+
   const { mutate } = useMutation({
     mutationFn: (roomId: string) => deleteRoom(roomId),
+    onSuccess: () => {
+      setRoomId('');
+    },
   });
 
   return mutate;
