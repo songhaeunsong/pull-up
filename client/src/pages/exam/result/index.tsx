@@ -78,7 +78,7 @@ const ExamResultPage = () => {
   ];
 
   return (
-    <div className="flex gap-12 bg-Main md:px-8 md:py-10">
+    <div className="flex min-h-screen gap-12 bg-Main md:px-8 md:py-10">
       <div className="relative flex w-full flex-col gap-4 sm:mt-16 md:flex-row md:justify-center">
         {/* Info Section*/}
         <section className="sticky top-2 border border-b-2 bg-white px-10 pb-2 pt-[86px] sm:pt-[8px] md:hidden">
