@@ -20,16 +20,16 @@ const RedirectPage = () => {
         toast.error('로그인 정보가 없습니다.', { position: 'bottom-center' });
       }
 
-      // 로그인 정보 저장
-      setIsLoggedIn(true);
-      setIsSolvedToday(auth.isSolvedToday);
-      setInterviewAnswerId(auth.interviewAnswerId);
-
       // 비회원가입 시
       if (!auth.isSignedUp) {
         navigate('/signup');
         return;
       }
+
+      // 로그인 정보 저장
+      setIsLoggedIn(true);
+      setIsSolvedToday(auth.isSolvedToday);
+      setInterviewAnswerId(auth.interviewAnswerId);
 
       navigate('/');
       return;

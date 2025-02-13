@@ -1,4 +1,4 @@
-import { signup } from '@/api/auth';
+import { login, signup } from '@/api/auth';
 import { getMember } from '@/api/member';
 import CsConditionSelector from '@/components/common/csConditionSelector';
 import { queryClient } from '@/main';
@@ -8,11 +8,16 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 const SignUpPage = () => {
-  const { setMember } = memberStore();
+  const { setMember, setIsLoggedIn, setInterviewAnswerId, setIsSolvedToday } = memberStore();
 
   const navigate = useNavigate();
   const onConfirmSignUp = async (selectedSubjects: Subject[]) => {
     try {
+      const auth = await queryClient.fetchQuery({
+        queryKey: ['auth'],
+        queryFn: login,
+      });
+
       // 회원가입 완료
       await signup(selectedSubjects);
 
@@ -29,8 +34,10 @@ const SignUpPage = () => {
         return;
       }
 
-      // 사용자 정보 저장
-      setMember(member);
+      // 로그인 정보 저장
+      setIsLoggedIn(true);
+      setIsSolvedToday(auth.isSolvedToday);
+      setInterviewAnswerId(auth.interviewAnswerId);
 
       navigate('/');
     } catch (error) {
