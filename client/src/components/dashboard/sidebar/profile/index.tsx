@@ -1,6 +1,5 @@
 import SubjectTag from '@/components/common/subjectTag';
 import useResponsive from '@/hooks/useResponsive';
-import React from 'react';
 import Modal from '@/components/common/modal';
 import ProfileModal from '../profileModal';
 
@@ -23,7 +22,11 @@ const Profile = ({ image, name, email, subjects }: ProfileProps) => {
       </div>
       <div className="flex w-[150px] flex-col justify-evenly gap-3 lg:w-auto lg:justify-start">
         <div className="flex flex-col gap-4 lg:flex-row lg:items-center">
-          {isDesktop && <img src={image} width={80} height={80} className="rounded-full object-cover" />}
+          {isDesktop && (
+            <div className="h-20 w-20 overflow-hidden rounded-full">
+              <img src={image} className="h-full w-full object-cover" />
+            </div>
+          )}
           <div className="flex flex-col">
             <span className="text-xl font-bold lg:text-2xl">{name}</span>
             <span className="text-sm font-semibold text-stone-700 lg:text-base">{email}</span>

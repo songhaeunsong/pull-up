@@ -8,7 +8,7 @@ import { useNavigate } from 'react-router-dom';
 const DashboardFeedback = () => {
   const navigate = useNavigate();
   const { isSolvedToday, interviewAnswerId } = memberStore();
-  const { data: result } = useGetInterviewResult(interviewAnswerId);
+  const { data: result, isLoading } = useGetInterviewResult(interviewAnswerId);
 
   const [resultData, setResultData] = useState<InterviewResultResponse>({
     interviewId: 1,
@@ -30,6 +30,8 @@ const DashboardFeedback = () => {
       setResultData(result);
     }
   }, [isSolvedToday, result]);
+
+  if (isLoading) return <>불러오는 중...</>;
 
   return (
     <div className="relative flex h-full w-full flex-col gap-3 lg:flex-row">

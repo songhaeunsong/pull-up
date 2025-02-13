@@ -27,14 +27,12 @@ const createComment = async (comment: CommentCreateRequest): Promise<CreateRespo
   const data = await api
     .post(`interview/${comment.interviewAnswerId}/comment`, { json: { content: comment.content } })
     .json<CreateResponse>();
-  console.log('댓글 작성 api 실행');
   return data;
 };
 
 export const useCreateComment = (interviewAnswerId: number) => {
   const { mutate } = useMutation({
     mutationFn: (comment: CommentCreateRequest) => {
-      console.log('Mutation function called with:', comment); // 디버깅용
       return createComment(comment);
     },
 
