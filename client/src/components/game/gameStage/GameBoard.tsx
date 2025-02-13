@@ -38,6 +38,10 @@ const GameBoard = ({ playerType, problems }: GameBoardProps) => {
     }
 
     if (selectedCards.length === 1) {
+      if (problems[0].disabled) {
+        setSelectedCards([index]);
+        return;
+      }
       checkCardPair(selectedCards[0], index);
 
       setTimeout(() => {
