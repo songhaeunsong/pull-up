@@ -14,38 +14,14 @@ const api = instance.extend({
   retry: {
     limit: 4,
     statusCodes: [401],
+    methods: ['get', 'post', 'put', 'delete', 'patch'],
     backoffLimit: 3 * 1000,
+    maxRetryAfter: 180_000, // retry-after 헤더의 최대 대기 시간도 설정
   },
+
   hooks: {
-    beforeRequest: [
-      (request) => {
-        console.log('요청 전:', request.url);
-        setTokenHeader(request);
-      },
-    ],
-    beforeRetry: [
-      async (options) => {
-        console.log('재시도 전:', options);
-        await handleRefreshToken(options);
-      },
-    ],
-    afterResponse: [
-      (_request, _options, response) => {
-        console.log('응답 후:', {
-          status: response.status,
-          url: response.url,
-        });
-      },
-    ],
-    beforeError: [
-      (error) => {
-        console.log('에러 발생:', {
-          status: error.response?.status,
-          message: error.message,
-        });
-        return error;
-      },
-    ],
+    beforeRequest: [setTokenHeader],
+    beforeRetry: [handleRefreshToken],
   },
 });
 
