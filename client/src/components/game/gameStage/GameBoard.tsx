@@ -28,13 +28,13 @@ const GameBoard = ({ playerType, problems }: GameBoardProps) => {
   };
 
   const handleClickCard = (index: number) => {
-    if (selectedCards.includes(index)) {
-      setSelectedCards(selectedCards.filter((i) => i !== index));
+    if (selectedCards.length === 1 && problems[selectedCards[0]].disabled) {
+      setSelectedCards([index]);
       return;
     }
 
-    if (selectedCards.length === 1 && problems[selectedCards[0]].disabled) {
-      setSelectedCards([]);
+    if (selectedCards.includes(index)) {
+      setSelectedCards(selectedCards.filter((i) => i !== index));
       return;
     }
 
