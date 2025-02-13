@@ -7,7 +7,6 @@ const instance = ky.create({
   headers: {
     'content-type': 'application/json',
   },
-  retry: 1,
 });
 
 const api = instance.extend({
@@ -22,7 +21,7 @@ const api = instance.extend({
     ],
   },
   retry: {
-    limit: 1,
+    limit: 5,
     statusCodes: [401],
   },
 });
