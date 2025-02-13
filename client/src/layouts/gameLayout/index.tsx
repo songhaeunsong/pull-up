@@ -19,7 +19,7 @@ const GameLayout = () => {
 
   useEffect(() => {
     if (!isLoggedIn) {
-      toast.error('로그인이 필요합니다.', { position: 'bottom-center' });
+      toast.error('로그인이 필요합니다.', { position: 'bottom-center', toastId: 'login-required' });
       navigate('/signin');
       return;
     }
