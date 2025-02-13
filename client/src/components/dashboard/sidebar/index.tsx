@@ -17,7 +17,6 @@ const SideBar = ({ image, name, email, subjects }: SideBarProps) => {
   return (
     <div className="flex flex-row gap-3 rounded-2xl bg-white p-5 shadow-sm sm:w-full sm:gap-6 lg:w-[351px] lg:flex-col">
       <Profile image={image} name={name} email={email} subjects={convertSubject(subjects)} />
-
       <hr className="hidden border-2 border-stone-200 lg:block" />
       <div className="flex w-full flex-row gap-4 lg:flex-col">
         <Card link="recent" title="최근에 푼 모의고사" data={recentExamList[0]} />
