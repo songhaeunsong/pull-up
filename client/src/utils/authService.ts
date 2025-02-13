@@ -1,6 +1,5 @@
 import { reissue } from '@/api/auth';
-import api from '@/api/instance';
-import { AfterResponseHook } from 'ky';
+import { BeforeErrorHook, HTTPError } from 'ky';
 
 const AUTH_TOKEN_KEY = 'auth_access_token';
 
@@ -37,24 +36,34 @@ export const setTokenHeader = (request: Request) => {
 };
 
 // 토큰 재발급
-export const handleRefreshToken: AfterResponseHook = async (request: Request, _, response: Response) => {
-  if (response.status === 401 && response.statusText === '[ACCESS_TOKEN] 만료된 Token 입니다.') {
+export const handleRefreshToken: BeforeErrorHook = async (error: HTTPError) => {
+  const { response } = error;
+  const responseData = await response.json();
+
+  // 재요청 횟수
+  const retryCount = Number(error.request.headers.get('x-retry-count')) || 0;
+
+  if (
+    response.status === 401 &&
+    responseData.errorMessage === '[ACCESS_TOKEN] 만료된 Token 입니다.' &&
+    retryCount < 1
+  ) {
     console.log('토큰 만료');
     try {
       await reissue();
 
-      // 기존 api 재요청
-      const newRequest = new Request(request, {
-        headers: {
-          ...request.headers,
-          Authorization: `Bearer ${AuthStore.getAccessToken()}`,
-        },
-      });
+      // 새로운 요청 생성 대신 기존 error.request를 재사용
+      error.request.headers.set('Authorization', `Bearer ${AuthStore.getAccessToken()}`);
+      error.request.headers.set('x-retry-count', String(retryCount + 1));
 
-      return api(newRequest);
-    } catch (error) {
-      console.error('토큰 재발급에 실패:', error);
+      // 새로운 에러 객체 생성하여 throw
+      throw new HTTPError(error.response, error.request, error.options);
+    } catch (refreshError) {
+      console.error('토큰 재발급 실패:', refreshError);
       window.location.href = '/signin';
+      throw error;
     }
   }
+
+  throw error;
 };

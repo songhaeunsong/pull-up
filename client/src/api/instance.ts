@@ -13,7 +13,7 @@ const instance = ky.create({
 const api = instance.extend({
   hooks: {
     beforeRequest: [setTokenHeader],
-    afterResponse: [handleRefreshToken],
+    beforeError: [handleRefreshToken],
   },
 });
 
