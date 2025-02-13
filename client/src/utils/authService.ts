@@ -38,7 +38,7 @@ export const setTokenHeader = (request: Request) => {
 
 // 토큰 재발급
 export const handleRefreshToken: AfterResponseHook = async (request: Request, _, response: Response) => {
-  if (response.status === 401 && response.statusText === '[ACCESS_TOKEN] 토큰이 만료되었습니다.') {
+  if (response.status === 401 && response.statusText === '[ACCESS_TOKEN] 만료된 Token 입니다.') {
     console.log('토큰 만료');
     try {
       await reissue();
