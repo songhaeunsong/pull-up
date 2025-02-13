@@ -17,8 +17,35 @@ const api = instance.extend({
     backoffLimit: 3 * 1000,
   },
   hooks: {
-    beforeRequest: [setTokenHeader],
-    beforeRetry: [handleRefreshToken],
+    beforeRequest: [
+      (request) => {
+        console.log('요청 전:', request.url);
+        setTokenHeader(request);
+      },
+    ],
+    beforeRetry: [
+      async (options) => {
+        console.log('재시도 전:', options);
+        await handleRefreshToken(options);
+      },
+    ],
+    afterResponse: [
+      (_request, _options, response) => {
+        console.log('응답 후:', {
+          status: response.status,
+          url: response.url,
+        });
+      },
+    ],
+    beforeError: [
+      (error) => {
+        console.log('에러 발생:', {
+          status: error.response?.status,
+          message: error.message,
+        });
+        return error;
+      },
+    ],
   },
 });
 
