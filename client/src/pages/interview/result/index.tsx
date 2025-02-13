@@ -54,10 +54,10 @@ const InterviewResultPage = () => {
   const formatDate = convertDate(resultData.createdAt).split('-');
 
   return (
-    <div className="min-h-full bg-Main p-6 md:p-10">
+    <div className="flex min-h-full bg-Main p-6 md:p-10">
       {/* 사이드바 넓이 만큼 왼쪽 마진 조절 */}
       <div
-        className={`relative flex pt-[94px] transition-all duration-500 sm:pt-16 ${
+        className={`relative flex flex-1 pt-[94px] transition-all duration-500 sm:pt-16 ${
           isSideMenuOpen ? 'md:ml-[280px] lg:ml-[300px]' : 'ml-0'
         }`}
       >
