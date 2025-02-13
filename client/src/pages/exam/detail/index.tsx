@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo, Suspense } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { postExamAnswer, useGetExamDetails } from '@/api/exam';
 import { useExamStore } from '@/stores/examStore';
@@ -22,11 +22,9 @@ const ExamDetailPage = () => {
   const [isInitialized] = useState(false);
   const { isBlocked, handleProceed, handleCancel, setException } = usePrompt();
 
-  const isAllSolved = useMemo(() => {
-    return (examProblems || []).every(
-      (problem) => answers[problem.problemId] && answers[problem.problemId].trim() !== '',
-    );
-  }, [examProblems, answers]);
+  const isAllSolved = (examProblems || []).every(
+    (problem) => answers[problem.problemId] && answers[problem.problemId].trim() !== '',
+  );
 
   useEffect(() => {
     if (!examProblems || isInitialized) return;
@@ -108,22 +106,20 @@ const ExamDetailPage = () => {
 
         {/* 문제 리스트 */}
         <section className="flex-2 flex w-full flex-col gap-6 px-10 md:w-[920px] md:gap-10">
-          <Suspense fallback={<div>문제를 불러오는 중...</div>}>
-            {examProblems.map((problem, index) => (
-              <div key={problem.problemId} id={`problem-${problem.problemId}`}>
-                <ExamProblem
-                  index={index + 1}
-                  problem={{
-                    problemId: problem.problemId,
-                    question: problem.problem,
-                    subject: problem.subject,
-                    questionType: problem.problemType,
-                    options: problem.options,
-                  }}
-                />
-              </div>
-            ))}
-          </Suspense>
+          {examProblems.map((problem, index) => (
+            <div key={problem.problemId} id={`problem-${problem.problemId}`}>
+              <ExamProblem
+                index={index + 1}
+                problem={{
+                  problemId: problem.problemId,
+                  question: problem.problem,
+                  subject: problem.subject,
+                  questionType: problem.problemType,
+                  options: problem.options,
+                }}
+              />
+            </div>
+          ))}
         </section>
 
         <aside className="relative min-w-[280px] flex-1 flex-shrink-0 px-10 py-4 md:p-0 lg:min-w-[340px] xl:max-w-[380px]">
