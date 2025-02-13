@@ -1,23 +1,12 @@
-import { useCallback, useEffect } from 'react';
+import { useCallback } from 'react';
 import CsConditionSelector from '@/components/common/csConditionSelector';
 import exam1 from '/assets/images/exam1.png';
 import { useNavigate } from 'react-router-dom';
 import { postExam } from '@/api/exam';
 import { Subject } from '@/types/member';
 import { Level } from '@/types/exam';
-import { toast } from 'react-toastify';
-import { memberStore } from '@/stores/memberStore';
 const ExamPage = () => {
   const navigate = useNavigate();
-  const { isLoggedIn } = memberStore();
-
-  useEffect(() => {
-    if (!isLoggedIn) {
-      toast.error('로그인이 필요합니다.', { position: 'bottom-center' });
-      navigate('/signin');
-      return;
-    }
-  }, [isLoggedIn]);
 
   const onSubmit = useCallback(
     async (level: Level | null, subjects: Subject[]) => {

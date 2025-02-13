@@ -1,4 +1,4 @@
-import { updateInterestSubjects } from '@/api/member';
+import { useUpdateInterestSubjects } from '@/api/member';
 import SubjectSelector from '@/components/common/csConditionSelector/subjectSelector';
 import { SUBJECT_OPTIONS } from '@/components/common/csConditionSelector/subjectSelector/SubjectOptions';
 import { Button } from '@/components/ui/button';
@@ -15,16 +15,14 @@ const ProfileModal = () => {
     setSelectedSubjects((prev) => (prev.includes(id) ? prev.filter((subjectId) => subjectId !== id) : [...prev, id]));
   };
 
-  const onSubmit = async (subjects: Subject[]) => {
-    try {
-      const status = await updateInterestSubjects(subjects);
-      if (status === 200) {
+  const updateInterestSubjectsMutation = useUpdateInterestSubjects();
+
+  const onSubmit = () => {
+    updateInterestSubjectsMutation.mutate(selectedSubjects, {
+      onSuccess: () => {
         toast.success('관심 과목이 수정되었습니다.', { position: 'bottom-center' });
-      }
-    } catch (error) {
-      console.error('관심 과목 수정에 실패했습니다.', error);
-      toast.error('관심 과목 수정에 실패했습니다.', { position: 'bottom-center' });
-    }
+      },
+    });
   };
 
   return (
@@ -42,7 +40,7 @@ const ProfileModal = () => {
         ))}
       </div>
       <DialogClose asChild>
-        <Button disabled={isDisabled} onClick={() => onSubmit(selectedSubjects)}>
+        <Button disabled={isDisabled} onClick={() => onSubmit()}>
           수정 완료
         </Button>
       </DialogClose>

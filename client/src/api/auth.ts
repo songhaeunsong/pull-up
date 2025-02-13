@@ -1,12 +1,11 @@
 import { AuthResponseType } from '@/types/auth';
 import api from './instance';
 import { Subject } from '@/types/member';
-import { useQuery } from '@tanstack/react-query';
 import { AuthStore } from '@/utils/authService';
 import { queryClient } from '@/main';
 
 // 로그인
-const login = async () => {
+export const login = async () => {
   const response = await api.post('auth/signin');
   const data = await response.json<AuthResponseType>();
 
@@ -19,18 +18,14 @@ const login = async () => {
   return data;
 };
 
-export const useAuthInfo = () => {
-  return useQuery({
-    queryKey: ['auth'],
-    queryFn: login,
-  });
-};
-
 // 토큰 재발급
 export const reissue = async () => {
   try {
     const { accessToken } = await api.post('auth/reissue').json<{ accessToken: string }>();
     AuthStore.setAccessToken(accessToken);
+
+    console.log('토큰 업데이트');
+    await queryClient.invalidateQueries({ queryKey: ['auth'] });
   } catch (error) {
     console.error('토큰 재발급 실패: ', error);
   }

@@ -7,6 +7,7 @@ import { memberStore } from '@/stores/memberStore';
 import { CommentCreateRequest, CommentUpdateRequest } from '@/types/request/comment';
 import { InterviewAnswer } from '@/types/interview';
 import { Comment } from '@/types/comment';
+import { toast } from 'react-toastify';
 
 // 댓글 전체 조회
 const getComments = async (interviewAnswerId: number) => {
@@ -26,14 +27,12 @@ const createComment = async (comment: CommentCreateRequest): Promise<CreateRespo
   const data = await api
     .post(`interview/${comment.interviewAnswerId}/comment`, { json: { content: comment.content } })
     .json<CreateResponse>();
-  console.log('댓글 작성 api 실행');
   return data;
 };
 
 export const useCreateComment = (interviewAnswerId: number) => {
   const { mutate } = useMutation({
     mutationFn: (comment: CommentCreateRequest) => {
-      console.log('Mutation function called with:', comment); // 디버깅용
       return createComment(comment);
     },
 
@@ -64,6 +63,7 @@ export const useCreateComment = (interviewAnswerId: number) => {
     onError: (err, _, context) => {
       if (context?.previousAnswers || context?.previousComments) {
         console.error('댓글 작성 요청을 실패했습니다.', err);
+        toast.error('댓글 작성을 실패했습니다.', { position: 'bottom-center' });
         queryClient.setQueryData(['interviewAnswerDetail', interviewAnswerId], context.previousAnswers);
         queryClient.setQueryData(['comments', interviewAnswerId], context.previousComments);
       }

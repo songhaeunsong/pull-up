@@ -1,35 +1,29 @@
-import { useAuthInfo } from '@/api/auth';
+import { login } from '@/api/auth';
 import { useGetMemberInfo } from '@/api/member';
+import { queryClient } from '@/main';
 import { memberStore } from '@/stores/memberStore';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 const RedirectPage = () => {
   const navigate = useNavigate();
-  const { data: auth, isLoading: isAuthLoading } = useAuthInfo();
   const { refetch } = useGetMemberInfo();
   const { setMember, setIsSolvedToday, setIsLoggedIn, setInterviewAnswerId } = memberStore();
 
   useEffect(() => {
     const handleRedirect = async () => {
-      if (!isAuthLoading && !auth) {
-        navigate('/signin');
-        return;
-      }
+      const auth = await queryClient.fetchQuery({
+        queryKey: ['auth'],
+        queryFn: login,
+      });
 
-      if (auth && !isAuthLoading) {
+      if (auth) {
         const memberData = await refetch();
 
         if (memberData) {
-          // 미가입시
-          if (!auth.isSignedUp) {
-            setIsLoggedIn(true);
-            navigate('/signup');
-            return;
-          }
-
-          // 관심과목 미선택시
-          if (!memberData.interestSubjects) {
+          // 미가입 혹은 관심과목 미선택
+          if (!auth.isSignedUp || !memberData.interestSubjects) {
             setIsLoggedIn(true);
             navigate('/signup');
             return;
@@ -40,13 +34,19 @@ const RedirectPage = () => {
           setIsLoggedIn(true);
           setIsSolvedToday(auth.isSolvedToday);
           setInterviewAnswerId(auth.interviewAnswerId);
-          navigate(auth.isSolvedToday ? `/interview/result/${auth.interviewAnswerId}` : '/interview');
+        } else {
+          toast.error('사용자 정보가 없습니다.', { position: 'bottom-center' });
         }
+      } else {
+        toast.error('로그인 정보가 없습니다.', { position: 'bottom-center' });
       }
+
+      navigate('/');
+      return;
     };
 
     handleRedirect();
-  }, [auth, isAuthLoading]);
+  }, [navigate]);
 
   return null;
 };
