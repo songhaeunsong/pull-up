@@ -24,7 +24,6 @@ const GameBoard = ({ playerType, problems }: GameBoardProps) => {
 
     if (!problems[cardIndex1].disabled && !problems[cardIndex2].disabled) {
       setShake(true);
-      setTimeout(() => setShake(false), 500);
     }
   };
 
@@ -40,7 +39,15 @@ const GameBoard = ({ playerType, problems }: GameBoardProps) => {
 
     if (selectedCards.length === 1) {
       checkCardPair(selectedCards[0], index);
-      setTimeout(() => setSelectedCards([]), 300);
+
+      setTimeout(() => {
+        setShake(true);
+      }, 100);
+
+      setTimeout(() => {
+        setShake(false);
+        setSelectedCards([]);
+      }, 400);
     }
   };
 

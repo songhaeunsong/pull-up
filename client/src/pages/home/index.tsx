@@ -1,13 +1,16 @@
+import { getMember } from '@/api/member';
 import SmallChip from '@/components/common/smallchip';
 import SubmitButton from '@/components/common/submitButton';
 import { useChipAnimation } from '@/hooks/useChipAnimation';
+import { queryClient } from '@/main';
 import { memberStore } from '@/stores/memberStore';
 import { registerServiceWorker, requestPermission } from '@/utils/serviceWorker';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 const HomePage = () => {
-  const { isLoggedIn, isSolvedToday, interviewAnswerId, member } = memberStore();
+  const { isLoggedIn, isSolvedToday, interviewAnswerId, setMember } = memberStore();
   const navigate = useNavigate();
 
   const setupNotification = async () => {
@@ -20,17 +23,38 @@ const HomePage = () => {
   };
 
   useEffect(() => {
-    setupNotification();
-  }, []);
+    const fetchMember = async () => {
+      // 사용자 정보 조회
+      const member = await queryClient.fetchQuery({
+        queryKey: ['member'],
+        queryFn: getMember,
+      });
 
-  const onClick = () => {
-    if (isLoggedIn) {
-      if (!member?.email) {
-        // 선호 과목을 선택하지 않았을 경우
+      if (!member) {
+        toast.error('사용자 정보가 없습니다.', { position: 'bottom-center' });
         navigate('/signup');
         return;
       }
 
+      if (member) {
+        setupNotification();
+
+        // 관심과목 미선택 시
+        if (!member.interestSubjects) {
+          navigate('/signup');
+          return;
+        } else {
+          // 사용자 정보 저장
+          setMember(member);
+        }
+      }
+    };
+
+    fetchMember();
+  }, [navigate]);
+
+  const onClick = () => {
+    if (isLoggedIn) {
       if (isSolvedToday) {
         // 문제를 풀었을 경우
         navigate(`/interview/result/${interviewAnswerId}`);

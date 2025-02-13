@@ -21,8 +21,12 @@ export const login = async () => {
 // 토큰 재발급
 export const reissue = async () => {
   try {
-    const { accessToken } = await api.post('auth/reissue').json<{ accessToken: string }>();
-    AuthStore.setAccessToken(accessToken);
+    const response = await api.post('auth/reissue');
+
+    const accessToken = response.headers.get('Authorization');
+    if (accessToken) {
+      AuthStore.setAccessToken(accessToken);
+    }
 
     console.log('토큰 업데이트');
     await queryClient.invalidateQueries({ queryKey: ['auth'] });

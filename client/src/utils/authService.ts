@@ -29,7 +29,6 @@ export const AuthStore = (() => {
 
 // 헤더에 토큰 주입
 export const setTokenHeader = (request: Request) => {
-  console.log('토큰 주입');
   const token = AuthStore.getAccessToken();
   const isLogin = request.url.includes('/auth/signin'); // 로그인은 헤더에 토큰 주입 안함
 
@@ -41,16 +40,17 @@ export const setTokenHeader = (request: Request) => {
 // 토큰 재발급
 export const handleRefreshToken: BeforeRetryHook = async ({ error, retryCount }) => {
   const httpError = error as HTTPError;
-  console.log('에러: ', httpError);
 
-  if (httpError.response?.status === 401) {
-    console.log('토큰 만료');
-
-    if (retryCount === API_RETRY_COUNT - 1) {
-      await logout();
-      return api.stop;
-    }
-
-    await reissue();
+  // 401 에러 아니면 멈춤
+  if (httpError.response?.status !== 401) {
+    return api.stop;
   }
+
+  // retry 횟수 넘기면 로그아웃
+  if (retryCount === API_RETRY_COUNT - 1) {
+    await logout();
+    return api.stop;
+  }
+
+  await reissue();
 };
