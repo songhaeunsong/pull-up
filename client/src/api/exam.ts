@@ -66,7 +66,7 @@ const getExamDetails = (examId: number) => {
 };
 
 export const useGetExamDetails = (examId: number) => {
-  return useQuery({
+  return useSuspenseQuery({
     queryKey: ['examDetails', examId],
     queryFn: async () => {
       const response = await getExamDetails(examId);
