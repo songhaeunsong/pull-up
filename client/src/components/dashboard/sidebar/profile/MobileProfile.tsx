@@ -13,7 +13,9 @@ const MobileProfile = ({ image, name, email, subjects }: MobileProfileProps) => 
   return (
     <div className="flex flex-row justify-between gap-3 rounded-2xl bg-white p-5 shadow-sm">
       <div className="grid grid-cols-[auto_auto] grid-rows-[auto_auto] gap-6">
-        <img src={image} width={80} height={80} className="rounded-full object-cover" />
+        <div className="h-20 w-20 overflow-hidden rounded-full">
+          <img src={image} className="h-full w-full object-cover" />
+        </div>
         <div className="flex flex-col justify-center">
           <span className="text-xl font-bold">{name}</span>
           <span className="text-sm font-semibold text-stone-700">{email}</span>

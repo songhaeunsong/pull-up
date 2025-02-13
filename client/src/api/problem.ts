@@ -27,11 +27,12 @@ const getRecentWrongProblem = async () => {
   return responseData;
 };
 
-export const useGetRecentWrongProblem = () =>
-  useQuery({
+export const useGetRecentWrongProblem = () => {
+  return useQuery({
     queryKey: ['recentWrongProblems'],
     queryFn: () => getRecentWrongProblem(),
   });
+};
 
 // 문제 단건 조회
 const getProblemDetail = (problemId: number) => api.get<ProblemDetail>(`problem/${problemId}`).json();

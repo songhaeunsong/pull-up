@@ -9,14 +9,14 @@ import { Outlet } from 'react-router-dom';
 
 const DashBoardLayout = () => {
   const { isMobile, isTabletMd } = useResponsive();
-  const { data: member, isLoading } = useGetMemberInfo();
+  const { data: member } = useGetMemberInfo();
   const [memberData, setMemberData] = useState<Member>();
 
   useEffect(() => {
-    if (!isLoading && member) {
+    if (member) {
       setMemberData(member);
     }
-  }, [member, isLoading]);
+  }, [member]);
 
   if (!memberData) {
     return <Page404 />;
