@@ -10,7 +10,7 @@ const instance = ky.create({
 });
 
 const api = instance.extend({
-  timeout: 10 + 1000,
+  timeout: 10 * 1000,
   retry: {
     limit: 4,
     statusCodes: [401],
