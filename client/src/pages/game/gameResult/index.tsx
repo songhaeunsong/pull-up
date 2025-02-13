@@ -5,14 +5,19 @@ import confetti from 'canvas-confetti';
 import { useNavigate } from 'react-router-dom';
 import { useRoomStore } from '@/stores/roomStore';
 import { OPPONENT } from '@/constants/game';
-import { useGetPlayerType } from '@/api/game';
 import { useWebSocketStore } from '@/stores/useWebSocketStore';
+import usePrompt from '@/hooks/useNavigationBlocker';
+import NavigationDialog from '@/components/common/navigationDialog';
+import { useGetPlayerType } from '@/api/game';
+import { toast } from 'react-toastify';
 
 const GameResultPage = () => {
-  const { setRoomId, roomId } = useRoomStore();
-  const { updateSubscription, gameResult, sendMessage } = useWebSocketStore();
-
   const navigate = useNavigate();
+
+  const { isBlocked, handleProceed, handleCancel, setException } = usePrompt();
+
+  const { setRoomId, roomId } = useRoomStore();
+  const { updateSubscription, gameResult, sendMessage, connectWebSocket, disconnectWebSocket } = useWebSocketStore();
 
   const { data: playerTypeData, isPending, isError } = useGetPlayerType(roomId);
 
@@ -21,20 +26,35 @@ const GameResultPage = () => {
   const [isVisibleResult, setIsVisibleResult] = useState(false);
   const [isVisibleWinner, setIsVisibleWinner] = useState(false);
 
+  const handleGoBack = () => {
+    setException();
+    setRoomId('');
+    navigate('/game');
+  };
+
+  const handleGameProceed = () => {
+    handleGoBack();
+    handleProceed();
+  };
+
+  useEffect(() => {
+    if (isError) {
+      setException();
+      navigate('/game');
+
+      toast('게임이 종료되어 대기 화면으로 이동합니다.');
+    }
+  }, [isError, navigate]);
+
   useEffect(() => {
     if (roomId) {
       updateSubscription(roomId, 'result');
       setTimeout(() => {
-        sendMessage(`/app/game/${roomId}/result`);
+        sendMessage(`/app/game/${roomId}/result`, {});
         setIsVisibleResult(true);
       }, 3000);
     }
   }, [roomId]);
-
-  const handleGoBack = () => {
-    setRoomId('');
-    navigate('/game');
-  };
 
   useEffect(() => {
     if (isPending || isError) return;
@@ -61,7 +81,7 @@ const GameResultPage = () => {
   }, [gameResult]);
 
   useEffect(() => {
-    if (isPending || isError || !gameResult) return;
+    if (isPending || isError || !gameResult.player1P.name) return;
 
     if (isVisibleWinner) {
       if (gameResult[playerTypeData.playerType].status === 'WIN') {
@@ -72,10 +92,9 @@ const GameResultPage = () => {
         });
       }
     }
-  }, [isVisibleWinner]);
+  }, [isVisibleWinner, gameResult]);
 
-  if (isPending) return <>불러오는 중</>;
-  if (isError) return <>불러오기 실패</>;
+  if (isPending || isError) return <>불러오는 중</>;
 
   return (
     <div className="flex h-full w-full flex-col items-center justify-center gap-3 bg-Main p-8 pt-24">
@@ -116,6 +135,13 @@ const GameResultPage = () => {
           </Button>
         </>
       )}
+      <NavigationDialog
+        isOpen={isBlocked}
+        onProceed={handleGameProceed}
+        onCancel={handleCancel}
+        title="게임 결과 페이지를 나가시겠습니까?"
+        description=""
+      />
     </div>
   );
 };
