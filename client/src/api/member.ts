@@ -1,6 +1,6 @@
 import { Member, Subject } from '@/types/member';
 import api from './instance';
-import { useMutation, useSuspenseQuery } from '@tanstack/react-query';
+import { useMutation, useQuery } from '@tanstack/react-query';
 import { queryClient } from '@/main';
 import { AuthStore } from '@/utils/authService';
 
@@ -13,10 +13,9 @@ const getMember = async () => {
 export const useGetMemberInfo = () => {
   const auth = AuthStore.getAccessToken();
   return {
-    ...useSuspenseQuery({
+    ...useQuery({
       queryKey: ['member'],
       queryFn: getMember,
-      enabled: !!auth,
     }),
     refetch: () =>
       queryClient.fetchQuery<Member>({

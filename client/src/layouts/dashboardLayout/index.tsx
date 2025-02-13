@@ -4,7 +4,7 @@ import MobileTopBar from '@/components/dashboard/sidebar/MobileTopBar';
 import useResponsive from '@/hooks/useResponsive';
 import Page404 from '@/pages/404';
 import { Member } from '@/types/member';
-import { Suspense, useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import { Outlet } from 'react-router-dom';
 
 const DashBoardLayout = () => {
@@ -39,14 +39,12 @@ const DashBoardLayout = () => {
           <main className="flex h-full flex-1 overflow-y-auto">
             <Outlet />
           </main>
-          <Suspense fallback={<div>사이드바 로딩 중...</div>}>
-            <SideBar
-              image={member?.profileImageUrl ?? ''}
-              name={member?.name ?? ''}
-              email={member?.email ?? ''}
-              subjects={member?.interestSubjects ?? []}
-            />
-          </Suspense>
+          <SideBar
+            image={member?.profileImageUrl ?? ''}
+            name={member?.name ?? ''}
+            email={member?.email ?? ''}
+            subjects={member?.interestSubjects ?? []}
+          />
         </div>
       )}
     </div>
