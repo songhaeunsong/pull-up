@@ -13,7 +13,13 @@ const instance = ky.create({
 const api = instance.extend({
   hooks: {
     beforeRequest: [setTokenHeader],
-    beforeRetry: [handleRefreshToken],
+    beforeRetry: [
+      async (options) => {
+        console.log('beforeRetry hook 실행됨');
+        console.log('retry options:', options);
+        await handleRefreshToken(options);
+      },
+    ],
   },
   retry: {
     limit: 1,
