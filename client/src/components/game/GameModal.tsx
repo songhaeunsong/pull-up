@@ -104,10 +104,6 @@ const GameModals = () => {
         setRoomId(codeForJoinning);
       }
     } catch {
-      toast.error('코드와 일치하는 방이 없습니다.', {
-        position: 'bottom-center',
-      });
-
       setIsPlayerReady(false);
     } finally {
       setCodeForJoinning('');
