@@ -43,14 +43,15 @@ export const handleRefreshToken: BeforeRetryHook = async ({ error, retryCount })
   const httpError = error as HTTPError;
   console.log('에러: ', httpError);
 
-  if (httpError.response?.status === 401) {
-    console.log('토큰 만료');
-
-    if (retryCount === API_RETRY_COUNT - 1) {
-      await logout();
-      return api.stop;
-    }
-
-    await reissue();
+  if (httpError.response?.status !== 401) {
+    return api.stop;
   }
+
+  if (retryCount === API_RETRY_COUNT - 1) {
+    await logout();
+    return api.stop;
+  }
+
+  console.log('토큰 재발급 시도');
+  await reissue();
 };

@@ -1,21 +1,27 @@
 import { signup } from '@/api/auth';
-import { useGetMemberInfo } from '@/api/member';
+import { getMember } from '@/api/member';
 import CsConditionSelector from '@/components/common/csConditionSelector';
+import { queryClient } from '@/main';
 import { memberStore } from '@/stores/memberStore';
 import { Subject } from '@/types/member';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 const SignUpPage = () => {
-  const { refetch } = useGetMemberInfo();
   const { setMember } = memberStore();
 
   const navigate = useNavigate();
   const onConfirmSignUp = async (selectedSubjects: Subject[]) => {
     try {
+      // 회원가입 완료
       await signup(selectedSubjects);
 
-      const member = await refetch();
+      // 사용자 정보 조회
+      const member = await queryClient.fetchQuery({
+        queryKey: ['member'],
+        queryFn: getMember,
+      });
+
       if (!member) {
         toast.error('사용자 정보가 없습니다.', {
           position: 'bottom-center',
@@ -23,7 +29,7 @@ const SignUpPage = () => {
         return;
       }
 
-      // 유저 정보 저장
+      // 사용자 정보 저장
       setMember(member);
 
       navigate('/');
