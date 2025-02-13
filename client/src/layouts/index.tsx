@@ -2,12 +2,18 @@ import Header from '@/components/common/header/Header';
 import MobileHeader from '@/components/common/header/MobileHeader';
 import { cn } from '@/lib/utils';
 import { memberStore } from '@/stores/memberStore';
-import { useEffect } from 'react';
+import { Suspense, useEffect } from 'react';
 import { Outlet, useLocation, useNavigate } from 'react-router';
 import { toast } from 'react-toastify';
 
 const SM_STYLE = 'mx-auto max-w-[430px]';
 const BASIC_STYLE = 'sm:mx-0 sm:max-w-full w-full h-screen';
+
+const PageFallback = () => (
+  <div className="flex h-full items-center justify-center bg-Main">
+    <span className="text-lg font-semibold">페이지 로딩 중...</span>
+  </div>
+);
 
 const MainLayout = () => {
   const location = useLocation();
@@ -21,7 +27,7 @@ const MainLayout = () => {
       location.pathname !== '/redirect' &&
       !isLoggedIn
     ) {
-      toast.error('로그인이 필요합니다.', { position: 'bottom-center' });
+      toast.error('로그인이 필요합니다.', { position: 'bottom-center', toastId: 'login-required' });
       navigate('/signin');
       return;
     }
@@ -32,7 +38,9 @@ const MainLayout = () => {
       <Header />
       <MobileHeader />
       <main className="h-full w-full">
-        <Outlet />
+        <Suspense fallback={<PageFallback />}>
+          <Outlet />
+        </Suspense>
       </main>
     </div>
   );

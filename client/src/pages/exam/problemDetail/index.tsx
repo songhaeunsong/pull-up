@@ -1,16 +1,20 @@
-import ExamProblem from '@/components/exam/problem';
-import ExamSolution from '@/components/exam/solution';
+//import ExamProblem from '@/components/exam/problem';
+//import ExamSolution from '@/components/exam/solution';
 import { useNavigate, useParams } from 'react-router-dom';
 import RouteHeader from '@/components/common/routeheader';
-import { useEffect } from 'react';
+import { lazy, Suspense, useEffect } from 'react';
 import { useExamStore } from '@/stores/examStore';
 import { useGetProblemDetail } from '@/api/problem';
+import ExamProblemSkeleton from '@/components/exam/problem/ExamProblemSekleton';
+import ExamSolutionSkeleton from '@/components/exam/solution/ExamSolutionSkeleton';
+
+const ExamProblem = lazy(() => import('@/components/exam/problem'));
+const ExamSolution = lazy(() => import('@/components/exam/solution'));
 
 const ProblemDetail = () => {
   const navigate = useNavigate();
   const { problemId } = useParams();
   const { data } = useGetProblemDetail(Number(problemId));
-  //console.log(data);
   const { setSolutionPage, setAnswer, initializeAndSetOptions } = useExamStore();
 
   useEffect(() => {
@@ -18,7 +22,6 @@ const ProblemDetail = () => {
     if (data) {
       initializeAndSetOptions(Number(problemId), data.options);
       setAnswer(Number(problemId), data.answer);
-      // console.log('options:', useExamStore.getState().options);
     }
   }, [data, problemId, setSolutionPage, setAnswer, initializeAndSetOptions]);
 
@@ -36,19 +39,26 @@ const ProblemDetail = () => {
         <div className="flex w-full justify-start">
           <RouteHeader prev="목록으로" title="문제 상세보기" onBackClick={onHandleBack} />
         </div>
+
         <div className="flex flex-col gap-6">
-          <ExamProblem
-            index={1}
-            problem={{
-              problemId: Number(problemId),
-              question: data.question,
-              subject: data.subject,
-              questionType: 'MULTIPLE_CHOICE',
-              options: data.options,
-              answer: data.answer,
-            }}
-          />
-          <ExamSolution answer={data.answer} correctRate={data.correctRate} explanation={data.explanation} />
+          {/* 문제 섹션 */}
+          <Suspense fallback={<ExamProblemSkeleton />}>
+            <ExamProblem
+              index={1}
+              problem={{
+                problemId: Number(problemId),
+                question: data.question,
+                subject: data.subject,
+                questionType: 'MULTIPLE_CHOICE',
+                options: data.options,
+                answer: data.answer,
+              }}
+            />
+          </Suspense>
+          {/* 해설 섹션 */}
+          <Suspense fallback={<ExamSolutionSkeleton />}>
+            <ExamSolution answer={data.answer} correctRate={data.correctRate} explanation={data.explanation} />
+          </Suspense>
         </div>
       </div>
     </div>

@@ -1,4 +1,4 @@
-import { useEffect, useState, useMemo } from 'react';
+import { useEffect, useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { postExamAnswer, useGetExamDetails } from '@/api/exam';
 import { useExamStore } from '@/stores/examStore';
@@ -22,11 +22,9 @@ const ExamDetailPage = () => {
   const [isInitialized] = useState(false);
   const { isBlocked, handleProceed, handleCancel, setException } = usePrompt();
 
-  const isAllSolved = useMemo(() => {
-    return (examProblems || []).every(
-      (problem) => answers[problem.problemId] && answers[problem.problemId].trim() !== '',
-    );
-  }, [examProblems, answers]);
+  const isAllSolved = (examProblems || []).every(
+    (problem) => answers[problem.problemId] && answers[problem.problemId].trim() !== '',
+  );
 
   useEffect(() => {
     if (!examProblems || isInitialized) return;
@@ -36,13 +34,7 @@ const ExamDetailPage = () => {
       initializeAndSetOptions(problem.problemId, problem.options);
       setAnswer(problem.problemId, '');
     });
-
-    //setIsInitialized(true);
   }, [examProblems, isInitialized, resetExamState, initializeAndSetOptions, setSolutionPage, setAnswer]);
-
-  if (!examProblems) {
-    return <div>시험 데이터를 불러오는 데 실패했습니다.</div>;
-  }
 
   const onSubmit = async () => {
     try {
@@ -65,7 +57,7 @@ const ExamDetailPage = () => {
       id: 'timeLeft',
       title: '남은 시간',
       icon: 'time',
-      content: <Timer initialTime={1500} onTimeOver={onSubmit} />,
+      content: <Timer initialTime={900} onTimeOver={onSubmit} />,
     },
     {
       id: 'problemStatus',

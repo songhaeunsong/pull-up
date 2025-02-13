@@ -1,6 +1,6 @@
 import { ProblemDetail } from '@/types/problem';
 import api from './instance';
-import { useQuery } from '@tanstack/react-query';
+import { useQuery, useSuspenseQuery } from '@tanstack/react-query';
 import {
   GetArchivedProblemAllResponse,
   GetRecentWrongProblem,
@@ -15,7 +15,7 @@ const getWrongProblemAll = async () => {
 };
 
 export const useGetWrongProblemAll = () =>
-  useQuery({
+  useSuspenseQuery({
     queryKey: ['wrongProblems'],
     queryFn: () => getWrongProblemAll(),
   });
@@ -38,7 +38,7 @@ export const useGetRecentWrongProblem = () => {
 const getProblemDetail = (problemId: number) => api.get<ProblemDetail>(`problem/${problemId}`).json();
 
 export const useGetProblemDetail = (problemId: number) =>
-  useQuery({
+  useSuspenseQuery({
     queryKey: ['problemDetail', problemId],
     queryFn: () => getProblemDetail(problemId),
   });

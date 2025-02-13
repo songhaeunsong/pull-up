@@ -1,4 +1,5 @@
 import { registerDeviceToken } from '@/api/member';
+import { queryClient } from '@/main';
 import { initializeApp } from 'firebase/app';
 import { getMessaging, getToken } from 'firebase/messaging';
 
@@ -48,7 +49,10 @@ export async function requestPermission() {
       return;
     }
 
-    await registerDeviceToken(currentToken);
+    await queryClient.fetchQuery({
+      queryKey: ['device-token'],
+      queryFn: () => registerDeviceToken(currentToken),
+    });
   } catch (error) {
     console.error('토큰 가져오기 실패: ', error);
   }
