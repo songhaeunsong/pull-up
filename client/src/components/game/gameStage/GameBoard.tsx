@@ -33,10 +33,13 @@ const GameBoard = ({ playerType, problems }: GameBoardProps) => {
       return;
     }
 
+    if (selectedCards.length === 1 && problems[selectedCards[0]].disabled) {
+      setSelectedCards([]);
+      return;
+    }
+
     if (selectedCards.length < 2) {
-      if (problems[0].disabled) {
-        setSelectedCards([index]);
-      } else setSelectedCards([...selectedCards, index]);
+      setSelectedCards([...selectedCards, index]);
     }
 
     if (selectedCards.length === 1) {
