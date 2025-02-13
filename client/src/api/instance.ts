@@ -1,5 +1,6 @@
 import ky from 'ky';
 import { setTokenHeader, handleRefreshToken } from '@/utils/authService';
+import { API_RETRY_COUNT } from '@/constants/auth';
 
 const instance = ky.create({
   prefixUrl: import.meta.env.VITE_BASE_URL,
@@ -7,13 +8,20 @@ const instance = ky.create({
   headers: {
     'content-type': 'application/json',
   },
-  retry: 1,
 });
 
 const api = instance.extend({
+  timeout: 10 * 1000,
+  retry: {
+    limit: API_RETRY_COUNT,
+    statusCodes: [401],
+    methods: ['get', 'post', 'put', 'delete', 'patch'],
+    backoffLimit: 3 * 1000,
+  },
+
   hooks: {
     beforeRequest: [setTokenHeader],
-    afterResponse: [handleRefreshToken],
+    beforeRetry: [handleRefreshToken],
   },
 });
 
