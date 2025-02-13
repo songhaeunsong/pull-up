@@ -30,6 +30,8 @@ const HomePage = () => {
         queryFn: getMember,
       });
 
+      setupNotification();
+
       if (!member) {
         toast.error('사용자 정보가 없습니다.', { position: 'bottom-center' });
         navigate('/signup');
@@ -37,8 +39,6 @@ const HomePage = () => {
       }
 
       if (member) {
-        setupNotification();
-
         // 관심과목 미선택 시
         if (!member.interestSubjects) {
           navigate('/signup');
@@ -51,7 +51,7 @@ const HomePage = () => {
     };
 
     fetchMember();
-  }, [navigate]);
+  }, []);
 
   const onClick = () => {
     if (isLoggedIn) {
@@ -104,7 +104,7 @@ const HomePage = () => {
                 />
               ))}
             </div>
-            <div className="flex flex-col items-center text-center text-2xl font-bold md:w-[510px] md:items-start md:text-left md:text-3xl lg:text-4xl xl:text-5xl">
+            <div className="flex flex-col items-center text-center text-2xl font-bold md:w-[320px] md:items-start md:text-left md:text-3xl lg:w-[380px] lg:text-4xl xl:w-[510px] xl:text-5xl">
               {contents.map((group, index) => (
                 <div
                   key={index}
