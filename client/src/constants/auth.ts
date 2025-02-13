@@ -1,1 +1,1 @@
-export const API_RETRY_COUNT = 2;
+export const API_RETRY_COUNT = 4;
