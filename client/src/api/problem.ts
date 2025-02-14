@@ -42,10 +42,9 @@ const getWrongProblemsByTitle = async (searchValue: string) => {
 };
 
 export const useGetWrongProblemsByTitle = (searchValue: string) => {
-  return useQuery({
+  return useSuspenseQuery({
     queryKey: ['getWrongProblemsByTitle', searchValue],
     queryFn: () => getWrongProblemsByTitle(searchValue),
-    enabled: !!searchValue, // 검색어가 있을 때만 실행
   });
 };
 
