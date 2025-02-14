@@ -28,7 +28,10 @@ const GameResultPage = () => {
 
   const handleGoBack = () => {
     setException();
+
     setRoomId('');
+    disconnectWebSocket();
+    connectWebSocket();
     navigate('/game');
   };
 
@@ -39,12 +42,11 @@ const GameResultPage = () => {
 
   useEffect(() => {
     if (isError) {
-      setException();
-      navigate('/game');
+      handleGoBack();
 
       toast('게임이 종료되어 대기 화면으로 이동합니다.');
     }
-  }, [isError, navigate]);
+  }, [isError]);
 
   useEffect(() => {
     if (roomId) {
