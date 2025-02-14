@@ -2,7 +2,6 @@ import { login } from '@/api/auth';
 import { getMember } from '@/api/member';
 import { queryClient } from '@/main';
 import { memberStore } from '@/stores/memberStore';
-import { setupNotification } from '@/utils/notiService';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -28,7 +27,7 @@ const RedirectPage = () => {
       }
 
       // 알림 설정
-      setupNotification();
+      // ();
 
       // 사용자 정보 설정
       setIsSolvedToday(auth.isSolvedToday);
