@@ -1,15 +1,24 @@
+import { useGetMemberInfo } from '@/api/member';
 import SideBar from '@/components/dashboard/sidebar';
 import MobileTopBar from '@/components/dashboard/sidebar/MobileTopBar';
-import { useMember } from '@/hooks/useMember';
 import useResponsive from '@/hooks/useResponsive';
 import Page404 from '@/pages/404';
+import { Member } from '@/types/member';
+import { useEffect, useState } from 'react';
 import { Outlet } from 'react-router-dom';
 
 const DashBoardLayout = () => {
   const { isMobile, isTabletMd } = useResponsive();
-  const memberInfo = useMember().memberInfo;
+  const { data: member } = useGetMemberInfo();
+  const [memberData, setMemberData] = useState<Member>();
 
-  if (!memberInfo) {
+  useEffect(() => {
+    if (member) {
+      setMemberData(member);
+    }
+  }, [member]);
+
+  if (!memberData) {
     return <Page404 />;
   }
 
@@ -18,10 +27,10 @@ const DashBoardLayout = () => {
       {isMobile || isTabletMd ? (
         <div className="flex flex-col gap-5 p-6">
           <MobileTopBar
-            image={memberInfo.profileImageUrl}
-            name={memberInfo.name}
-            email={memberInfo.email}
-            subjects={memberInfo.interestSubjects}
+            image={memberData.profileImageUrl}
+            name={memberData.name}
+            email={memberData.email}
+            subjects={memberData.interestSubjects}
           />
           <Outlet />
         </div>
@@ -31,10 +40,10 @@ const DashBoardLayout = () => {
             <Outlet />
           </main>
           <SideBar
-            image={memberInfo.profileImageUrl}
-            name={memberInfo.name}
-            email={memberInfo.email}
-            subjects={memberInfo.interestSubjects}
+            image={member?.profileImageUrl ?? ''}
+            name={member?.name ?? ''}
+            email={member?.email ?? ''}
+            subjects={member?.interestSubjects ?? []}
           />
         </div>
       )}
