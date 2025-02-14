@@ -53,7 +53,6 @@ const GameResultPage = () => {
       updateSubscription(roomId, 'result');
       setTimeout(() => {
         sendMessage(`/app/game/${roomId}/result`, {});
-        setIsVisibleResult(true);
       }, 3000);
     }
   }, [roomId]);
@@ -78,8 +77,12 @@ const GameResultPage = () => {
       setTimeout(step, interval);
     };
 
-    animateValue(0, gameResult[playerTypeData.playerType].score, 200, setAnimatedScore);
-    animateValue(0, gameResult[OPPONENT[playerTypeData.playerType]].score, 200, setAnimatedOpponentScore);
+    if (gameResult.player1P.name) {
+      setIsVisibleResult(true);
+
+      animateValue(0, gameResult[playerTypeData.playerType].score, 200, setAnimatedScore);
+      animateValue(0, gameResult[OPPONENT[playerTypeData.playerType]].score, 200, setAnimatedOpponentScore);
+    }
   }, [gameResult]);
 
   useEffect(() => {
@@ -96,31 +99,40 @@ const GameResultPage = () => {
     }
   }, [isVisibleWinner, gameResult]);
 
-  if (isPending || isError) return <>불러오는 중</>;
+  if (isPending || isError)
+    return (
+      <div className="flex h-full w-full flex-col items-center justify-center bg-Main">잠시만 기다려주세요...</div>
+    );
 
   return (
-    <div className="flex h-full w-full flex-col items-center justify-center gap-3 bg-Main p-8 pt-24">
+    <div className="flex h-full w-full flex-col items-center justify-center bg-Main p-8">
       {!isVisibleResult ? (
         <>누가 이겼을까요?</>
       ) : (
-        <>
+        <div className="flex flex-col items-center gap-4">
           <h3
             className={cn(
-              'transform text-7xl font-bold text-primary-500 transition-opacity duration-700 ease-out',
+              'transform text-8xl font-bold text-primary-500 transition-opacity duration-700 ease-out',
               isVisibleWinner ? 'translate-y-0 opacity-100' : 'translate-y-5 opacity-0',
             )}
           >
             {gameResult[playerTypeData.playerType].status}
           </h3>
           {!gameResult.isForfeit && (
-            <div className="flex items-center justify-center gap-7">
-              <div className="flex flex-col items-center justify-center gap-1">
+            <div className="grid grid-cols-[1fr_auto_1fr] grid-rows-2 items-center justify-center rounded-xl bg-white p-6">
+              <div className="flex max-w-[110px] flex-col items-center justify-center">
                 <span className="text-lg font-medium">{gameResult[playerTypeData.playerType].name}</span>
+              </div>
+              <span className="px-8 text-xl font-bold text-primary-400">vs</span>
+              <div className="flex max-w-[100px] flex-col items-center justify-center">
+                <span className="text-lg font-medium">{gameResult[OPPONENT[playerTypeData.playerType]].name}</span>
+              </div>
+              <div className="flex flex-col items-center justify-center">
                 <span className="text-3xl font-semibold text-primary-700">{animatedScore}</span>
               </div>
-              <div className="flex flex-col items-center justify-center gap-1">
-                <span className="text-lg font-medium">{gameResult[OPPONENT[playerTypeData.playerType]].name}</span>
-                <span className="text-3xl font-semibold text-primary-700">{animatedOpponentScore}</span>
+              <div></div>
+              <div className="flex flex-col items-center justify-center">
+                <span className="text-4xl font-semibold text-primary-700">{animatedOpponentScore}</span>
               </div>
             </div>
           )}
@@ -132,10 +144,10 @@ const GameResultPage = () => {
               님의 기권으로 게임이 종료되었습니다.
             </span>
           )}
-          <Button variant="transparent" className="mt-6" onClick={handleGoBack}>
+          <Button className="mt-4 w-[120px]" onClick={handleGoBack}>
             돌아가기
           </Button>
-        </>
+        </div>
       )}
       <NavigationDialog
         isOpen={isBlocked}

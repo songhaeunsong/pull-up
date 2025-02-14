@@ -73,10 +73,12 @@ const GameStage = () => {
     }
   }, [getPlayerTypeError, navigate]);
 
-  if (!playerTypeData || isPending) return <>불러오는 중...</>;
-
+  if (!playerTypeData || isPending)
+    return (
+      <div className="flex h-full w-full flex-col items-center justify-center bg-Main">잠시만 기다려주세요...</div>
+    );
   return (
-    <div className="flex h-full w-full flex-col gap-3 bg-Main p-4 pt-[106px] sm:pt-[85px] md:p-8 md:pt-[84px]">
+    <div className="flex h-full w-full flex-col gap-3 bg-Main p-4 sm:pt-[85px] md:p-8 md:pt-[84px]">
       <div className="flex items-center gap-3 md:gap-6">
         <ProgressBar initialTime={60} />
       </div>
