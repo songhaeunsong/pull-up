@@ -28,7 +28,7 @@ const SignInPage = () => {
 
         <div className="flex flex-col items-center gap-4">
           <OAuthButton image="google" title="Google" />
-          <OAuthButton image="naver" title="Naver" />
+          {/* <OAuthButton image="naver" title="Naver" /> */}
           <OAuthButton image="kakao" title="Kakao" />
         </div>
       </div>

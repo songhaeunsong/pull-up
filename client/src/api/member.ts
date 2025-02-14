@@ -1,6 +1,6 @@
 import { Member, Subject } from '@/types/member';
 import api from './instance';
-import { useMutation, useQuery } from '@tanstack/react-query';
+import { useMutation } from '@tanstack/react-query';
 import { queryClient } from '@/main';
 import { toast } from 'react-toastify';
 
@@ -8,13 +8,6 @@ export const getMember = async () => {
   const response = await api.get<Member>('member/me');
   const data = await response.json();
   return data;
-};
-
-export const useGetMemberInfo = () => {
-  return useQuery({
-    queryKey: ['member'],
-    queryFn: getMember,
-  });
 };
 
 // 선호 과목 수정

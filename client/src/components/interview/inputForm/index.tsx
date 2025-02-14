@@ -1,13 +1,14 @@
 import Icon from '@/components/common/icon';
+import { TextAreaChangeEvent, TextAreaKeyboardEvent } from '@/types/event';
 
 interface InputFormProps {
   id: string;
   placeholder: string;
   value: string;
   limit?: number;
-  onChange: (e: React.ChangeEvent<HTMLTextAreaElement>) => void;
+  onChange: (e: TextAreaChangeEvent) => void;
   onSubmit: () => void;
-  onKeyDown: (e: React.KeyboardEvent<HTMLTextAreaElement>) => void;
+  onKeyDown: (e: TextAreaKeyboardEvent) => void;
 }
 
 const InputForm = ({ id, placeholder, value, limit, onChange, onSubmit, onKeyDown }: InputFormProps) => {

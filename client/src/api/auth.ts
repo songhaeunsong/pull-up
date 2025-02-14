@@ -3,6 +3,8 @@ import api from './instance';
 import { Subject } from '@/types/member';
 import { AuthStore } from '@/utils/authService';
 import { queryClient } from '@/main';
+import { useMutation } from '@tanstack/react-query';
+import { toast } from 'react-toastify';
 
 // 로그인
 export const login = async () => {
@@ -39,4 +41,20 @@ export const logout = async () => {
 // 회원가입
 export const signup = async (subjectNames: Subject[]) => {
   return await api.post('auth/signup', { json: { subjectNames } });
+};
+
+export const useSignUpMutation = (subjectNames: Subject[]) => {
+  const { mutate } = useMutation({
+    mutationFn: () => signup(subjectNames),
+    onError: (error) => {
+      toast.error('회원가입을 실패했습니다.', {
+        position: 'bottom-center',
+        toastId: 'member-required',
+      });
+
+      throw new Error();
+    },
+  });
+
+  return mutate;
 };
