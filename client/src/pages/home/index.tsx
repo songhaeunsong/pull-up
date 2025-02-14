@@ -4,7 +4,6 @@ import SubmitButton from '@/components/common/submitButton';
 import { useChipAnimation } from '@/hooks/useChipAnimation';
 import { queryClient } from '@/main';
 import { memberStore } from '@/stores/memberStore';
-import { setupNotification } from '@/utils/notiService';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -20,9 +19,6 @@ const HomePage = () => {
         queryKey: ['member'],
         queryFn: getMember,
       });
-
-      // 알림 설정
-      setupNotification();
 
       if (!member) {
         toast.error('회원가입이 필요합니다.', { position: 'bottom-center', toastId: 'member-required' });
