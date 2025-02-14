@@ -11,7 +11,7 @@ const WaitingAfterCreating = () => {
     throttle(
       async () => {
         await navigator.clipboard.writeText(roomId);
-        toast.success('코드가 복사되었습니다!', { position: 'bottom-center' });
+        toast.success('코드가 복사되었습니다!', { position: 'bottom-center', toastId: 'clipboard' });
       },
       3000,
       { leading: true, trailing: false },

@@ -17,7 +17,12 @@ const RedirectPage = () => {
       });
 
       if (!auth) {
-        toast.error('로그인 정보가 없습니다.', { position: 'bottom-center' });
+        toast.error('로그인 정보가 없습니다. 다시 로그인 해주세요.', {
+          position: 'bottom-center',
+          toastId: 'auth-required',
+        });
+        navigate('/');
+        return;
       }
 
       // 비회원가입 시

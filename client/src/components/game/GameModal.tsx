@@ -22,6 +22,7 @@ const INITIAL_SELECT = {
   network: false,
   operatingSystem: false,
 };
+
 const GameModals = () => {
   const navigate = useNavigate();
   const createRoomTimeoutRef = useRef<NodeJS.Timeout | null>(null);
@@ -31,16 +32,13 @@ const GameModals = () => {
 
   const postCreateGame = usePostCreateGame();
   const postJoinGame = usePostJoinGame();
-
   const deleteRoom = useDeleteRoom();
-
   const postCreateGameRandom = usePostCreateRoomRandom();
 
   const [isPlayerReady, setIsPlayerReady] = useState(false);
+  const [isCreateMode, setIsCreateMode] = useState(false);
 
   const [codeForJoinning, setCodeForJoinning] = useState('');
-
-  const [isCreateMode, setIsCreateMode] = useState(false);
   const [selectedSubjects, setSelectedSubjects] = useState<SubjectSelect>(INITIAL_SELECT);
 
   const createRoomTimeout = (roomId: string) => {
@@ -98,9 +96,7 @@ const GameModals = () => {
 
     try {
       const { isReady } = await postJoinGame(codeForJoinning);
-      if (isReady) {
-        setRoomId(codeForJoinning);
-      }
+      if (isReady) setRoomId(codeForJoinning);
     } catch {
       setIsPlayerReady(false);
     } finally {
@@ -113,20 +109,17 @@ const GameModals = () => {
 
     if (randomMatchType === 'CREATE') {
       setIsCreateMode(true);
-      const { roomId: createdRondomId } = await postCreateGameRandom();
-      setRoomId(createdRondomId);
+      const { roomId: createdRandomId } = await postCreateGameRandom();
+      setRoomId(createdRandomId);
 
       return;
     }
 
     if (randomMatchType === 'JOIN') {
-      setRoomId(randomRoomId);
-      const { isReady } = await postJoinGame(randomRoomId);
-      if (!isReady) {
-        toast.error('다시 시도해주세요.', {
-          position: 'bottom-center',
-        });
-
+      try {
+        const { isReady } = await postJoinGame(randomRoomId);
+        if (isReady) setRoomId(randomRoomId);
+      } catch {
         setIsPlayerReady(false);
       }
     }

@@ -1,10 +1,11 @@
 import React from 'react';
 import Keyword from '../keywordList/keyword';
+import { ButtonMouseEvent } from '@/types/event';
 
 interface InterviewCardProps {
   title: string;
   keywords: string[];
-  onHintClick: (e: React.MouseEvent<HTMLButtonElement>) => void;
+  onHintClick: (e: ButtonMouseEvent) => void;
   hint: boolean;
 }
 

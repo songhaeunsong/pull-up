@@ -2,6 +2,7 @@ import { Member, Subject } from '@/types/member';
 import api from './instance';
 import { useMutation, useSuspenseQuery } from '@tanstack/react-query';
 import { queryClient } from '@/main';
+import { toast } from 'react-toastify';
 
 export const getMember = async () => {
   const response = await api.get<Member>('member/me');
@@ -22,6 +23,10 @@ export const updateInterestSubjects = async (subjects: Subject[]) => {
     json: { subjectNames: subjects },
   });
   if (!response.ok) {
+    toast.error('관심 과목이 수정되지 않았습니다. 다시 시도해주세요!', {
+      position: 'bottom-center',
+      toastId: 'subject-update',
+    });
     throw new Error('관심 과목 수정 실패');
   }
   // PATCH 요청 성공 후 최신 멤버 데이터 가져오기
@@ -45,7 +50,6 @@ export const useUpdateInterestSubjects = () => {
       return { previousData };
     },
     onError: (err, _, context) => {
-      console.error('관심 과목 수정 실패', err);
       if (context?.previousData) {
         queryClient.setQueryData(['member'], context.previousData);
       }

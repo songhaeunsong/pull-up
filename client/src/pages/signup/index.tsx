@@ -8,44 +8,39 @@ import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 const SignUpPage = () => {
-  const { setMember, setIsLoggedIn, setInterviewAnswerId, setIsSolvedToday } = memberStore();
-
+  const { setIsLoggedIn, setInterviewAnswerId, setIsSolvedToday } = memberStore();
   const navigate = useNavigate();
+
   const onConfirmSignUp = async (selectedSubjects: Subject[]) => {
-    try {
-      const auth = await queryClient.fetchQuery({
-        queryKey: ['auth'],
-        queryFn: login,
-      });
+    const auth = await queryClient.fetchQuery({
+      queryKey: ['auth'],
+      queryFn: login,
+    });
 
-      // 회원가입 완료
-      await signup(selectedSubjects);
+    // 회원가입 완료
+    await signup(selectedSubjects);
 
-      // 사용자 정보 조회
-      const member = await queryClient.fetchQuery({
-        queryKey: ['member'],
-        queryFn: getMember,
-      });
+    // 사용자 정보 조회
+    const member = await queryClient.fetchQuery({
+      queryKey: ['member'],
+      queryFn: getMember,
+    });
 
-      if (!member) {
-        toast.error('사용자 정보가 없습니다.', {
-          position: 'bottom-center',
-        });
-        return;
-      }
-
-      // 로그인 정보 저장
-      setIsLoggedIn(true);
-      setIsSolvedToday(auth.isSolvedToday);
-      setInterviewAnswerId(auth.interviewAnswerId);
-
-      navigate('/');
-    } catch (error) {
-      console.error('회원가입 실패: ', error);
-      toast.error('회원가입을 실패했습니다', {
+    if (!member) {
+      toast.error('회원가입을 실패했습니다.', {
         position: 'bottom-center',
+        toastId: 'member-required',
       });
+
+      return;
     }
+
+    // 로그인 정보 저장
+    setIsLoggedIn(true);
+    setIsSolvedToday(auth.isSolvedToday);
+    setInterviewAnswerId(auth.interviewAnswerId);
+
+    navigate('/');
   };
 
   return (

@@ -4,7 +4,7 @@ import SubmitButton from '@/components/common/submitButton';
 import { useChipAnimation } from '@/hooks/useChipAnimation';
 import { queryClient } from '@/main';
 import { memberStore } from '@/stores/memberStore';
-import { registerServiceWorker, requestPermission } from '@/utils/serviceWorker';
+import { setupNotification } from '@/utils/notiService';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -12,15 +12,6 @@ import { toast } from 'react-toastify';
 const HomePage = () => {
   const { isLoggedIn, isSolvedToday, interviewAnswerId, setMember } = memberStore();
   const navigate = useNavigate();
-
-  const setupNotification = async () => {
-    try {
-      await registerServiceWorker();
-      await requestPermission();
-    } catch (error) {
-      console.error('알림 설정 실패:', error);
-    }
-  };
 
   useEffect(() => {
     const fetchMember = async () => {
@@ -30,10 +21,11 @@ const HomePage = () => {
         queryFn: getMember,
       });
 
+      // 알림 설정
       setupNotification();
 
       if (!member) {
-        toast.error('사용자 정보가 없습니다.', { position: 'bottom-center' });
+        toast.error('회원가입이 필요합니다.', { position: 'bottom-center', toastId: 'member-required' });
         navigate('/signup');
         return;
       }

@@ -1,5 +1,5 @@
-export type RoomStatus = 'WAITING' | 'PLAYING' | 'FINISHED';
-export type ResultStatus = 'WIN' | 'DRAW' | 'LOSE';
+export type RoomStatus = 'WAITING' | 'PLAYING' | 'FINISHED' | null;
+export type ResultStatus = 'WIN' | 'DRAW' | 'LOSE' | null;
 
 export type PlayerType = 'player1P' | 'player2P';
 

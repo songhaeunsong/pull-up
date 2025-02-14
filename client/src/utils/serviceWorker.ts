@@ -2,6 +2,7 @@ import { registerDeviceToken } from '@/api/member';
 import { queryClient } from '@/main';
 import { initializeApp } from 'firebase/app';
 import { getMessaging, getToken } from 'firebase/messaging';
+import { toast } from 'react-toastify';
 
 const firebaseConfig = {
   apiKey: import.meta.env.VITE_API_KEY,
@@ -19,33 +20,35 @@ const messaging = getMessaging(app);
 
 // service worker 등록
 export async function registerServiceWorker() {
-  navigator.serviceWorker
-    .register('firebase-messaging-sw.js')
-    .then(function () {
-      console.log('Service Worker 등록 성공');
-    })
-    .catch(function (error) {
-      console.log('Service Worker 등록 실패:', error);
-    });
+  const registration = await navigator.serviceWorker.register('firebase-messaging-sw.js');
+
+  // Service Worker에 Firebase 설정 전달
+  registration.active?.postMessage({
+    type: 'FIREBASE_CONFIG',
+    config: firebaseConfig,
+  });
+}
+
+// 아이폰 확인
+function isIOSDevice() {
+  return (
+    ['iPad Simulator', 'iPhone Simulator', 'iPod Simulator', 'iPad', 'iPhone', 'iPod'].includes(navigator.platform) ||
+    // iPad on iOS 13 detection
+    (navigator.userAgent.includes('Mac') && 'ontouchend' in document)
+  );
 }
 
 // 알림 허용
 export async function requestPermission() {
-  try {
-    const permission = await Notification.requestPermission();
+  const permission = await Notification.requestPermission();
 
-    if (permission !== 'granted') {
-      console.log('알림이 차단되었습니다.');
-      return;
-    }
-
+  if (permission === 'granted') {
     // 토큰 가져오기
     const currentToken = await getToken(messaging, {
       vapidKey: import.meta.env.VITE_VAPID,
     });
 
     if (!currentToken) {
-      console.log('등록된 토큰이 없습니다.');
       return;
     }
 
@@ -53,7 +56,15 @@ export async function requestPermission() {
       queryKey: ['device-token'],
       queryFn: () => registerDeviceToken(currentToken),
     });
-  } catch (error) {
-    console.error('토큰 가져오기 실패: ', error);
+  } else if (isIOSDevice()) {
+    toast.info('사이트 알림을 받으려면 홈 화면에 앱을 추가해주세요!', {
+      position: 'bottom-center',
+      toastId: 'ios-notification',
+    });
+  } else {
+    toast.info('사이트 알림을 허용해서 오늘의 문제를 매일 받아보세요!', {
+      position: 'bottom-center',
+      toastId: 'notification',
+    });
   }
 }

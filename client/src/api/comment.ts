@@ -61,9 +61,8 @@ export const useCreateComment = (interviewAnswerId: number) => {
       return { previousAnswers, previousComments };
     },
     onError: (err, _, context) => {
+      toast.error('댓글이 작성되지 않았습니다.', { position: 'bottom-center', toastId: 'comment-create' });
       if (context?.previousAnswers || context?.previousComments) {
-        console.error('댓글 작성 요청을 실패했습니다.', err);
-        toast.error('댓글 작성을 실패했습니다.', { position: 'bottom-center' });
         queryClient.setQueryData(['interviewAnswerDetail', interviewAnswerId], context.previousAnswers);
         queryClient.setQueryData(['comments', interviewAnswerId], context.previousComments);
       }
@@ -103,8 +102,8 @@ export const useUpdateComment = (interviewAnswerId: number) => {
       return { previousData };
     },
     onError: (err, _, context) => {
+      toast.error('댓글이 수정되지 않았습니다.', { position: 'bottom-center', toastId: 'comment-update' });
       if (context?.previousData) {
-        console.error('댓글 수정 요청을 실패했습니다.', err);
         queryClient.setQueryData(['comments', interviewAnswerId], context.previousData);
       }
     },
@@ -144,8 +143,8 @@ export const useDeleteComment = (interviewAnswerId: number) => {
       return { previousAnswer, previousComment };
     },
     onError: (err, _, context) => {
+      toast.error('댓글이 삭제되지 않았습니다.', { position: 'bottom-center', toastId: 'comment-delete' });
       if (context?.previousAnswer || context?.previousComment) {
-        console.error('댓글 삭제 요청을 실패했습니다.', err);
         queryClient.setQueryData(['interviewAnswerDetail', interviewAnswerId], context.previousAnswer);
         queryClient.setQueryData(['comments', interviewAnswerId], context.previousComment);
       }

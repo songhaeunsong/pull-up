@@ -8,6 +8,7 @@ export const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       retry: false, // 실패 시 재시도 안 함
+      refetchOnWindowFocus: false,
     },
   },
 });
