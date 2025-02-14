@@ -70,3 +70,17 @@ export const useGetArchivedProblemAll = () =>
 export const toggleProblemBookmark = async (problemId: number) => {
   await api.post(`problem/${problemId}`);
 };
+
+// 북마크 문제 검색 조회
+const getArchivedProblemsByTitle = async (searchValue: string) => {
+  const response = await api.get<GetArchivedProblemAllResponse>(`problem/bookmark?title=${searchValue}`);
+  const responseData = await response.json();
+  return responseData;
+};
+
+export const useGetArchivedProblemsByTitle = (searchValue: string) => {
+  return useSuspenseQuery({
+    queryKey: ['getArchivedProblemsByTitle', searchValue],
+    queryFn: () => getArchivedProblemsByTitle(searchValue),
+  });
+};
