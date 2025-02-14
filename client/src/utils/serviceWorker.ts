@@ -20,11 +20,34 @@ const messaging = getMessaging(app);
 
 // service worker 등록
 export async function registerServiceWorker() {
-  navigator.serviceWorker.register('firebase-messaging-sw.js');
+  const registration = await navigator.serviceWorker.register('firebase-messaging-sw.js');
+
+  // Service Worker에 Firebase 설정 전달
+  registration.active?.postMessage({
+    type: 'FIREBASE_CONFIG',
+    config: firebaseConfig,
+  });
+}
+
+// 아이폰 확인
+function isIOSDevice() {
+  return (
+    ['iPad Simulator', 'iPhone Simulator', 'iPod Simulator', 'iPad', 'iPhone', 'iPod'].includes(navigator.platform) ||
+    // iPad on iOS 13 detection
+    (navigator.userAgent.includes('Mac') && 'ontouchend' in document)
+  );
 }
 
 // 알림 허용
 export async function requestPermission() {
+  if (isIOSDevice()) {
+    toast.info('사이트 알림을 받으려면 홈 화면에 앱을 추가해주세요!', {
+      position: 'bottom-center',
+      toastId: 'ios-notification',
+    });
+    return;
+  }
+
   const permission = await Notification.requestPermission();
 
   if (permission === 'granted') {
