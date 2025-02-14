@@ -1,30 +1,21 @@
-import { login, signup } from '@/api/auth';
+import { signup } from '@/api/auth';
 import { getMember } from '@/api/member';
 import CsConditionSelector from '@/components/common/csConditionSelector';
-import { queryClient } from '@/main';
 import { memberStore } from '@/stores/memberStore';
 import { Subject } from '@/types/member';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
 
 const SignUpPage = () => {
-  const { setIsLoggedIn, setInterviewAnswerId, setIsSolvedToday } = memberStore();
   const navigate = useNavigate();
+  const { setMember, setIsLoggedIn } = memberStore();
 
   const onConfirmSignUp = async (selectedSubjects: Subject[]) => {
-    const auth = await queryClient.fetchQuery({
-      queryKey: ['auth'],
-      queryFn: login,
-    });
-
     // 회원가입 완료
     await signup(selectedSubjects);
 
     // 사용자 정보 조회
-    const member = await queryClient.fetchQuery({
-      queryKey: ['member'],
-      queryFn: getMember,
-    });
+    const member = await getMember();
 
     if (!member) {
       toast.error('회원가입을 실패했습니다.', {
@@ -35,11 +26,8 @@ const SignUpPage = () => {
       return;
     }
 
-    // 로그인 정보 저장
+    setMember(member);
     setIsLoggedIn(true);
-    setIsSolvedToday(auth.isSolvedToday);
-    setInterviewAnswerId(auth.interviewAnswerId);
-
     navigate('/');
   };
 
