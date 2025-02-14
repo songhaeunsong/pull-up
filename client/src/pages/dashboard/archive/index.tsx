@@ -4,6 +4,7 @@ import RouteHeader from '@/components/common/routeheader';
 import ReviewList from '@/components/dashboard/reviewList';
 import { useGetArchivedProblemAll } from '@/api/problem';
 import { convertSubject } from '@/utils/convertSubject';
+import SearchBar from '@/components/common/searchbar';
 
 const Archive = () => {
   const navigate = useNavigate();
@@ -22,14 +23,13 @@ const Archive = () => {
     navigate('/dashboard');
   };
 
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchValue(e.target.value);
-  };
-
   return (
-    <section className="flex w-full flex-col gap-3">
+    <section className="flex h-full w-full flex-col gap-3">
       <RouteHeader prev="마이페이지" title="아카이브" onBackClick={onHandleBack} />
-      <ReviewList searchValue={searchValue} onSearchChange={handleSearchChange} data={problems} />
+      <div className="flex flex-1 flex-col rounded-xl bg-white p-4 md:p-8">
+        <SearchBar value={searchValue} onChange={() => {}} />
+        <ReviewList data={problems} />
+      </div>
     </section>
   );
 };

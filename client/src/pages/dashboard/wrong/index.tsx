@@ -6,6 +6,7 @@ import { useGetWrongProblemAll } from '@/api/problem';
 import convertDate from '@/utils/convertDate';
 import { convertSubject } from '@/utils/convertSubject';
 import ReviewListSkeleton from '@/components/dashboard/reviewList/reviewListSkeleton';
+import SearchBar from '@/components/common/searchbar';
 const ReviewList = lazy(() => import('@/components/dashboard/reviewList'));
 
 const Wrong = () => {
@@ -30,10 +31,13 @@ const Wrong = () => {
   };
 
   return (
-    <section className="flex w-full flex-col gap-3">
+    <section className="flex h-full w-full flex-col gap-3">
       <RouteHeader prev="마이페이지" title="내가 틀린 문제" onBackClick={onHandleBack} />
       <Suspense fallback={<ReviewListSkeleton />}>
-        <ReviewList searchValue={searchValue} onSearchChange={handleSearchChange} data={wrongProblemDtos} />
+        <div className="flex flex-1 flex-col gap-4 rounded-xl bg-white p-4 md:gap-8 md:p-8">
+          <SearchBar value={searchValue} onChange={() => {}} />
+          <ReviewList data={wrongProblemDtos} />
+        </div>
       </Suspense>
     </section>
   );
