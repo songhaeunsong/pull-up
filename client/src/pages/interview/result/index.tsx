@@ -2,37 +2,24 @@ import { useGetInterviewList, useGetInterviewResult } from '@/api/interview';
 import SearchModal from '@/components/interview/searchModal';
 import SideMenu from '@/components/interview/sideMenu';
 import InterviewFeedback from '@/components/interview/interviewFeedback';
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import { useNavigate, useParams } from 'react-router-dom';
 import { Tabs, TabsContent, TabsList, TabsTrigger } from '@radix-ui/react-tabs';
 import InterviewMyAnswer from '@/components/interview/myAnswer';
 import convertDate from '@/utils/convertDate';
 import Icon from '@/components/common/icon';
 import Page404 from '@/pages/404';
-import { InterviewListResponse, InterviewResultResponse } from '@/types/response/interview';
 
 const InterviewResultPage = () => {
   const navigate = useNavigate();
   const { interviewAnswerId } = useParams();
+  const { data: result } = useGetInterviewResult(Number(interviewAnswerId));
+  const { data: interviewList } = useGetInterviewList();
+
   const [isSideMenuOpen, setIsSideMenuOpen] = useState(false);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const { data: result, isLoading: isResultLoading } = useGetInterviewResult(Number(interviewAnswerId));
-  const [resultData, setResultData] = useState<InterviewResultResponse>();
-  const { data: interviewList, isLoading: isInterviewLoading } = useGetInterviewList();
-  const [interviewListData, setInterviewListData] = useState<InterviewListResponse[]>();
-
-  useEffect(() => {
-    if (!isResultLoading && result) {
-      setResultData(result);
-    }
-
-    if (!isInterviewLoading && interviewList) {
-      setInterviewListData(interviewList);
-    }
-  }, [result, interviewList, isResultLoading, isInterviewLoading]);
-
-  if (!resultData || !interviewListData) {
+  if (!result || !interviewList) {
     return <Page404 />;
   }
 
@@ -42,7 +29,7 @@ const InterviewResultPage = () => {
 
   // 다른 사람 답변 보기
   const onButtonClick = () => {
-    navigate(`/interview/${resultData.interviewId}/answers`);
+    navigate(`/interview/${result.interviewId}/answers`);
   };
 
   // 지난 문제 보기
@@ -51,7 +38,7 @@ const InterviewResultPage = () => {
     setIsModalOpen(false);
   };
 
-  const formatDate = convertDate(resultData.createdAt).split('-');
+  const formatDate = convertDate(result.createdAt).split('-');
 
   return (
     <div className="flex min-h-full bg-Main p-6 md:p-10">
@@ -63,7 +50,7 @@ const InterviewResultPage = () => {
       >
         <SideMenu
           isOpen={isSideMenuOpen}
-          interviewList={interviewListData}
+          interviewList={interviewList}
           handleMenuClick={handleMenuClick}
           handleSearchClick={() => setIsModalOpen(true)}
           onInterviewClick={onInterviewClick}
@@ -96,17 +83,17 @@ const InterviewResultPage = () => {
             </TabsList>
             <TabsContent value="myAnswer">
               <InterviewMyAnswer
-                question={resultData.question}
-                answer={resultData.memberAnswer}
+                question={result.question}
+                answer={result.memberAnswer}
                 onButtonClick={onButtonClick}
               />
             </TabsContent>
             <TabsContent value="analyze">
               <InterviewFeedback
-                keywords={resultData.keywords}
-                strength={resultData.strength}
-                weakness={resultData.weakness}
-                answer={resultData.answer}
+                keywords={result.keywords}
+                strength={result.strength}
+                weakness={result.weakness}
+                answer={result.answer}
               />
             </TabsContent>
           </Tabs>
@@ -123,18 +110,14 @@ const InterviewResultPage = () => {
                 {`${formatDate[0]}년 ${formatDate[1]}월 ${formatDate[2]}일`}
               </span>
             </button>
-            <InterviewMyAnswer
-              question={resultData.question}
-              answer={resultData.memberAnswer}
-              onButtonClick={onButtonClick}
-            />
+            <InterviewMyAnswer question={result.question} answer={result.memberAnswer} onButtonClick={onButtonClick} />
           </div>
           <div className="flex flex-[5.5]">
             <InterviewFeedback
-              keywords={resultData.keywords}
-              strength={resultData.strength}
-              weakness={resultData.weakness}
-              answer={resultData.answer}
+              keywords={result.keywords}
+              strength={result.strength}
+              weakness={result.weakness}
+              answer={result.answer}
             />
           </div>
         </div>

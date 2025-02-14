@@ -4,12 +4,14 @@ import { InterviewAnswer } from '@/types/interview';
 import { LikeResponse } from '@/types/common';
 import { queryClient } from '@/main';
 import {
+  AnswerResponse,
   GetStreakResponse,
   InterviewListResponse,
   InterviewResponse,
   InterviewResultResponse,
 } from '@/types/response/interview';
-import { MemberAnswerRequest } from '@/types/request/interview';
+import { toast } from 'react-toastify';
+import { AnswerRequest } from '@/types/request/interview';
 
 const getStreak = async () => {
   const response = await api.get<GetStreakResponse>('member/me/streak');
@@ -40,9 +42,24 @@ export const useGetInterview = () => {
 };
 
 // 답안 제출
-export const createMemberAnswer = async (interviewId: number, answer: string): Promise<MemberAnswerRequest> => {
-  const data = await api.post(`interview/${interviewId}/submit`, { json: { answer } }).json<MemberAnswerRequest>();
-  return data;
+export const createAnswer = async (request: AnswerRequest) => {
+  const response = await api
+    .post(`interview/${request.interviewId}/submit`, { json: { answer: request.answer } })
+    .json<AnswerResponse>();
+
+  return response;
+};
+
+export const useCreateAnswer = (request: AnswerRequest) => {
+  const { mutate } = useMutation({
+    mutationFn: () => createAnswer(request),
+    onError: (error) => {
+      toast.error('답변 작성을 실패했습니다.', { position: 'bottom-center', toastId: 'answer-create' });
+      throw error;
+    },
+  });
+
+  return mutate;
 };
 
 // 결과 조회
@@ -151,13 +168,16 @@ export const useCreateInterviewAnswerLike = (interviewId: number) => {
       return { previousListData, previousDetailData };
     },
     onError: (err, interviewAnswerId, context) => {
+      toast.error('좋아요를 실패했습니다. 다시 시도해주세요!', {
+        position: 'bottom-center',
+        toastId: 'like-request',
+      });
       if (context?.previousListData) {
         queryClient.setQueryData(['interviewAnswers', interviewId], context.previousListData);
       }
       if (context?.previousDetailData) {
         queryClient.setQueryData(['interviewAnswerDetail', interviewAnswerId], context.previousDetailData);
       }
-      console.error('좋아요 요청을 실패했습니다.', err);
     },
     onSettled: (_, __, interviewAnswerId) => {
       queryClient.invalidateQueries({ queryKey: ['interviewAnswers', interviewId] });

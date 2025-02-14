@@ -8,6 +8,9 @@ export interface GetStreakResponse {
 // 오늘의 문제 조회 응답 타입
 export type InterviewResponse = Pick<Interview, 'interviewId' | 'question' | 'keywords'>;
 
+// 답안 제출 응답 타입
+export type AnswerResponse = Pick<Interview, 'interviewId' | 'interviewAnswerId'>;
+
 // 결과 응답 타입
 export type InterviewResultResponse = Pick<
   Interview,

@@ -62,7 +62,7 @@ export const useComment = ({ interviewAnswerId }: useCommentProps) => {
     }
 
     if (updatedComment.content === '') {
-      toast.error('댓글을 입력하세요.', { position: 'bottom-center' });
+      toast.error('댓글을 입력하세요.', { position: 'bottom-center', toastId: 'comment-required' });
       return;
     }
 
