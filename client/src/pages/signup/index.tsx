@@ -30,6 +30,7 @@ const SignUpPage = () => {
       if (!member) {
         toast.error('사용자 정보가 없습니다.', {
           position: 'bottom-center',
+          toastId: 'member-required',
         });
         return;
       }
@@ -41,9 +42,9 @@ const SignUpPage = () => {
 
       navigate('/');
     } catch (error) {
-      console.error('회원가입 실패: ', error);
       toast.error('회원가입을 실패했습니다', {
         position: 'bottom-center',
+        toastId: 'signup-required',
       });
     }
   };

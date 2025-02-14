@@ -20,19 +20,14 @@ export const login = async () => {
 
 // 토큰 재발급
 export const reissue = async () => {
-  try {
-    const response = await api.post('auth/reissue');
+  const response = await api.post('auth/reissue');
 
-    const accessToken = response.headers.get('Authorization');
-    if (accessToken) {
-      AuthStore.setAccessToken(accessToken);
-    }
-
-    console.log('토큰 업데이트');
-    await queryClient.invalidateQueries({ queryKey: ['auth'] });
-  } catch (error) {
-    console.error('토큰 재발급 실패: ', error);
+  const accessToken = response.headers.get('Authorization');
+  if (accessToken) {
+    AuthStore.setAccessToken(accessToken);
   }
+
+  await queryClient.invalidateQueries({ queryKey: ['auth'] });
 };
 
 // 로그아웃

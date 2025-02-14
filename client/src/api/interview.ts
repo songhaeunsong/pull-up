@@ -10,6 +10,7 @@ import {
   InterviewResultResponse,
 } from '@/types/response/interview';
 import { MemberAnswerRequest } from '@/types/request/interview';
+import { toast } from 'react-toastify';
 
 const getStreak = async () => {
   const response = await api.get<GetStreakResponse>('member/me/streak');
@@ -151,13 +152,16 @@ export const useCreateInterviewAnswerLike = (interviewId: number) => {
       return { previousListData, previousDetailData };
     },
     onError: (err, interviewAnswerId, context) => {
+      toast.error('좋아요를 실패했습니다. 다시 시도해주세요!', {
+        position: 'bottom-center',
+        toastId: 'like-request',
+      });
       if (context?.previousListData) {
         queryClient.setQueryData(['interviewAnswers', interviewId], context.previousListData);
       }
       if (context?.previousDetailData) {
         queryClient.setQueryData(['interviewAnswerDetail', interviewAnswerId], context.previousDetailData);
       }
-      console.error('좋아요 요청을 실패했습니다.', err);
     },
     onSettled: (_, __, interviewAnswerId) => {
       queryClient.invalidateQueries({ queryKey: ['interviewAnswers', interviewId] });

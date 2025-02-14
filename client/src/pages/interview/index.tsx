@@ -37,7 +37,7 @@ const InterviewPage = () => {
 
   const onSubmit = async () => {
     if (!interviewAnswer) {
-      toast.error('답변을 입력해주세요.', { position: 'bottom-center' });
+      toast.error('답변을 입력해주세요.', { position: 'bottom-center', toastId: 'answer-required' });
       return;
     }
 
@@ -48,8 +48,7 @@ const InterviewPage = () => {
       setInterviewAnswerId(data.interviewAnswerId);
       navigate(`/interview/result/${data.interviewAnswerId}`);
     } catch (error) {
-      console.error('답변 작성을 실패했습니다.', error);
-      toast.error('답변 작성을 실패했습니다.', { position: 'bottom-center' });
+      toast.error('답변 작성을 실패했습니다.', { position: 'bottom-center', toastId: 'answer-create' });
     }
 
     setInterviewAnswer('');

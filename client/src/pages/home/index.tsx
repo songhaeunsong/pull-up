@@ -33,7 +33,7 @@ const HomePage = () => {
       setupNotification();
 
       if (!member) {
-        toast.error('사용자 정보가 없습니다.', { position: 'bottom-center' });
+        toast.error('사용자 정보가 없습니다.', { position: 'bottom-center', toastId: 'member-required' });
         navigate('/signup');
         return;
       }

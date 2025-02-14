@@ -17,7 +17,7 @@ const RedirectPage = () => {
       });
 
       if (!auth) {
-        toast.error('로그인 정보가 없습니다.', { position: 'bottom-center' });
+        toast.error('로그인 정보가 없습니다.', { position: 'bottom-center', toastId: 'auth-required' });
       }
 
       // 비회원가입 시
