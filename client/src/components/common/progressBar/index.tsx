@@ -3,7 +3,7 @@ import useTimer from '@/hooks/useTimer';
 
 interface progressBar {
   initialTime: number;
-  onTimeOver: () => void;
+  onTimeOver?: () => void;
 }
 
 const ProgressBar = ({ initialTime, onTimeOver }: progressBar) => {

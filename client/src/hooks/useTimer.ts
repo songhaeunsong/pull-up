@@ -1,6 +1,6 @@
 import { useEffect, useState, useRef } from 'react';
 
-const useTimer = (initialTime: number, onTimeOver: () => void) => {
+const useTimer = (initialTime: number, onTimeOver?: () => void) => {
   const [timeLeft, setTimeLeft] = useState(initialTime);
   const timerRef = useRef<NodeJS.Timeout | null>(null);
 
@@ -13,7 +13,7 @@ const useTimer = (initialTime: number, onTimeOver: () => void) => {
       setTimeLeft((prevTime) => {
         if (prevTime <= 0) {
           clearInterval(timerRef.current!);
-          onTimeOver();
+          onTimeOver?.();
           return 0;
         }
         return prevTime - 1;
