@@ -4,7 +4,7 @@
   "start_url": "/",
   "display": "standalone",
   "background_color": "#ffffff",
-  "theme_color": "#000000",
+  "theme_color": "#ffffff",
   "icons": [
     {
       "src": "/logo-192.png",
@@ -16,5 +16,9 @@
       "sizes": "512x512",
       "type": "image/png"
     }
-  ]
+  ],
+  "orientation": "portrait",
+  "description": "게임처럼! 시험처럼! 루틴처럼! CS 정복해보세요 🚀",
+  "prefer_related_applications": false,
+  "scope": "/"
 }
