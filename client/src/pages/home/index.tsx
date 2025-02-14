@@ -4,6 +4,7 @@ import SubmitButton from '@/components/common/submitButton';
 import { useChipAnimation } from '@/hooks/useChipAnimation';
 import { queryClient } from '@/main';
 import { memberStore } from '@/stores/memberStore';
+import { setupNotification } from '@/utils/notiService';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
