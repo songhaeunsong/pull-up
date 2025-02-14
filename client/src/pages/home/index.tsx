@@ -21,9 +21,6 @@ const HomePage = () => {
         queryFn: getMember,
       });
 
-      // 알림 설정
-      setupNotification();
-
       if (!member) {
         toast.error('회원가입이 필요합니다.', { position: 'bottom-center', toastId: 'member-required' });
         navigate('/signup');
@@ -43,6 +40,9 @@ const HomePage = () => {
     };
 
     fetchMember();
+
+    // 알림 설정
+    setupNotification();
   }, []);
 
   const onClick = () => {

@@ -29,15 +29,6 @@ export async function registerServiceWorker() {
   });
 }
 
-// 아이폰 확인
-function isIOSDevice() {
-  return (
-    ['iPad Simulator', 'iPhone Simulator', 'iPod Simulator', 'iPad', 'iPhone', 'iPod'].includes(navigator.platform) ||
-    // iPad on iOS 13 detection
-    (navigator.userAgent.includes('Mac') && 'ontouchend' in document)
-  );
-}
-
 // 알림 허용
 export async function requestPermission() {
   const permission = await Notification.requestPermission();
@@ -55,11 +46,6 @@ export async function requestPermission() {
     await queryClient.fetchQuery({
       queryKey: ['device-token'],
       queryFn: () => registerDeviceToken(currentToken),
-    });
-  } else if (isIOSDevice()) {
-    toast.info('사이트 알림을 받으려면 홈 화면에 앱을 추가해주세요!', {
-      position: 'bottom-center',
-      toastId: 'ios-notification',
     });
   } else {
     toast.info('사이트 알림을 허용해서 오늘의 문제를 매일 받아보세요!', {
