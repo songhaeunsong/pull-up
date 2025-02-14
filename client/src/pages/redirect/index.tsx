@@ -1,6 +1,7 @@
 import { login } from '@/api/auth';
 import { queryClient } from '@/main';
 import { memberStore } from '@/stores/memberStore';
+import { setupNotification } from '@/utils/notiService';
 import { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
@@ -25,6 +26,9 @@ const RedirectPage = () => {
         return;
       }
 
+      // 알림 설정
+      setupNotification();
+
       // 비회원가입 시
       if (!auth.isSignedUp) {
         navigate('/signup');
@@ -37,7 +41,6 @@ const RedirectPage = () => {
       setInterviewAnswerId(auth.interviewAnswerId);
 
       navigate('/');
-      return;
     };
 
     handleRedirect();

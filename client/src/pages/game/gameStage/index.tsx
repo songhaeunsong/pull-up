@@ -82,7 +82,7 @@ const GameStage = () => {
       <div className="flex items-center gap-3 md:gap-6">
         <ProgressBar initialTime={60} />
       </div>
-      <div className="grid h-full w-full grid-rows-[3fr_1fr] gap-3 md:grid-cols-[2.5fr_1fr] md:grid-rows-1 md:gap-7">
+      <div className="grid h-full w-full grid-rows-[3fr_auto] gap-3 md:grid-cols-[2.5fr_1fr] md:grid-rows-1 md:gap-7">
         <GameBoard playerType={playerTypeData.playerType} problems={roomInfo.problemCardWithoutCardIds} />
         <div className="flex flex-col">
           <div className="grid grow grid-cols-2 gap-3 md:grid-cols-1 md:grid-rows-2 md:gap-7">
