@@ -1,8 +1,8 @@
+import Header from '@/components/common/header/Header';
 import MobileHeader from '@/components/common/header/MobileHeader';
 import { cn } from '@/lib/utils';
 import { memberStore } from '@/stores/memberStore';
 import { useWebSocketStore } from '@/stores/useWebSocketStore';
-import { Header } from '@radix-ui/react-accordion';
 import { useEffect } from 'react';
 import { Outlet, useLocation, useNavigate } from 'react-router';
 import { toast } from 'react-toastify';
