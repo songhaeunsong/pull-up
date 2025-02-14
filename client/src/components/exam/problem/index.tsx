@@ -5,7 +5,7 @@ import { useExamStore } from '@/stores/examStore';
 import { convertSubject } from '@/utils/convertSubject';
 
 interface ExamProblemProps {
-  index: number;
+  index?: number;
   problem: {
     problemId: number;
     question: string;

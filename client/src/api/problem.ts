@@ -34,6 +34,20 @@ export const useGetRecentWrongProblem = () => {
   });
 };
 
+// 내가 틀린 문제 검색 조회
+const getWrongProblemsByTitle = async (searchValue: string) => {
+  const response = await api.get<GetWrongProblemAllResponse>(`problem/wrong?title=${searchValue}`);
+  const responseData = await response.json();
+  return responseData;
+};
+
+export const useGetWrongProblemsByTitle = (searchValue: string) => {
+  return useSuspenseQuery({
+    queryKey: ['getWrongProblemsByTitle', searchValue],
+    queryFn: () => getWrongProblemsByTitle(searchValue),
+  });
+};
+
 // 문제 단건 조회
 const getProblemDetail = (problemId: number) => api.get<ProblemDetail>(`problem/${problemId}`).json();
 
@@ -55,4 +69,18 @@ export const useGetArchivedProblemAll = () =>
 // 문제 북마크
 export const toggleProblemBookmark = async (problemId: number) => {
   await api.post(`problem/${problemId}`);
+};
+
+// 북마크 문제 검색 조회
+const getArchivedProblemsByTitle = async (searchValue: string) => {
+  const response = await api.get<GetArchivedProblemAllResponse>(`problem/bookmark?title=${searchValue}`);
+  const responseData = await response.json();
+  return responseData;
+};
+
+export const useGetArchivedProblemsByTitle = (searchValue: string) => {
+  return useSuspenseQuery({
+    queryKey: ['getArchivedProblemsByTitle', searchValue],
+    queryFn: () => getArchivedProblemsByTitle(searchValue),
+  });
 };

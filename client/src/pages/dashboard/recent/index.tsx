@@ -23,13 +23,12 @@ const Recent = () => {
     navigate('/dashboard');
   };
 
-  const handleSearchChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchValue(e.target.value);
-  };
   return (
     <section className="flex w-full flex-col gap-3">
       <RouteHeader prev="마이페이지" title="최근에 푼 모의고사" onBackClick={onHandleBack} />
-      <ReviewList searchValue={searchValue} onSearchChange={handleSearchChange} data={examData} isProblem={false} />
+      <div className="flex flex-1 flex-col rounded-xl bg-white px-4 py-6 md:p-8">
+        <ReviewList data={examData} isProblem={false} />
+      </div>
     </section>
   );
 };

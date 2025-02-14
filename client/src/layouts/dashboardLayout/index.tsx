@@ -1,11 +1,12 @@
 import { getMember } from '@/api/member';
 import SideBar from '@/components/dashboard/sidebar';
-import MobileTopBar from '@/components/dashboard/sidebar/MobileTopBar';
+//import MobileTopBar from '@/components/dashboard/sidebar/MobileTopBar';
 import useResponsive from '@/hooks/useResponsive';
 import { queryClient } from '@/main';
 import { Member } from '@/types/member';
-import { useEffect, useState } from 'react';
+import { lazy, Suspense, useEffect, useState } from 'react';
 import { Outlet } from 'react-router-dom';
+const MobileTopBar = lazy(() => import('@/components/dashboard/sidebar/MobileTopBar'));
 
 const DashBoardLayout = () => {
   const { isMobile, isTabletMd } = useResponsive();
@@ -31,13 +32,16 @@ const DashBoardLayout = () => {
   return (
     <div className="flex min-h-screen bg-Main pt-[94px] sm:pt-16">
       {isMobile || isTabletMd ? (
-        <div className="flex flex-col gap-5 p-6">
-          <MobileTopBar
-            image={member.profileImageUrl}
-            name={member.name}
-            email={member.email}
-            subjects={member.interestSubjects}
-          />
+        <div className="flex flex-col gap-5 p-2 py-4 sm:p-4">
+          <Suspense fallback={<div>Loading...</div>}>
+            <MobileTopBar
+              image={member.profileImageUrl}
+              name={member.name}
+              email={member.email}
+              subjects={member.interestSubjects}
+            />
+          </Suspense>
+
           <Outlet />
         </div>
       ) : (
