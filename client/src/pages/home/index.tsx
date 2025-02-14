@@ -43,7 +43,7 @@ const HomePage = () => {
     };
 
     fetchMember();
-  }, [navigate]);
+  }, [navigate, setMember]);
 
   const onClick = () => {
     if (isLoggedIn) {

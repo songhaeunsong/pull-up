@@ -37,7 +37,6 @@ const RedirectPage = () => {
       setInterviewAnswerId(auth.interviewAnswerId);
 
       navigate('/');
-      return;
     };
 
     handleRedirect();
