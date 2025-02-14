@@ -21,7 +21,7 @@ const GameCard = ({ card, isSelected, shake, onClick }: GameCardProps) => {
               'border-white': !isSelected,
               'animate-shake border-[#ff716c]': shake && isSelected,
             },
-            'm-1 flex cursor-pointer select-none items-center justify-center rounded-md border-4 bg-white p-2 text-base',
+            'm-1 flex cursor-pointer select-none items-center justify-center rounded-md border-4 bg-white p-2 text-sm sm:text-base',
           )}
           onClick={onClick}
         >

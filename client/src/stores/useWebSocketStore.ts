@@ -14,10 +14,10 @@ interface WebSocketState {
   sendMessage: (destination: string, payload?: unknown) => void;
 }
 
-const INITIAL_ROOMSTATUS = 'WAITING';
+const INITIAL_ROOMSTATUS = null;
 const INITIAL_ROOMINFO: StompRoomInfo = {
   roomId: '',
-  gameRoomStatus: 'WAITING',
+  gameRoomStatus: null,
   player1P: { memberId: 0, name: '', score: 0 },
   player2P: { memberId: 0, name: '', score: 0 },
   problemCardWithoutCardIds: [],
@@ -28,12 +28,12 @@ const INITIAL_GAMERESULT: StompGameResult = {
   player1P: {
     name: '',
     score: 0,
-    status: 'DRAW',
+    status: null,
   },
   player2P: {
     name: '',
     score: 0,
-    status: 'DRAW',
+    status: null,
   },
 };
 
@@ -53,12 +53,6 @@ export const useWebSocketStore = create<WebSocketState>((set, get) => ({
       heartbeatIncoming: 4000,
       heartbeatOutgoing: 4000,
     });
-
-    // client.onConnect = () => {};
-
-    // client.onStompError = (frame) => {
-    //   console.log('Websocket: STOMP 에러:', frame.headers['message']);
-    // };
 
     client.activate();
     set({ client });
