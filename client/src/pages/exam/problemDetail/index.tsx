@@ -44,7 +44,6 @@ const ProblemDetail = () => {
           {/* 문제 섹션 */}
           <Suspense fallback={<ExamProblemSkeleton />}>
             <ExamProblem
-              index={1}
               problem={{
                 problemId: Number(problemId),
                 question: data.question,
