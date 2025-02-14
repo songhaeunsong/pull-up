@@ -34,6 +34,21 @@ export const useGetRecentWrongProblem = () => {
   });
 };
 
+// 내가 틀린 문제 검색 조회
+const getWrongProblemsByTitle = async (searchValue: string) => {
+  const response = await api.get<GetWrongProblemAllResponse>(`problem/wrong?title=${searchValue}`);
+  const responseData = await response.json();
+  return responseData;
+};
+
+export const useGetWrongProblemsByTitle = (searchValue: string) => {
+  return useQuery({
+    queryKey: ['getWrongProblemsByTitle', searchValue],
+    queryFn: () => getWrongProblemsByTitle(searchValue),
+    enabled: !!searchValue, // 검색어가 있을 때만 실행
+  });
+};
+
 // 문제 단건 조회
 const getProblemDetail = (problemId: number) => api.get<ProblemDetail>(`problem/${problemId}`).json();
 
