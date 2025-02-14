@@ -1,36 +1,42 @@
-import { useGetMemberInfo } from '@/api/member';
+import { getMember } from '@/api/member';
 import SideBar from '@/components/dashboard/sidebar';
 import MobileTopBar from '@/components/dashboard/sidebar/MobileTopBar';
 import useResponsive from '@/hooks/useResponsive';
-import Page404 from '@/pages/404';
+import { queryClient } from '@/main';
 import { Member } from '@/types/member';
 import { useEffect, useState } from 'react';
 import { Outlet } from 'react-router-dom';
 
 const DashBoardLayout = () => {
   const { isMobile, isTabletMd } = useResponsive();
-  const { data: member } = useGetMemberInfo();
-  const [memberData, setMemberData] = useState<Member>();
+  const [member, setMember] = useState<Member>();
 
   useEffect(() => {
-    if (member) {
-      setMemberData(member);
-    }
-  }, [member]);
+    const fetchMember = async () => {
+      const data = await queryClient.fetchQuery({
+        queryKey: ['member'],
+        queryFn: getMember,
+      });
 
-  if (!memberData) {
-    return <Page404 />;
-  }
+      if (!data) return null;
+
+      setMember(data);
+    };
+
+    fetchMember();
+  }, []);
+
+  if (!member) return null;
 
   return (
     <div className="flex min-h-screen bg-Main pt-[94px] sm:pt-16">
       {isMobile || isTabletMd ? (
         <div className="flex flex-col gap-5 p-6">
           <MobileTopBar
-            image={memberData.profileImageUrl}
-            name={memberData.name}
-            email={memberData.email}
-            subjects={memberData.interestSubjects}
+            image={member.profileImageUrl}
+            name={member.name}
+            email={member.email}
+            subjects={member.interestSubjects}
           />
           <Outlet />
         </div>
@@ -40,10 +46,10 @@ const DashBoardLayout = () => {
             <Outlet />
           </main>
           <SideBar
-            image={member?.profileImageUrl ?? ''}
-            name={member?.name ?? ''}
-            email={member?.email ?? ''}
-            subjects={member?.interestSubjects ?? []}
+            image={member.profileImageUrl}
+            name={member.name}
+            email={member.email}
+            subjects={member.interestSubjects}
           />
         </div>
       )}

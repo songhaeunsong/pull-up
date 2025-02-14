@@ -4,19 +4,18 @@ import InterviewCard from '@/components/interview/interviewCard';
 import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { toast } from 'react-toastify';
-import Page404 from '../404';
-import { useMember } from '@/hooks/useMember';
 import { TextAreaChangeEvent, TextAreaKeyboardEvent } from '@/types/event';
+import { memberStore } from '@/stores/memberStore';
 
 const InterviewPage = () => {
   const navigate = useNavigate();
-  const memberInfo = useMember().memberInfo;
+  const { member } = memberStore();
   const { data } = useGetInterview();
 
   const [hint, setHint] = useState(false);
   const [answer, setAnswer] = useState('');
 
-  if (!data) return <Page404 />;
+  if (!data || !member) return null;
 
   const onSubmit = async () => {
     if (!answer) {
@@ -55,7 +54,7 @@ const InterviewPage = () => {
     <div className="flex min-h-full w-full items-center justify-center bg-gradient-to-b from-primary-50 to-white p-6 md:p-10">
       <div className="flex w-[873px] flex-col items-center justify-center gap-12 pt-[94px] sm:pt-16">
         <div className="text-xl font-extrabold md:text-2xl lg:text-3xl">
-          <span className="text-primary-600">{`${memberInfo.name}`}</span>
+          <span className="text-primary-600">{`${member.name}`}</span>
           <span>님 만을 위한 오늘의 맞춤 문제🎯</span>
         </div>
         <InterviewCard title={data.question} keywords={data.keywords} hint={hint} onHintClick={onHintClick} />
